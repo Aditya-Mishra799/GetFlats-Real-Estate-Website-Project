@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const MutlipleSelect = ({ label, options, className, ...rest }) => {
   const { name, control, onChange, value, errors, ...remaining } = rest;
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState(value ? value : []);
   const [unselectedOptions, setUnselectedOptions] = useState(options);
   const handleSelectChange = (e) => {
     const selectedOption = JSON.parse(e.target.value);
