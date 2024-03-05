@@ -9,6 +9,9 @@ export const metadata = {
 export default function Layout({ children }) {
   return (
     <html lang="en">
+      <head>
+      <meta name="google-site-verification" content="dgms-iT1EFL706tiJ3A0GneU_SZp8n_wvh1dJzZ1waI" />
+      </head>
       <body className="flex flex-col p-0 m-0 ">
         <Provider>
           <Header />
