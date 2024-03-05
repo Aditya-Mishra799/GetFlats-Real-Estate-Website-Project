@@ -3,7 +3,13 @@ import React, { useState } from "react";
 const MutlipleSelect = ({ label, options, className, ...rest }) => {
   const { name, control, onChange, value, errors, ...remaining } = rest;
   const [selectedOptions, setSelectedOptions] = useState(value ? value : []);
-  const [unselectedOptions, setUnselectedOptions] = useState(options);
+  const initialOptions = value
+    ? options.filter(
+        (option) =>
+          !value.some((selectedOption) => selectedOption.value === option.value)
+      )
+    : options;
+  const [unselectedOptions, setUnselectedOptions] = useState(initialOptions);
   const handleSelectChange = (e) => {
     const selectedOption = JSON.parse(e.target.value);
     setSelectedOptions([...selectedOptions, selectedOption]);
@@ -19,14 +25,10 @@ const MutlipleSelect = ({ label, options, className, ...rest }) => {
     setUnselectedOptions([...unselectedOptions, option]);
     const updatedOptions = selectedOptions.filter(
       (selectedOption) => selectedOption.label !== option.label
-    )
-    setSelectedOptions(
-      updatedOptions
     );
-    onChange(
-      updatedOptions
-    );
-    console.log(value)
+    setSelectedOptions(updatedOptions);
+    onChange(updatedOptions);
+    console.log(value);
   };
   return (
     <div className="flex flex-col gap-y-2 mx-1 w-full">

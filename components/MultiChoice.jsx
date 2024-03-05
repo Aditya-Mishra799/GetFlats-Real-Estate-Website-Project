@@ -9,7 +9,7 @@ const MultiChoice = ({ label, options, className, ...rest }) => {
   return (
     <div className="flex flex-col gap-y-2 mx-1 w-full">
       <p className="font-semibold text-lg">{label}</p>
-      <div className="flex  w-full border-collapse ">
+      <div className="flex  w-full border-collapse items-center">
         {options.map((option, index) => {
           const borderStyle =
             index === 0
@@ -19,7 +19,7 @@ const MultiChoice = ({ label, options, className, ...rest }) => {
               : "border-r-1";
           return (
             <span
-              className={`border  ${borderStyle} text-center px-1 py-1 border-smooth-orange border-collapse flex-grow hover:bg-active-orange hover:text-orange-50 cursor-pointer transition-all ${option === selectedOption && 'bg-smooth-orange text-white'}`}
+              className={`border  ${borderStyle} text-center px-1 py-1 border-smooth-orange border-collapse flex-grow hover:bg-active-orange hover:text-orange-50 cursor-pointer transition-all ${option === selectedOption && 'bg-smooth-orange text-white'} h-full flex items-center justify-center`}
               onClick = {()=>clickHandler(option)}
             >
               {option.label}
