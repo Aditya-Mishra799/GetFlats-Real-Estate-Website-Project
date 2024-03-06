@@ -3,6 +3,7 @@ import MultiStepForm from "@components/MultiStepForm";
 import React from "react";
 import InputForm from "@components/InputForm";
 import { useForm, SubmitHandler } from "react-hook-form";
+import Map from "@components/Map";
 import {
   propertyOptions,
   amenitiesOptions,
@@ -115,7 +116,7 @@ const page = () => {
     },
     {
       name: "Choose listing type",
-      component: <div>Choose listing type!</div>,
+      component: <div className="h-96 m-3"><Map/></div>,
     },
     {
       name: "Choose listing type",

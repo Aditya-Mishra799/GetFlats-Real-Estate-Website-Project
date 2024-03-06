@@ -10,7 +10,16 @@ export default function Layout({ children }) {
   return (
     <html lang="en">
       <head>
-      <meta name="google-site-verification" content="dgms-iT1EFL706tiJ3A0GneU_SZp8n_wvh1dJzZ1waI" />
+        <meta
+          name="google-site-verification"
+          content="dgms-iT1EFL706tiJ3A0GneU_SZp8n_wvh1dJzZ1waI"
+        />
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+          integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+          crossorigin=""
+        />
       </head>
       <body className="flex flex-col p-0 m-0 ">
         <Provider>

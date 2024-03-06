@@ -54,7 +54,7 @@ const MultiStepForm = ({ steps, handleSubmit, errors, getValues, trigger, clearE
           </div>
           {steps.map((step, index) => {
             return (
-              <div className="flex flex-col items-center space-y-2 z-10 transition-all duration-300">
+              <div key = {index} className="flex flex-col items-center space-y-2 z-10 transition-all duration-300">
                 <div
                   className={`h-10 w-10 p-2 rounded-full  text-white ${
                     index <= currentStep
