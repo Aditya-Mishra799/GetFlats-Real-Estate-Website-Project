@@ -3,7 +3,15 @@ import Button from "./Button";
 import PropertyListingSchema from "@models/schema/PropertyListingSchema";
 import { data } from "autoprefixer";
 
-const MultiStepForm = ({ steps, handleSubmit, errors, getValues, trigger, clearErrors }) => {
+const MultiStepForm = ({
+  steps,
+  handleSubmit,
+  errors,
+  getValues,
+  trigger,
+  clearErrors,
+  formInputFeilds,
+}) => {
   const [currentStep, setCurrentStep] = useState(0);
   const goBack = () => {
     if (currentStep === 0) return;
@@ -14,27 +22,30 @@ const MultiStepForm = ({ steps, handleSubmit, errors, getValues, trigger, clearE
     // check if any field is invalid
     // if yes then don't move forward
     // else move ahead
-    const fields =  getValues()
+    const fields = getValues();
     try {
-     Array.from(Object.keys(fields)).map(
-        fieldName => PropertyListingSchema.pick({[fieldName]: true}).parse({[fieldName] :fields[fieldName]})
-      )
+      currentStep < formInputFeilds.length &&
+        formInputFeilds[currentStep].map((inputField) => fields[inputField.name] &&
+          PropertyListingSchema.pick({ [inputField.name]: true }).parse({
+            [inputField.name]: fields[inputField.name],
+          })
+        );
       setCurrentStep(currentStep + 1);
-      clearErrors()
+      clearErrors();
     } catch (error) {
-      trigger()
-      console.log(error)
+      trigger();
+      console.log(error);
     }
   };
-  const handleClickOnNextButton = (data)=>{
-    if(currentStep < steps.length - 1){
-      goForward()
+  const handleClickOnNextButton = (data) => {
+    if (currentStep < steps.length - 1) {
+      goForward();
     }
-    console.log(data)
-  }
-  useEffect(()=>{
-    console.log(errors, getValues())
-  }, [errors])
+    console.log(data);
+  };
+  useEffect(() => {
+    console.log(errors, getValues());
+  }, [errors]);
   return (
     <form
       className="flex flex-col space-y-3 py-3 gap-2 px-5 border"
@@ -54,7 +65,10 @@ const MultiStepForm = ({ steps, handleSubmit, errors, getValues, trigger, clearE
           </div>
           {steps.map((step, index) => {
             return (
-              <div key = {index} className="flex flex-col items-center space-y-2 z-10 transition-all duration-300">
+              <div
+                key={index}
+                className="flex flex-col items-center space-y-2 z-10 transition-all duration-300"
+              >
                 <div
                   className={`h-10 w-10 p-2 rounded-full  text-white ${
                     index <= currentStep
@@ -84,13 +98,11 @@ const MultiStepForm = ({ steps, handleSubmit, errors, getValues, trigger, clearE
           &larr; Previous
         </Button>
         <Button
-          type = 'submit'
-          {
-            ...(currentStep < steps.length -1) && {
-              type : 'button',
-              onClick : goForward
-            }
-          }
+          type="submit"
+          {...(currentStep < steps.length - 1 && {
+            type: "button",
+            onClick: goForward,
+          })}
         >
           Next &rarr;
         </Button>

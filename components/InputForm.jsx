@@ -5,6 +5,7 @@ import Select from "./Select";
 import MultiChoice from "./MultiChoice";
 import { Controller } from "react-hook-form";
 import MutlipleSelect from "./MutlipleSelect";
+import Map from "./Map";
 
 const InputForm = ({ inputFeilds }) => {
   return (
@@ -53,6 +54,21 @@ const InputForm = ({ inputFeilds }) => {
                   defaultValue={[]}
                   render={({ field }) => (
                     <MutlipleSelect
+                      {...inputFeild}
+                      {...field}
+                      key={inputFeild.label}
+                    />
+                  )}
+                />
+              );
+            case "map-input":
+              return (
+                <Controller
+                  control={inputFeild.control}
+                  name={inputFeild.name}
+                  defaultValue={{}}
+                  render={({ field }) => (
+                    <Map
                       {...inputFeild}
                       {...field}
                       key={inputFeild.label}
