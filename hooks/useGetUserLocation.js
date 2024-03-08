@@ -14,6 +14,7 @@ const useGetUserLocation = () => {
       );
     }, []);
     const updateAndGetLocation = (mapRef)=>{
+      if (typeof window === "undefined") return
         navigator.geolocation.getCurrentPosition(
           (position) => {
             console.log("User location:", position.coords);
