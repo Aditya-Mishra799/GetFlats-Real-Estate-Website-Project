@@ -52,8 +52,7 @@ const Map = () => {
   const mapRef = useRef(null);
   const [address, setAddress] = useState(null);
   const reverseGeoCodeURL = "https://nominatim.openstreetmap.org/reverse";
-  const [userLocation, updateAndGetLocation, setUserLocation] =
-    useGetUserLocation();
+  const [userLocation, updateAndGetLocation, setUserLocation] =useGetUserLocation();
   const eventHandlers = useMemo(
     () => ({
       dragend() {
@@ -66,9 +65,11 @@ const Map = () => {
     }),
     []
   );
-
   useEffect(() => {
-    fetchAddress(reverseGeoCodeURL, userLocation, setAddress);
+    updateAndGetLocation(mapRef)
+  }, [])
+  useEffect(  () => {
+     fetchAddress(reverseGeoCodeURL, userLocation, setAddress);
   }, [userLocation]);
 
   return (

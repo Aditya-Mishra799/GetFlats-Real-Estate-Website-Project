@@ -4,19 +4,18 @@ import React, {useState, useEffect} from 'react'
 const useGetUserLocation = () => {
     const [userLocation, setUserLocation] = useState([19.076,72.8777]);
     
-    useEffect(() => {
-      if (typeof window === "undefined") return
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation([position.coords.latitude, position.coords.longitude]);
-        },
-        (error) => {
-          console.error("Error getting user location:", error);
-        }
-      );
-    }, []);
+    // useEffect(() => {
+    //   navigator.geolocation.getCurrentPosition(
+    //     (position) => {
+    //       setUserLocation([position.coords.latitude, position.coords.longitude]);
+    //     },
+    //     (error) => {
+    //       console.error("Error getting user location:", error);
+    //     }
+    //   );
+    // }, []);
     const updateAndGetLocation = (mapRef)=>{
-      if (typeof window === "undefined") return
+      if (typeof window !== "undefined") {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             console.log("User location:", position.coords);
@@ -26,7 +25,7 @@ const useGetUserLocation = () => {
           (error) => {
             console.error("Error getting user location:", error);
           }
-        );
+        );}
     }
     return [userLocation, updateAndGetLocation, setUserLocation]
 }

@@ -5,8 +5,13 @@ import Select from "./Select";
 import MultiChoice from "./MultiChoice";
 import { Controller } from "react-hook-form";
 import MutlipleSelect from "./MutlipleSelect";
-import Map from "./Map";
-
+import dynamic from "next/dynamic";
+//importing the Map dynamically with lazy loading to avoid window object Reference error
+//we turnoff server side rendering to stop window referrence error
+const DynamicMap = dynamic(()=>import("./Map"),{
+  ssr: false,
+  loading: ()=> <p className="text-center text-gray-500 font-bold text-xl">Loading Map...</p>
+});
 const InputForm = ({ inputFeilds }) => {
   return (
     <div class="flex flex-wrap bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-xl gap-2 w-full">
@@ -68,7 +73,7 @@ const InputForm = ({ inputFeilds }) => {
                   name={inputFeild.name}
                   defaultValue={{}}
                   render={({ field }) => (
-                    <Map
+                    <DynamicMap
                       {...inputFeild}
                       {...field}
                       key={inputFeild.label}
