@@ -1,9 +1,11 @@
+'use-client'
 import React, {useState, useEffect} from 'react'
 //clean
 const useGetUserLocation = () => {
     const [userLocation, setUserLocation] = useState([19.076,72.8777]);
     
     useEffect(() => {
+      if (typeof window === "undefined") return
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setUserLocation([position.coords.latitude, position.coords.longitude]);
