@@ -3,7 +3,6 @@ import MultiStepForm from "@components/MultiStepForm";
 import React from "react";
 import InputForm from "@components/InputForm";
 import { useForm, SubmitHandler } from "react-hook-form";
-import Map from "@components/Map";
 import {
   propertyOptions,
   amenitiesOptions,
