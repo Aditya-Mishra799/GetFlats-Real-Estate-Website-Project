@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-
+//clean
 const useGetUserLocation = () => {
     const [userLocation, setUserLocation] = useState([19.076,72.8777]);
     
