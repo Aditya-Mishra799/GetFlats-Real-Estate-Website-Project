@@ -23,121 +23,161 @@ const page = () => {
     trigger,
     getValues,
     clearErrors,
-  } = useForm({ resolver: zodResolver(PropertyListingSchema) });
+    setValue,
+  } = useForm({
+    resolver: zodResolver(PropertyListingSchema),
+  });
 
-  const commonProps = { control, errors, register };
-  const formInputFeilds = [
-    [
-      {
-        label: "Title",
-        elementType: "input",
-        type: "text",
-        name: "property_title",
-        ...commonProps,
-      },
-      {
-        label: "Listing Type",
-        elementType: "multi-choice",
-        name: "listing_type",
-        ...commonProps,
-        options: listingTypeOptions,
-      },
-      {
-        label: "Aemnities",
-        elementType: "multi-select",
-        name: "amenities",
-        ...commonProps,
-        options: amenitiesOptions,
-      },
-      {
-        label: "Property Type",
-        elementType: "select",
-        name: "property_type",
-        ...commonProps,
-        options: propertyOptions,
-      },
-      {
-        label: "Furnished Status",
-        elementType: "multi-choice",
-        name: "furnished_status",
-        ...commonProps,
-        options: furnishedStatusOptions,
-      },
-      {
-        label: "Bathrooms",
-        elementType: "input",
-        type: "number",
-        name: "bathrooms",
-        ...commonProps,
-      },
-      {
-        label: "Bedrooms",
-        elementType: "input",
-        type: "number",
-        name: "bedrooms",
-        ...commonProps,
-      },
-      {
-        label: "Halls",
-        elementType: "input",
-        type: "number",
-        name: "halls",
-        ...commonProps,
-      },
-      {
-        label: "Construction Date",
-        elementType: "input",
-        type: "date",
-        name: "construction_date",
-        ...commonProps,
-      },
-    ],
-    [
-      {
-        label: "Description",
-        elementType: "textarea",
-        name: "property_description",
-        ...commonProps,
-      },
-    ],
-    [
-      {
-        label: "Location",
-        elementType: "map-input",
-        name: "loctaion",
-        ...commonProps,
-      },
-    ],
+  const commonProps = { control, errors, register, setValue, getValues };
+  const formPages = [
+    {
+      title: "Add Listing Details",
+      form: [
+        {
+          label: "Title",
+          elementType: "input",
+          type: "text",
+          name: "property_title",
+          ...commonProps,
+        },
+        {
+          label: "Listing Type",
+          elementType: "multi-choice",
+          name: "listing_type",
+          ...commonProps,
+          options: listingTypeOptions,
+        },
+        {
+          label: "Aemnities",
+          elementType: "multi-select",
+          name: "amenities",
+          ...commonProps,
+          options: amenitiesOptions,
+        },
+        {
+          label: "Property Type",
+          elementType: "select",
+          name: "property_type",
+          ...commonProps,
+          options: propertyOptions,
+        },
+        {
+          label: "Furnished Status",
+          elementType: "multi-choice",
+          name: "furnished_status",
+          ...commonProps,
+          options: furnishedStatusOptions,
+        },
+        {
+          label: "Bathrooms",
+          elementType: "input",
+          type: "number",
+          name: "bathrooms",
+          ...commonProps,
+        },
+        {
+          label: "Bedrooms",
+          elementType: "input",
+          type: "number",
+          name: "bedrooms",
+          ...commonProps,
+        },
+        {
+          label: "Halls",
+          elementType: "input",
+          type: "number",
+          name: "halls",
+          ...commonProps,
+        },
+        {
+          label: "Construction Date",
+          elementType: "input",
+          type: "date",
+          name: "construction_date",
+          ...commonProps,
+        },
+        {
+          label: "Area of Flat",
+          elementType: "input",
+          type: "number",
+          name: "area",
+          ...commonProps,
+        },
+      ],
+    },
+    {
+      title: "Add Description",
+      form: [
+        {
+          label: "Description",
+          elementType: "textarea",
+          name: "property_description",
+          ...commonProps,
+        },
+      ],
+    },
+    {
+      title : 'Add Pricing and Contact Details',
+      form : [
+        {
+          label: "Enter Pricing",
+          elementType: "input",
+          type: "number",
+          name: "price",
+          ...commonProps,
+        },
+        {
+          label: "Phone Number",
+          elementType: "input",
+          type: "number",
+          name: "phone",
+          ...commonProps,
+        },
+      ]
+    },
+    {
+      title: "Add Images",
+      form: [
+        {
+          label: "Add Image",
+          elementType: "image-input",
+          name: "media",
+          ...commonProps,
+          defaultValue:  {
+            thumbnail: null,
+            images: [],
+          },
+        },
+      ],
+    },
+    {
+      title: "Add Location of Listing",
+      form: [
+        {
+          label: "Location",
+          elementType: "map-input",
+          name: "location",
+          ...commonProps,
+          defaultValue: {
+            coordinates:  [19.076,72.8777],
+            address : {},
+          }
+        },
+      ],
+    },
   ];
-  const steps = [
-    {
-      name: "Add Listing Details",
-      component: <InputForm inputFeilds={formInputFeilds[0]} />,
-    },
-    {
-      name: "Add Listing Description",
-      component: <InputForm inputFeilds={formInputFeilds[1]} />,
-    },
-    {
-      name: "Add Loctaion Details",
-      component: <InputForm inputFeilds={formInputFeilds[2]} />,
-    },
-    {
-      name: "Choose listing type",
-      component: <div>Choose listing type!</div>,
-    },
-  ];
+
+
   return (
     <div>
       Add Listing
       <MultiStepForm
-        steps={steps}
+        formPages={formPages}
         handleSubmit={handleSubmit}
         getValues={getValues}
         trigger={trigger}
         clearErrors={clearErrors}
         errors={errors}
-        formInputFeilds = {formInputFeilds}
       />
     </div>
   );

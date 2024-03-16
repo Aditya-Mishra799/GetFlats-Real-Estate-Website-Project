@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const MutlipleSelect = ({ label, options, className, ...rest }) => {
   const { name, control, onChange, value, errors, ...remaining } = rest;
+  console.log(value)
   const [selectedOptions, setSelectedOptions] = useState(value ? value : []);
   const initialOptions = value
     ? options.filter(

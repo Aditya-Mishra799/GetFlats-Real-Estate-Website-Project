@@ -1,79 +1,84 @@
-'use-client'
-import React, {
-  useState,
-  useRef,
-  useMemo,
-  useCallback,
-  useEffect,
-} from "react";
+"use-client";
+import React, { useState, useRef, useMemo, useEffect } from "react";
 import { MapContainer } from "react-leaflet";
 import { TileLayer } from "react-leaflet/TileLayer";
 import { Marker, Popup } from "react-leaflet";
-import { useMapEvents, useMap } from "react-leaflet";
 import useGetUserLocation from "@hooks/useGetUserLocation";
 import Button from "./Button";
 import formatAddress from "@common_functions/formatAddress";
 import { FaLocationCrosshairs } from "react-icons/fa6";
+
 //function to fetch Adrdress based on  coords
+const reverseGeoCodeURL = "https://nominatim.openstreetmap.org/reverse";
 const fetchAddress = async (
-  reverseGeoCodeURL,
   locationCoords = [],
-  setAddress
+  saveAddress
 ) => {
   if (locationCoords == null) return;
-  const coordinates =
-    locationCoords.length === 2
-      ? {
-          lat: locationCoords[0],
-          lon: locationCoords[1],
-        }
-      : {
-          lat: 19.076,
-          lon: 72.8777,
-        };
   const requestData = {
-    ...coordinates,
+    lat: locationCoords[0],
+    lon: locationCoords[1],
     format: "json",
   };
 
-  reverseGeoCodeURL += "?" + new URLSearchParams(requestData);
+ let url = reverseGeoCodeURL + "?" + new URLSearchParams(requestData);
   try {
-    console.log(reverseGeoCodeURL);
-    const response = await fetch(reverseGeoCodeURL);
+    const response = await fetch(url);
     const result = await response.json();
-    setAddress(result?.address);
-    console.log("address", formatAddress(result?.address));
+    saveAddress(locationCoords, result?.address);
   } catch (error) {
     console.error(error);
   }
 };
-const Map = () => {
+const Map = ({ label, onChange, name, errors, getValues, ...rest }) => {
+  const value = getValues(name);
   const markerRef = useRef(null);
   const mapRef = useRef(null);
-  const [address, setAddress] = useState(null);
-  const reverseGeoCodeURL = "https://nominatim.openstreetmap.org/reverse";
-  const [userLocation, updateAndGetLocation, setUserLocation] =useGetUserLocation();
+  const saveAddress = (coordinates, address) => {
+    onChange({ coordinates: coordinates, address: address });
+  };
+  const [userLocation, setUserLocation] = useState(value?.coordinates);
   const eventHandlers = useMemo(
     () => ({
-      dragend() {
+      async dragend() {
         const marker = markerRef.current;
         if (marker != null) {
           const coords = Object.values(marker._latlng);
           setUserLocation(coords);
+          await fetchAddress(coords, saveAddress)
         }
       },
     }),
     []
   );
+  const updateAndGetLocation = async () =>{
+    if ("geolocation" in navigator) {
+      // Geolocation is supported
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          setUserLocation([position.coords.latitude, position.coords.longitude]);
+          await fetchAddress([position.coords.latitude, position.coords.longitude], saveAddress);
+          mapRef.current.flyTo([position.coords.latitude, position.coords.longitude], 15, {animate: true})
+        },
+        (error) => {
+          console.error("Error white fetching Location", error)
+        }
+      );
+    }
+    else{
+      console.log("Geolocation is not supported in your browser");
+      //show error
+    }
+  }
   useEffect(() => {
-    updateAndGetLocation(mapRef)
-  }, [])
-  useEffect(  () => {
-     fetchAddress(reverseGeoCodeURL, userLocation, setAddress);
-  }, [userLocation]);
-
+    updateAndGetLocation();
+  }, []);
+  // useEffect( async () => {
+  //   await fetchAddress(userLocation, saveAddress);
+  // }, [userLocation]);
+  //upadte address in react hook form
   return (
-    <div className="w-full h-full  px-2 py-1 space-y-2">
+    <div className="w-full h-full  px-1 py-1 space-y-2" key={name}>
       <div className=" space-y-3">
         {userLocation && (
           <div className="w-full h-64">
@@ -83,10 +88,7 @@ const Map = () => {
               scrollWheelZoom={true}
               ref={mapRef}
             >
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                //   attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              />
+              <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               <Marker
                 position={userLocation}
                 draggable={true}
@@ -98,15 +100,23 @@ const Map = () => {
             </MapContainer>
           </div>
         )}
-        <Button onClick={() => updateAndGetLocation(mapRef)} className = 'flex justify-center gap-2'>
+        <Button
+          onClick={updateAndGetLocation}
+          className="flex justify-center gap-2"
+        >
           Locate Me <FaLocationCrosshairs />
         </Button>
       </div>
-      {address && (
-        <div className="flex flex-col m-1 gap-1 flex-wrap bg-slate-200 px-2 py-1 rounded-md">
+      {value?.address && Object.keys(value.address).length > 0 && (
+        <div className="flex flex-col m-1 gap-1 flex-wrap bg-highlight-orange px-2 py-1 rounded-md">
           <label className="font-semibold text-lg">Your Address</label>
-          <p>{formatAddress(address)}</p>
+          <p>{formatAddress(value.address)}</p>
         </div>
+      )}
+      {errors[name] && (
+        <p className="text-red-500 text-xs italic">
+          {errors[name]?.coordinates.message}
+        </p>
       )}
     </div>
   );

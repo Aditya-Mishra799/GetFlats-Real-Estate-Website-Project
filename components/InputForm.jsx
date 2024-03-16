@@ -6,6 +6,7 @@ import MultiChoice from "./MultiChoice";
 import { Controller } from "react-hook-form";
 import MutlipleSelect from "./MutlipleSelect";
 import dynamic from "next/dynamic";
+import ImageInput from "./ImageInput";
 //importing the Map dynamically with lazy loading to avoid window object Reference error
 //we turnoff server side rendering to stop window referrence error
 const DynamicMap = dynamic(()=>import("./Map"),{
@@ -14,39 +15,61 @@ const DynamicMap = dynamic(()=>import("./Map"),{
 });
 const InputForm = ({ inputFeilds }) => {
   return (
-    <div class="flex flex-wrap bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-xl gap-2 w-full">
+    <div class="flex flex-wrap bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-xl min-w-sm gap-2 w-full">
       {inputFeilds.map((inputFeild, index) => {
         switch (inputFeild.elementType) {
           case "input":
-            return <Input {...inputFeild} key={inputFeild.label} />;
+            return <Input {...inputFeild} key={inputFeild.name} />;
           case "textarea":
-            return <TextArea {...inputFeild} key={inputFeild.label} />;
+            return <TextArea {...inputFeild} key={inputFeild.name} />;
           case "select":
             return (
               <Controller
                 control={inputFeild.control}
                 name={inputFeild.name}
+                key={inputFeild.name}
                 defaultValue={inputFeild.defaultValue || inputFeild?.options[0]}
                 render={({ field }) => (
                   <Select
                     {...inputFeild}
                     {...field}
-                    key={inputFeild.label}
+                    key={inputFeild.name}
                   />
                 )}
               />
-            );          
+            ); 
+          case 'image-input':
+            return    (
+              <Controller
+                control={inputFeild.control}
+                name={inputFeild.name}
+                key={inputFeild.name}
+                defaultValue = {inputFeild?.defaultValue}
+                render={({ field: { onChange, } }) => {
+                  return (
+                  <ImageInput
+                    {...inputFeild}
+                    onChange = {onChange}
+                    ref ={null}
+                    key={inputFeild.name}
+                  />
+                )}
+              }
+              />
+            );        
           case "multi-choice":
             return (
               <Controller
                 control={inputFeild.control}
                 name={inputFeild.name}
+                key={inputFeild.name}
                 defaultValue={inputFeild.defaultValue || inputFeild?.options[0]}
                 render={({ field }) => (
                   <MultiChoice
                     {...inputFeild}
                     {...field}
-                    key={inputFeild.label}
+                    ref ={null}
+                    key={inputFeild.name}
                   />
                 )}
               />
@@ -56,12 +79,13 @@ const InputForm = ({ inputFeilds }) => {
                 <Controller
                   control={inputFeild.control}
                   name={inputFeild.name}
+                  key={inputFeild.name}
                   defaultValue={[]}
                   render={({ field }) => (
                     <MutlipleSelect
                       {...inputFeild}
                       {...field}
-                      key={inputFeild.label}
+                      key={inputFeild.name}
                     />
                   )}
                 />
@@ -70,15 +94,18 @@ const InputForm = ({ inputFeilds }) => {
               return (
                 <Controller
                   control={inputFeild.control}
-                  name={inputFeild.name}
-                  defaultValue={{}}
-                  render={({ field }) => (
+                  name={inputFeild?.name}
+                  key={inputFeild.name}
+                  defaultValue = {inputFeild?.defaultValue}
+                  render={({ field: { onChange, } }) => {
+                    return (
                     <DynamicMap
                       {...inputFeild}
-                      {...field}
-                      key={inputFeild.label}
+                      onChange = {onChange}
+                      ref ={null}
+                      key={inputFeild.name}
                     />
-                  )}
+                  )}}
                 />
               );
           default:
@@ -86,7 +113,7 @@ const InputForm = ({ inputFeilds }) => {
               <Input
                 type={inputFeild.type}
                 label={inputFeild.label}
-                key={inputFeild.label}
+                key={inputFeild.name}
                 {...inputFeild.rest}
               />
             );

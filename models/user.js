@@ -18,7 +18,7 @@ const UserSchema = new  Schema({
 
 
 //as the next js routes are created only when it is called
-//so we check if the model is already created if created then assidn it to previous value
+//so we check if the model is already created if created then assign it to previous value
 //if not then create new user model
 
 const User = models.User || model("User", UserSchema);

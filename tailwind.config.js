@@ -15,6 +15,8 @@ module.exports = {
         'smooth-orange': '#ff6f61',
         'dark-orange': '#fa6557',
         'active-orange': '#fa5546',
+        'faded-orange': '#fca79f',
+        'highlight-orange': '#ffc5bf',
       },
       borderRadius:{
         'mini': '4px',
