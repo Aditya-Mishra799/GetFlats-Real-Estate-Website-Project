@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import Button from "./Button";
 import PropertyListingSchema from "@models/schema/PropertyListingSchema";
 import InputForm from "./InputForm";
+import { useSession } from 'next-auth/react'
 import { data } from "autoprefixer";
-
+import { createFormData } from "@common_functions/create_form_data";
 const MultiStepForm = ({
   formPages,
   handleSubmit,
@@ -14,6 +15,7 @@ const MultiStepForm = ({
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [progressBarWidth, setProgressBarWidth] = useState(0);
+  const {data:session} = useSession()
   const markerRef = useRef(null)
   const progressBarRef = useRef(null)
   const goBack = () => {
@@ -61,14 +63,22 @@ const MultiStepForm = ({
       console.log(error);
     }
   };
-  const handleClickOnNextButton = (data) => {
+  const handleClickOnNextButton = async () => {
     if (currentStep < formPages.length - 1) {
-      trigger();
-      //no-errors then submit the data 
-     
+      goForward()
     }
     if(currentStep === formPages.length - 1){
-      console.log('Final data', data)
+       if(Object.keys(errors).length === 0){
+        const data = getValues()
+        //convert object to form data
+        const formData = createFormData({...data, creator: session?.user.id})
+        console.log(formData, data)
+        //push the data to backend
+        const res = await fetch('/api/listing/new',{
+          method: 'POST',
+          body: formData,
+        })
+       }
     }
   };
   useEffect(()=>{
@@ -77,7 +87,6 @@ const MultiStepForm = ({
   return (
     <form
       className="flex flex-col space-y-3 py-3 gap-2 px-5 border"
-      onSubmit={handleSubmit(handleClickOnNextButton)}
     >
       {/* Progress Bar */}
       <div className="flex flex-col items-center space-y-2 my-3 ">
@@ -126,13 +135,10 @@ const MultiStepForm = ({
           &larr; Previous
         </Button>
         <Button
-          type="submit"
-          {...(currentStep < formPages.length - 1 && {
-            type: "button",
-            onClick: goForward,
-          })}
+          type="button"
+          onClick = {handleClickOnNextButton}
         >
-          Next &rarr;
+          {currentStep === formPages.length - 1 ? 'Submit' : <>Next &rarr;</>}
         </Button>
       </div>
     </form>

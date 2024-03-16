@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import mongoose, { Schema, model, models } from "mongoose";
 const { string } = require('zod');
 
 // Define Mongoose schema
@@ -81,6 +81,7 @@ const PropertyListingSchema = new Schema({
       type: [String], // Adjust as per your file storage mechanism
       validate: {
         validator: function(images) {
+          console.log('Images Input', images)
           return images.length > 0;
         },
         message: 'Please provide at least one image.'
