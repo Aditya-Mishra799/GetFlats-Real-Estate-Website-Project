@@ -18,9 +18,10 @@ const PropertyListingPage = ({ listingData }) => {
   });
   const otherDetails = ['construction_date', 'furnished_status', 'phone', 'property_type']
   return (
-    <div className="w-full h-full m-0 border">
+    <div className="w-full h-full m-0">
       {/* Image Display */}
-      <div className="w-full h-[45vh] lg:40vh overflow-x-scroll flex gap-2 min-w-0  scroll-m-5 hidden-scrollbar">
+      <div className="w-full h-[45vh] lg:40vh overflow-x-scroll flex gap-2 min-w-0  scroll-m-5 hidden-scrollbar relative">
+        <h3 className="absolute top-2 left-2 text-xl bg-active-orange px-2 py-1 text-white font-bold rounded-lg">{listingData?.property_title}</h3>
         {images.map((imageURL) => (
           <Image
             key={imageURL}
@@ -157,7 +158,7 @@ const PropertyListingPage = ({ listingData }) => {
 
           <div className="border border-active-orange p-3 m-2 rounded-lg text-slate-600 max-h-max transition-all duration-1000">
             <h3 className="font-bold text-xl">Description:</h3>
-            <p className=" text-pretty tracking-wide line-clamp-10 hover:line-clamp-none transition-all duration-1000">
+            <p className=" text-pretty tracking-wide line-clamp-6 hover:line-clamp-none">
               {listingData?.property_description}
             </p>
           </div>
