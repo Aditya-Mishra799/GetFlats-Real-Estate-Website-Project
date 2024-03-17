@@ -9,7 +9,9 @@ const page = () => {
   const listing_id = useSearchParams().get("id");
   const [listingData, setListingData] = useState()
   const fetchListingData = async()=>{
-    const response = await fetch(`/api/listing/view/${listing_id}`);
+    const endpoint = process.env.NEXT_PUBLIC_URL+'/api/listing/view/'+listing_id
+    console.log(endpoint)
+    const response = await fetch(endpoint);
     const data = await response.json()
     setListingData(data)
   }
