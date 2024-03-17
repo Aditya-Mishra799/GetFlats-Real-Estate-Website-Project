@@ -36,7 +36,20 @@
   height: 40px;
   animation: spin 1s linear infinite;
 }
+/* Hide scrollbar for Firefox */
+.hidden-scrollbar::-moz-scrollbar {
+  display: none;
+}
 
+/* Hide scrollbar for IE/Edge */
+.hidden-scrollbar {
+  -ms-overflow-style: none;
+}
+
+/* Hide scrollbar for Webkit browsers */
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none;
+}
 @keyframes spin {
   0% {
     transform: rotate(0deg);

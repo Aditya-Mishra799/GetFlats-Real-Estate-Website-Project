@@ -3,10 +3,10 @@ const nextConfig = {
     experimental: {
     //   appDir: true,
       serverComponentsExternalPackages: ["mongoose"],
-      missingSuspenseWithCSRBailout: false,
+      // missingSuspenseWithCSRBailout: false,
     },
     images: {
-      domains: ['lh3.googleusercontent.com'],
+      domains: ['lh3.googleusercontent.com', 'vwit7toqwgm70frp.public.blob.vercel-storage.com'],
     },
     webpack(config) {
       config.experiments = {

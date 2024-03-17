@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
+import PropertyListingPage from "@components/PropertyListingPage";
 
 const page = () => {
   const { data: session } = useSession();
@@ -11,9 +13,9 @@ const page = () => {
   const fetchListingData = async()=>{
     if(listing_id){
     const endpoint =  '/api/listing/view/'+listing_id
-    console.log(endpoint)
     const response = await fetch(endpoint);
     const data = await response.json()
+    console.log(data)
     setListingData(data)
     }
   }
@@ -26,13 +28,11 @@ const page = () => {
     setData()
   },[listing_id])
   if (!listingData) {
-    return <div className="font-bold text-xl">Loading...</div>;
+    return <div className="font-bold text-xl flex w-screen h-screen items-center justify-center"><div>Loading...</div></div>;
   }
-  return <div>
-    Listing Data : 
-    <br></br>
-    <pre>{JSON.stringify(listingData, null, 2)}</pre>
-  </div>;
+  return (
+    <PropertyListingPage listingData = {listingData}/>
+  )
 };
-
+                   
 export default page;

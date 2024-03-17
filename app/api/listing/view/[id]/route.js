@@ -1,15 +1,19 @@
 import { connectToDB } from "@utils/database"
 import PropertyListing from "@models/property_listing";
+import User from "@models/user";
 //GET to read request
 // fetch posts
 export const GET = async (req, {params})=>{
     try {
       await connectToDB();
-      const listings = await PropertyListing.findById(params.id);
+      let listings = await PropertyListing.findById(params.id);
 
       if(!listings){
         return new Response("Post not found", {status: 404})
       }
+      const user = await User.findById(listings?.creator);
+      listings = {...listings?._doc, user: user}
+      console.log(listings)
 
       return new Response(JSON.stringify(listings), {status : 200})
     } catch (error) {
