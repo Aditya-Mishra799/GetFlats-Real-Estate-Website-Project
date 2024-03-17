@@ -12,12 +12,13 @@ import {
 
 import PropertyListingSchema from "@models/schema/PropertyListingSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { useCheckLoginAndRedirect } from "@common_functions/check_login_and_redirect";
+import { useSession } from "next-auth/react";
 const page = () => {
   const {
     register,
     handleSubmit,
-    watch,
+    reset,
     control,
     formState: { errors },
     trigger,
@@ -166,10 +167,11 @@ const page = () => {
       ],
     },
   ];
-
-
+  const { data: session } = useSession();
+  useCheckLoginAndRedirect(session);
   return (
-    <div>
+    <>
+    {session?.user && <div>
       Add Listing
       <MultiStepForm
         formPages={formPages}
@@ -178,8 +180,10 @@ const page = () => {
         trigger={trigger}
         clearErrors={clearErrors}
         errors={errors}
+        reset = {reset}
       />
-    </div>
+    </div>}
+    </>
   );
 };
 

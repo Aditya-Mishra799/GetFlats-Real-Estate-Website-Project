@@ -5,19 +5,22 @@ import InputForm from "./InputForm";
 import { useSession } from 'next-auth/react'
 import { data } from "autoprefixer";
 import { createFormData } from "@common_functions/create_form_data";
+import { useSnackBar } from "./SnackBar/SnackBarService";
 const MultiStepForm = ({
   formPages,
-  handleSubmit,
   errors,
   getValues,
   trigger,
   clearErrors,
+  reset,
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [progressBarWidth, setProgressBarWidth] = useState(0);
   const {data:session} = useSession()
   const markerRef = useRef(null)
   const progressBarRef = useRef(null)
+  const [submitting, setSubmitting] = useState(false);
+  const snackBar = useSnackBar()
   const goBack = () => {
     if (currentStep === 0) return;
     setCurrentStep(currentStep - 1);
@@ -63,6 +66,7 @@ const MultiStepForm = ({
       console.log(error);
     }
   };
+  // const  handleClickOnNextButton = ()=>{}
   const handleClickOnNextButton = async () => {
     if (currentStep < formPages.length - 1) {
       goForward()
@@ -72,15 +76,42 @@ const MultiStepForm = ({
         const data = getValues()
         //convert object to form data
         const formData = createFormData({...data, creator: session?.user.id})
-        console.log(formData, data)
+        setSubmitting(true)
+        const id = snackBar.open('loading', {
+          label: 'Submitting Form...',
+          message: 'Please wait until form is submitting',
+        }, Infinity)
         //push the data to backend
-        const res = await fetch('/api/listing/new',{
-          method: 'POST',
-          body: formData,
-        })
-       }
+        try {
+          const res = await fetch('/api/listing/new',{
+            method: 'POST',
+            body: formData,
+          })
+          const responseData = await res.json()
+          snackBar.open('success', {
+            label: 'Submission Successfull',
+            message: 'click to view',
+            link: {
+              label: 'show',
+              href :`/listing/?id=${responseData?._id}`
+            }
+          }, 7000)
+          setCurrentStep(0)
+          reset()
+         }
+        catch (error) {
+          console.error(error)
+          snackBar.open('alert', {
+            label: 'Submission Failed',
+            message: <div className="max-w-16 truncate ...">`Error : ${JSON.stringify(error)}`</div>,
+          }, 7000)
+        }finally{
+          setSubmitting(false)
+          snackBar.close(id)
+        }
     }
-  };
+  }
+}
   useEffect(()=>{
     console.log(errors, getValues());
   }, [errors])
@@ -131,12 +162,13 @@ const MultiStepForm = ({
       </div>
       {/* Navigation buttons */}
       <div className="w-full flex justify-around px-10">
-        <Button disable={currentStep === 0} onClick={goBack}>
+        <Button disable={currentStep === 0 || submitting} onClick={goBack}>
           &larr; Previous
         </Button>
         <Button
           type="button"
           onClick = {handleClickOnNextButton}
+          disable = {submitting }
         >
           {currentStep === formPages.length - 1 ? 'Submit' : <>Next &rarr;</>}
         </Button>
