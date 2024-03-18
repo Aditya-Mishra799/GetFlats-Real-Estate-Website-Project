@@ -56,7 +56,7 @@ const PropertyListingsCard = ({data}) => {
             </div>
         </div>
         {/* Additional details */}
-        <div className="flex gap-1 flex-wrap mb-2">
+        <div className="flex gap-1 flex-wrap mb-2 px-2">
             <Button
               className={
                 "outline_btn px-2 py-1 font-medium text-sm flex  items-center rounded-lg gap-2"

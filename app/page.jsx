@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import "../styles/globals.css";
 import { useSnackBar } from "@components/SnackBar/SnackBarService";
 import { useSession } from "next-auth/react";
-import Modal from "@components/Modal";
 const Page = () => {
   const snackBar = useSnackBar();
   const { data: session } = useSession();
@@ -34,9 +33,7 @@ const Page = () => {
       );
     }
   }, [session]);
-  return <div className="border px-3 py-3 border-black">
-    Home
-    </div>;
+  return <div className="border px-3 py-3 border-black">Home</div>;
 };
 
 export default Page;
