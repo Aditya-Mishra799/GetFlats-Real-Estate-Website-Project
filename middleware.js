@@ -5,4 +5,4 @@ export function middleware(req){
     if (!sessionToken) return NextResponse.redirect(new URL('/auth', req.url))
     return 
 }
-export const config = { matcher: ["/profile/:path*"] }
+// export const config = { matcher: ["/profile/:path*"] }
