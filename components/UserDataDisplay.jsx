@@ -2,7 +2,6 @@ import Image from 'next/image'
 import React from 'react'
 
 const UserDataDisplay = ({user}) => {
-    console.log(user)
   return (
     <div className='w-full flex  gap-2 bg items-center'>
         <Image

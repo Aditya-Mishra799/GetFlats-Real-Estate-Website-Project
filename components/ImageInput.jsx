@@ -45,7 +45,6 @@ const reducer = (state, action) => {
 };
 const ImageInput = ({ label,onChange, name , errors,getValues,  ...rest }) => {
   const value = getValues(name)
-  console.log(name, value)
   const [media, dispatchMedia] = useReducer(reducer, value);
   const imageInputRef = useRef(null);
   const handleImageChange =  (e) => {

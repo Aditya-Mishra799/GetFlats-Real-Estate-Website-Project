@@ -24,7 +24,6 @@ const page = () => {
   useEffect(() => {
     const setUpProviders = async () => {
       const result = await getProviders();
-      console.log(result);
       setProviders(result);
     };
     setUpProviders();

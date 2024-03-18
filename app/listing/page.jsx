@@ -15,7 +15,6 @@ const page = () => {
     const endpoint =  '/api/listing/view/'+listing_id
     const response = await fetch(endpoint);
     const data = await response.json()
-    console.log(data)
     setListingData(data)
     }
   }

@@ -66,7 +66,6 @@ const Map = ({ label, onChange, name, errors, getValues, ...rest }) => {
       );
     }
     else{
-      console.log("Geolocation is not supported in your browser");
       //show error
     }
   }

@@ -7,7 +7,6 @@ const useGetUserLocation = (initialValue) => {
       if (typeof window !== "undefined") {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            console.log("User location:", position.coords);
             setUserLocation([position.coords.latitude, position.coords.longitude]);
             mapRef.current.flyTo([position.coords.latitude, position.coords.longitude], 15, {animate: true})
           },

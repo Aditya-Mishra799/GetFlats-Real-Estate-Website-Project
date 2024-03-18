@@ -52,7 +52,6 @@ const MultiStepForm = ({
     // else move ahead
     const fields = getValues();
     try {
-      console.log(errors, fields);
       currentStep < formPages.length &&
         formPages[currentStep]?.form.map((inputField) => 
           PropertyListingSchema.pick({ [inputField.name]: true }).parse({
@@ -63,7 +62,6 @@ const MultiStepForm = ({
       clearErrors()
     } catch (error) {
       trigger();
-      console.log(error);
     }
   };
   // const  handleClickOnNextButton = ()=>{}
@@ -112,9 +110,6 @@ const MultiStepForm = ({
     }
   }
 }
-  useEffect(()=>{
-    console.log(errors, getValues());
-  }, [errors])
   return (
     <form
       className="flex flex-col space-y-3 py-3 gap-2 px-5 border"

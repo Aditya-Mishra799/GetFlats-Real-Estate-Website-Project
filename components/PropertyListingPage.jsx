@@ -10,7 +10,6 @@ const IconButton = ({ Icon }) => (
   <Button className={"p-1 rounded-full"}>{Icon}</Button>
 );
 const PropertyListingPage = ({ listingData }) => {
-  console.log(listingData)
   const images = [listingData?.media.thumbnail, ...listingData?.media.images];
   const formatter = new Intl.NumberFormat("en-IN", {
     style: "currency",

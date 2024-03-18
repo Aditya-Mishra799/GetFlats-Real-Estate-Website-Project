@@ -1,55 +1,72 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 import Image from "next/image";
 import { useCheckLoginAndRedirect } from "@common_functions/check_login_and_redirect";
+import ProfileCard from "@components/ProfileCard";
+import FetchAndDisplayCards from "@components/FetchAndDisplayCards";
+import PropertyListingsCard from "@components/PropertyLisingsCard";
 const page = () => {
-  const { data: session } = useSession();
-  console.log(session);
-  useCheckLoginAndRedirect(session);
+  const { data: session, status } = useSession();
+  const [selectedTab, setSelectedTab] = useState(0);
+  useCheckLoginAndRedirect(session, status);
+  const handleLogOut = async () => {
+    await signOut();
+    sessionStorage.removeItem("hasRunOnce");
+  };
+  if (status === "loading") {
+    return (
+      <div className="w-screen h-screen flex justify-center items-center text-2xl font-bold text-slate-800">
+        Loading...
+      </div>
+    );
+  }
+  const tabs = [
+    {
+      label: "Your Listings",
+      component: <FetchAndDisplayCards apiEndpoint={`api/listing/user/${session?.user.id}`} CardComponet = {PropertyListingsCard}/>,
+    },
+    {
+      label: "Wish list",
+      component: <></>,
+    },
+    {
+      label: "Enquiries",
+      component: <></>,
+    },
+  ];
   return (
     <>
       {session?.user && (
-        <div className="flex flex-col justify-center items-center p-3 lg:flex-row w-full gap-4 lg:justify-between lg:m-5">
-          <div className="border p-4 rounded-md border-orange-400 max-w-max  shadow-2xl flex flex-col">
-            <h1 className="text-2xl font-semibold">Profile</h1>
-            {session?.user && (
-              <div>
-                <Image
-                  height={120}
-                  width={120}
-                  src={session.user.image}
-                  alt="profile"
-                  title="profile"
-                  className="mx-auto my-3 rounded-md shadow-sm"
-                />
-                <div className="flex flex-col gap-2 mt-5">
-                  <p>
-                    <span className="font-medium ">Name: </span>{" "}
-                    <span>{session.user.name}</span>
-                  </p>
-                  <p>
-                    <span className="font-medium ">Email:</span>{" "}
-                    <span>{session.user.email}</span>
-                  </p>
-                </div>
-              </div>
-            )}
-            <div className="flex justify-between items-center mt-4 gap-3">
-              <button className="primary_btn" onClick={signOut}>
-                Log Out
-              </button>
-              <button className="outline_btn" onClick={signOut}>
-                Edit Profile
-              </button>
-            </div>
+        <div className="flex flex-col items-start p-3 lg:flex-row w-full gap-4 lg:justify-between lg:m-5 justify-evenly">
+          <div className="lg:w-1/3 flex w-full justify-center max-h-min flex-grow-0 self-auto">
+            <ProfileCard
+              user={session?.user}
+              control={true}
+              handleLogOut={handleLogOut}
+            />
           </div>
-          <div>
-            <button className="border p-2 rounded-lg  bg-orange-400 text-white">
-              Your Listings
-            </button>
-            <button>Wishlist</button>
-            <button>Enquiries</button>
+          <div className="w-full flex-col items-center  gap-4">
+            {/* Tabs */}
+            <div className="flex gap-1 lg:gap-4 w-full justify-center">
+              {tabs.map((tab, index) => (
+                <button
+                  key={tab.label + index}
+                  className={
+                    "border border-faded-orange uppercase tracking-wider px-4 py-2 shadow-md rounded-md "+
+                  "hover:bg-smooth-orange hover:text-white hover:font-semibold transition-all " +
+                  ((index === selectedTab) ? " text-white font-semibold bg-active-orange" : '')
+                } 
+                onClick = {()=>setSelectedTab(index)}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+            {/* Display Component */}
+            <div className="w-full p-4 m-y-1">
+              {tabs[selectedTab]?.component}
+            </div>
           </div>
         </div>
       )}

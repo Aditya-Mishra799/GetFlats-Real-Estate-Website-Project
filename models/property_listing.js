@@ -81,7 +81,6 @@ const PropertyListingSchema = new Schema({
       type: [String], // Adjust as per your file storage mechanism
       validate: {
         validator: function(images) {
-          console.log('Images Input', images)
           return images.length > 0;
         },
         message: 'Please provide at least one image.'

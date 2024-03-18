@@ -23,7 +23,6 @@ export default function SnackBarProvider({ children }) {
         component?.link,
         component?.label,
       );
-      console.log(builtInComponent);
       setSnackBars((snackBars) => [
         ...snackBars,
         { id, component: builtInComponent },
@@ -40,7 +39,6 @@ export default function SnackBarProvider({ children }) {
     alert: 'Action Failed',
   }
   const defaultSnackBarComponents = (type, message, link, label = defaultLabels[type]) => {
-    console.log(type, message);
     switch (type) {
       case "success":
         return (

@@ -2,7 +2,7 @@ import { connectToDB } from "@utils/database"
 import PropertyListing from "@models/property_listing";
 import User from "@models/user";
 //GET to read request
-// fetch posts
+// fetch listings
 export const GET = async (req, {params})=>{
     try {
       await connectToDB();
@@ -13,7 +13,7 @@ export const GET = async (req, {params})=>{
       }
       const user = await User.findById(listings?.creator);
       listings = {...listings?._doc, user: user}
-      console.log(listings)
+      console.log('Fetched listing and sent to user')
 
       return new Response(JSON.stringify(listings), {status : 200})
     } catch (error) {
