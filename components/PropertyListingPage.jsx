@@ -1,26 +1,43 @@
 import formatAddress from "@common_functions/formatAddress";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { FaBath, FaBed } from "react-icons/fa6";
 import { TbHexagon3D, TbRulerMeasure } from "react-icons/tb";
 import Button from "./Button";
 import UserDataDisplay from "./UserDataDisplay";
+import dynamic from "next/dynamic";
+const DynamicDisplayMap = dynamic(() => import("@components/DisplayMap"), {
+  ssr: false,
+  loading: () => (
+    <p className="text-center text-gray-500 font-bold text-xl w-full h-full flex justify-center items-center">
+      Loading Map...
+    </p>
+  ),
+});
+
 const IconButton = ({ Icon }) => (
   <Button className={"p-1 rounded-full"}>{Icon}</Button>
 );
 const PropertyListingPage = ({ listingData }) => {
   const images = [listingData?.media.thumbnail, ...listingData?.media.images];
+  const [openModal, setOpenModal] = useState(false)
   const formatter = new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
   });
-  const otherDetails = ['construction_date', 'furnished_status', 'phone', 'property_type']
+ const Map = (
+  <Modal isOpen={openModal} title = {'Map View of Property Listing'}>
+      <DynamicDisplayMap mainMarkerCoords={listingData?.location?.coordinates}/>
+    </Modal>
+ )
   return (
     <div className="w-full h-full m-0">
       {/* Image Display */}
       <div className="w-full h-[45vh] lg:40vh overflow-x-scroll flex gap-2 min-w-0  scroll-m-5 hidden-scrollbar relative">
-        <h3 className="absolute top-2 left-2 text-xl bg-active-orange px-2 py-1 text-white font-bold rounded-lg">{listingData?.property_title}</h3>
+        <h3 className="absolute top-2 left-2 text-xl bg-active-orange px-2 py-1 text-white font-bold rounded-lg">
+          {listingData?.property_title}
+        </h3>
         {images.map((imageURL) => (
           <Image
             key={imageURL}
@@ -41,6 +58,7 @@ const PropertyListingPage = ({ listingData }) => {
               className={
                 "outline_btn font-medium flex  items-center rounded-lg gap-2"
               }
+              onClick = {()=>setOpenModal(true)}
             >
               <CiLocationOn size={20} /> Map
             </Button>
@@ -107,8 +125,8 @@ const PropertyListingPage = ({ listingData }) => {
           {/* Amenities */}
           <div className="space-y-3 px-4">
             <h3 className="font-bold text-xl tracking-wider text-slate-800">
-                Amenities Available
-                </h3>
+              Amenities Available
+            </h3>
             <div className="flex gap-2 flex-wrap">
               {listingData?.amenities.map((amenity) => (
                 <span className="border border-active-orange text-active-orange p-3 rounded-md font-bold  tracking-wide">
@@ -120,38 +138,33 @@ const PropertyListingPage = ({ listingData }) => {
         </div>
         {/* Col 2 */}
         <div className="px-2 w-full lg:w-1/2">
-            {/* Other Details */}
+          {/* Other Details */}
           <div className="px-4 py-4 border border-active-orange rounded-xl mx-2 my-2 ">
-            <h3 className="font-bold text-xl tracking-wider text-slate-800">Other Details</h3>
+            <h3 className="font-bold text-xl tracking-wider text-slate-800">
+              Other Details
+            </h3>
             <div className="flex flex-col gap-2 text-lg">
+              <div className="flex justify-between  text-dark-orange ">
+                <h3 className="font-semibold">Contruction Date</h3>
+                <span className="">
+                  {Date(listingData?.construction_date).substring(0, 15)}
+                </span>
+              </div>
 
-            <div className="flex justify-between  text-dark-orange ">
-              <h3 className="font-semibold">Contruction Date</h3>
-              <span className="">
-                {Date(listingData?.construction_date).substring(0, 15)}
-              </span>
-            </div>
+              <div className="flex justify-between  text-dark-orange ">
+                <h3 className="font-semibold">Furnishing Status</h3>
+                <span className="">{listingData?.furnished_status.label}</span>
+              </div>
+              {/* Description */}
+              <div className="flex justify-between  text-dark-orange ">
+                <h3 className="font-semibold">Property Type</h3>
+                <span className="">{listingData?.property_type.label}</span>
+              </div>
 
-            <div className="flex justify-between  text-dark-orange ">
-              <h3 className="font-semibold">Furnishing Status</h3>
-              <span className="">
-                {listingData?.furnished_status.label}
-              </span>
-            </div>
-            {/* Description */}
-            <div className="flex justify-between  text-dark-orange ">
-              <h3 className="font-semibold">Property Type</h3>
-              <span className="">
-                {listingData?.property_type.label}
-              </span>
-            </div>
-
-            <div className="flex justify-between  text-dark-orange ">
-              <h3 className="font-semibold">Contact Number</h3>
-              <span className="">
-                {listingData?.phone}
-              </span>
-            </div>
+              <div className="flex justify-between  text-dark-orange ">
+                <h3 className="font-semibold">Contact Number</h3>
+                <span className="">{listingData?.phone}</span>
+              </div>
             </div>
           </div>
 

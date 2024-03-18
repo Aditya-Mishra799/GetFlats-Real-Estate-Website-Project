@@ -3,7 +3,6 @@ import React, { useState, useRef, useMemo, useEffect } from "react";
 import { MapContainer } from "react-leaflet";
 import { TileLayer } from "react-leaflet/TileLayer";
 import { Marker, Popup } from "react-leaflet";
-import useGetUserLocation from "@hooks/useGetUserLocation";
 import Button from "./Button";
 import formatAddress from "@common_functions/formatAddress";
 import { FaLocationCrosshairs } from "react-icons/fa6";
