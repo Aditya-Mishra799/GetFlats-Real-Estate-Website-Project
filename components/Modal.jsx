@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 
 const Modal = ({ title ='Modal', isOpen, onClose, children }) => {
-  const [isVisible, setIsVisible] = useState(isOpen);
-
   const handleClose = () => {
-    setIsVisible(false);
     onClose && onClose();
   };
 
   return (
     <>
-      {isVisible && (
+      {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-30">
           <div className="fixed inset-0 bg-gray-900 opacity-50" onClick={handleClose}></div>
           <div className="bg-white p-4 rounded shadow-lg w-full flex-grow max-w-md z-50 m-4 h-2/3">

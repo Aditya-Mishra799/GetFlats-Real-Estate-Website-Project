@@ -7,6 +7,7 @@ import { TbHexagon3D, TbRulerMeasure } from "react-icons/tb";
 import Button from "./Button";
 import UserDataDisplay from "./UserDataDisplay";
 import dynamic from "next/dynamic";
+import Modal from "./Modal";
 const DynamicDisplayMap = dynamic(() => import("@components/DisplayMap"), {
   ssr: false,
   loading: () => (
@@ -21,16 +22,22 @@ const IconButton = ({ Icon }) => (
 );
 const PropertyListingPage = ({ listingData }) => {
   const images = [listingData?.media.thumbnail, ...listingData?.media.images];
-  const [openModal, setOpenModal] = useState(false)
+  const [openModal, setOpenModal] = useState(false);
   const formatter = new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
   });
- const Map = (
-  <Modal isOpen={openModal} title = {'Map View of Property Listing'}>
-      <DynamicDisplayMap mainMarkerCoords={listingData?.location?.coordinates}/>
+  const Map = (
+    <Modal
+      isOpen={openModal}
+      title={"Map View of Property Listing"}
+      onClose={() => setOpenModal(false)}
+    >
+      <DynamicDisplayMap
+        mainMarkerCoords={listingData?.location?.coordinates}
+      />
     </Modal>
- )
+  );
   return (
     <div className="w-full h-full m-0">
       {/* Image Display */}
@@ -58,7 +65,11 @@ const PropertyListingPage = ({ listingData }) => {
               className={
                 "outline_btn font-medium flex  items-center rounded-lg gap-2"
               }
-              onClick = {()=>setOpenModal(true)}
+              clickHandler={() => {
+                console.log("clicked");
+                console.log(openModal);
+                setOpenModal(true);
+              }}
             >
               <CiLocationOn size={20} /> Map
             </Button>
@@ -180,6 +191,8 @@ const PropertyListingPage = ({ listingData }) => {
           </div>
         </div>
       </div>
+      {/* Diplay the Map */}
+      {Map}
     </div>
   );
 };
