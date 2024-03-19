@@ -10,7 +10,7 @@ const Modal = ({ title ='Modal', isOpen, onClose, children }) => {
       {isOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-30">
           <div className="fixed inset-0 bg-gray-900 opacity-50" onClick={handleClose}></div>
-          <div className="bg-white p-4 rounded shadow-lg w-full flex-grow max-w-md z-50 m-4 h-2/3">
+          <div className="bg-slate-50 p-4 rounded shadow-lg w-full flex-grow max-w-lg z-50 m-4 h-3/4">
             <div className="flex justify-between items-center ">
               <h2 className="text-lg font-semibold">{title}</h2>
               <button className="text-gray-500 hover:text-gray-700" onClick={handleClose}>
@@ -30,7 +30,7 @@ const Modal = ({ title ='Modal', isOpen, onClose, children }) => {
                 </svg>
               </button>
             </div>
-            <div className="w-full h-full box-border overflow-hidden px-2 py-7">{children}</div>
+            <div className="w-full h-[90%]  overflow-scroll m-2 px-2 py-7 hidden-scrollbar">{children}</div>
           </div>
         </div>
       )}

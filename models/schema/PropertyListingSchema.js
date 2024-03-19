@@ -88,7 +88,7 @@ const PropertyListingSchema = z.object({
   media : z.object(
     {
       thumbnail :imageFileSchema(),
-      images : z.array(imageFileSchema()).refine(arr => arr.length > 0)
+      images : z.array(imageFileSchema()).refine(arr => arr.length > 0, {message : 'Must Provide 2 images thumbnail + 1.'})
     }, {message: 'Please provide thumbnail and images.'}
   ),
   area: validNumberSchema(50,Infinity,'Area must be greater than 50 sqft.'),

@@ -8,6 +8,8 @@ import Button from "./Button";
 import UserDataDisplay from "./UserDataDisplay";
 import dynamic from "next/dynamic";
 import Modal from "./Modal";
+import EnquiryForm from "./EnquiryForm";
+import { useSession } from "next-auth/react";
 const DynamicDisplayMap = dynamic(() => import("@components/DisplayMap"), {
   ssr: false,
   loading: () => (
@@ -21,23 +23,33 @@ const IconButton = ({ Icon }) => (
   <Button className={"p-1 rounded-full"}>{Icon}</Button>
 );
 const PropertyListingPage = ({ listingData }) => {
+  const { data: session, status } = useSession();
   const images = [listingData?.media.thumbnail, ...listingData?.media.images];
-  const [openModal, setOpenModal] = useState(false);
+  const [openMapModal, setOpenMapModal] = useState(false);
+  const [openEnquriyModal, setOpenEnquriyModal] = useState(false);
   const formatter = new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
   });
-  const Map = (
+  const MopModalComp = (
     <Modal
-      isOpen={openModal}
+      isOpen={openMapModal}
       title={"Map View of Property Listing"}
-      onClose={() => setOpenModal(false)}
+      onClose={() => setOpenMapModal(false)}
     >
       <DynamicDisplayMap
         mainMarkerCoords={listingData?.location?.coordinates}
       />
     </Modal>
   );
+  const AddEnquiryModalComp = (
+    <Modal
+    isOpen={openEnquriyModal}
+    title={"Add a new enquiry"}
+    onClose={()=> setOpenEnquriyModal(false)}
+    >
+     <EnquiryForm listing_id={listingData?._id} session={session}/>
+  </Modal>)
   return (
     <div className="w-full h-full m-0">
       {/* Image Display */}
@@ -66,9 +78,7 @@ const PropertyListingPage = ({ listingData }) => {
                 "outline_btn font-medium flex  items-center rounded-lg gap-2"
               }
               clickHandler={() => {
-                console.log("clicked");
-                console.log(openModal);
-                setOpenModal(true);
+                setOpenMapModal(true);
               }}
             >
               <CiLocationOn size={20} /> Map
@@ -126,8 +136,11 @@ const PropertyListingPage = ({ listingData }) => {
           </div>
           {/* Main Action Buttons */}
           <div className="w-full px-10 space-y-4 p-3 lg:px-20">
-            <Button className="uppercase w-full p-2 text-lg tracking-wider rounded-lg">
-              Schedule Visit
+            <Button 
+            className="uppercase w-full p-2 text-lg tracking-wider rounded-lg"
+            clickHandler={()=>setOpenEnquriyModal(true)}
+            >
+              Make an Enquiry
             </Button>
             <Button className="uppercase w-full p-2 text-lg tracking-wider rounded-lg">
               Talk on whatsapp
@@ -191,8 +204,9 @@ const PropertyListingPage = ({ listingData }) => {
           </div>
         </div>
       </div>
-      {/* Diplay the Map */}
-      {Map}
+      {/* Diplay the Modal Componet */}
+      {MopModalComp}
+      {AddEnquiryModalComp}
     </div>
   );
 };

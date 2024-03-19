@@ -1,14 +1,13 @@
 import mongoose, { Schema, model, models } from "mongoose";
-const { string } = require('zod');
 
 // Define Mongoose schema
 const PropertyListingSchema = new Schema({
-   // Add link to the user creating the post
-    // same as foreign key in sql
-    creator:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-    },
+  // Add link to the user creating the post
+  // same as foreign key in sql
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
   property_title: {
     type: String,
     minlength: 5,
@@ -53,7 +52,7 @@ const PropertyListingSchema = new Schema({
   construction_date: {
     type: Date,
     validate: {
-      validator: function(date) {
+      validator: function (date) {
         return !isNaN(new Date(date).getTime());
       },
       message: 'Please provide a valid date.'
@@ -63,7 +62,7 @@ const PropertyListingSchema = new Schema({
     coordinates: {
       type: [Number],
       validate: {
-        validator: function(coords) {
+        validator: function (coords) {
           return coords.length === 2;
         },
         message: 'Please provide your location coordinates.'
@@ -80,7 +79,7 @@ const PropertyListingSchema = new Schema({
     images: {
       type: [String], // Adjust as per your file storage mechanism
       validate: {
-        validator: function(images) {
+        validator: function (images) {
           return images.length > 0;
         },
         message: 'Please provide at least one image.'
@@ -95,7 +94,7 @@ const PropertyListingSchema = new Schema({
   phone: {
     type: String,
     validate: {
-      validator: function(phone) {
+      validator: function (phone) {
         const phoneRegex = /^\d{10}$/;
         return phoneRegex.test(phone);
       },
@@ -112,4 +111,4 @@ const PropertyListingSchema = new Schema({
 // Create Mongoose model
 const PropertyListing = models.PropertyListing || model('PropertyListing', PropertyListingSchema);
 
-export  default PropertyListing
+export default PropertyListing
