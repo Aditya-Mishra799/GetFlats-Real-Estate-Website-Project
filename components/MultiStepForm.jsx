@@ -101,7 +101,7 @@ const MultiStepForm = ({
           console.error(error)
           snackBar.open('alert', {
             label: 'Submission Failed',
-            message: <div className="max-w-16 truncate ...">`Error : ${JSON.stringify(error)}`</div>,
+            message: <div className="max-w-16 truncate ...">{`Error : ${JSON.stringify(error)}`}</div>,
           }, 7000) 
         }finally{
           setSubmitting(false)

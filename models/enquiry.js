@@ -13,29 +13,34 @@ const EnquiryModel = new Schema({
     phone: {
         type: String,
         required: true,
-        validate: {
-            validator: (value) => EnquirySchema.parse({ phone: value }),
-            message: (props) => props.reason.errors[0].message,
-        },
+        // validate: {
+        //     validator: (value) => EnquirySchema.pick({phone: true}).parse({ phone: value }),
+        //     message: (props) => props.reason.errors[0].message,
+        // },
     },
     email: {
         type: String,
         required: true,
-        validate: {
-            validator: (value) => EnquirySchema.parse({ email: value }),
-            message: (props) => props.reason.errors[0].message,
-        },
+        // validate: {
+        //     validator: (value) => EnquirySchema.pick({email: true}).parse({ email: value }),
+        //     message: (props) => props.reason.errors[0].message,
+        // },
     },
     description: {
         type: String,
-        validate: {
-            validator: (value) => {
-                if (!value) return true;
-                return EnquirySchema.parse({ description: value });
-            },
-            message: (props) => props.reason.errors[0].message,
-        },
+        // validate: {
+        //     validator: (value) => {
+        //         if (!value) return true;
+        //         return EnquirySchema.pick({description: true}).parse({ description: value });
+        //     },
+        //     message: (props) => props.reason.errors[0].message,
+        // },
     },
+    status:{
+        type: String,
+        enum: ['pending', 'accepted', 'rejected'],
+        default: 'pending'
+    }
 });
 
 // Create Mongoose model
