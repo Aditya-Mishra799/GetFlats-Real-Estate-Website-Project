@@ -15,6 +15,7 @@ const Page = () => {
       label: "view profile",
     },
   };
+ 
   useEffect(() => {
     const hasRunOnce = sessionStorage.getItem("hasRunOnce");
     if (!hasRunOnce && session?.user) {
