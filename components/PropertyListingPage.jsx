@@ -26,6 +26,7 @@ const PropertyListingPage = ({ listingData }) => {
   const { data: session, status } = useSession();
   const images = [listingData?.media.thumbnail, ...listingData?.media.images];
   const [openMapModal, setOpenMapModal] = useState(false);
+  const [open3DViewModal, setOpen3DViewModal] = useState(false);
   const [openEnquriyModal, setOpenEnquriyModal] = useState(false);
   const formatter = new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -44,12 +45,20 @@ const PropertyListingPage = ({ listingData }) => {
   );
   const AddEnquiryModalComp = (
     <Modal
-    isOpen={openEnquriyModal}
-    title={"Add a new enquiry"}
-    onClose={()=> setOpenEnquriyModal(false)}
+      isOpen={openEnquriyModal}
+      title={"Add a new enquiry"}
+      onClose={() => setOpenEnquriyModal(false)}
     >
-     <EnquiryForm listing_id={listingData?._id} session={session}/>
-  </Modal>)
+      <EnquiryForm listing_id={listingData?._id} session={session} />
+    </Modal>)
+  const ThreeDViewModal = (
+    <Modal
+      isOpen={open3DViewModal}
+      title={"3D View of Property"}
+      onClose={() => setOpen3DViewModal(false)}
+    >
+      <iframe height="100%" width="100%" allowfullscreen="true" src="https://momento360.com/e/u/fd8ef0b432cf426c8900e6a2ce10d804?utm_campaign=embed&utm_source=other&heading=0&pitch=0&field-of-view=75&size=medium&display-plan=true"></iframe>
+    </Modal>)
   return (
     <div className="w-full h-full m-0">
       {/* Image Display */}
@@ -87,6 +96,9 @@ const PropertyListingPage = ({ listingData }) => {
               className={
                 "outline_btn font-medium flex  items-center rounded-lg gap-2"
               }
+              clickHandler={() => {
+                setOpen3DViewModal(true);
+              }}
             >
               <TbHexagon3D size={20} /> 3D View
             </Button>
@@ -136,9 +148,9 @@ const PropertyListingPage = ({ listingData }) => {
           </div>
           {/* Main Action Buttons */}
           <div className="w-full px-10 space-y-4 p-3 lg:px-20">
-            <Button 
-            className="uppercase w-full p-2 text-lg tracking-wider rounded-lg"
-            clickHandler={()=>setOpenEnquriyModal(true)}
+            <Button
+              className="uppercase w-full p-2 text-lg tracking-wider rounded-lg"
+              clickHandler={() => setOpenEnquriyModal(true)}
             >
               Make an Enquiry
             </Button>
@@ -207,6 +219,7 @@ const PropertyListingPage = ({ listingData }) => {
       {/* Diplay the Modal Componet */}
       {MopModalComp}
       {AddEnquiryModalComp}
+      {ThreeDViewModal}
     </div>
   );
 };
