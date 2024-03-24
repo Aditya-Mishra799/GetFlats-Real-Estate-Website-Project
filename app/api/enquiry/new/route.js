@@ -1,7 +1,7 @@
 import { connectToDB } from "@utils/database";
 import Enquiry from "@models/enquiry";
 import PropertyListing from "@models/property_listing";
-export async function POST(req, res) {
+export async function POST(req) {
   const data = await req.json();
   console.log("Received data: ", data);
   try {
@@ -11,7 +11,7 @@ export async function POST(req, res) {
     const existingEnquiry = await Enquiry.findOne({
       creator: data.creator,
       property_listing: data.property_listing,
-    });
+    }).exec();
     if (existingEnquiry) {
       console.log("Already maid and enquiry exists!");
       return new Response(
@@ -22,8 +22,8 @@ export async function POST(req, res) {
       );
     }
     //check if user is making and enquiry to it's own listed property and don't allow
-    const property = PropertyListing.findById(data.property_listing);
-    console.log(property)
+    const property = await PropertyListing.findById(data.property_listing).exec();
+    console.log("Property Found : ", property)
     if (property && property?.creator == data?.creator) {
       console.log(
         "User is trying to make an enquiry to their own listed property!"
@@ -36,7 +36,7 @@ export async function POST(req, res) {
       );
     }
     //create new enquiry if not made previously
-    const enquiry = new Enquiry({...data});
+    const enquiry = new Enquiry({...data, owner: property?.creator});
     await enquiry.save();
     console.log("Enquiry added successfully!");
     return new Response(

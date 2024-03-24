@@ -84,6 +84,9 @@ const PropertyListingSchema = new Schema({
         },
         message: 'Please provide at least one image.'
       }
+    },
+    panorama: {
+      type: String
     }
   },
   area: {

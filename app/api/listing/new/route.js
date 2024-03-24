@@ -27,7 +27,7 @@ export async function POST(req, res){
         const newListing = new PropertyListing({...listingData})
         await newListing.save()
         console.log('Added listing to mongo DB Atlas !')
-        //Response is a fetch Api Class and it sends a response to clien
+        //Response is a fetch Api Class and it sends a response to client
         //it contains message and status and other meta data 
         return new Response(JSON.stringify(newListing), {status: 201})
 

@@ -84,7 +84,7 @@ const EnquiryForm = ({ listing_id, session }) => {
         {
           label: "Submission Failed",
           message: (
-            <div className="">{`Error : ${error?.message}`}</div>
+            <div className="max-w-64 truncate ...">{`Error : ${error?.message}`}</div>
           ),
         },
         7000

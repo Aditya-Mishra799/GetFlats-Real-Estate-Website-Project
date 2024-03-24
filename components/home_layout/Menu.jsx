@@ -4,7 +4,7 @@ import MenuButton from "./MenuButton";
 import { usePathname } from "next/navigation";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
-const Menu = ({ menuOpen }) => {
+const Menu = ({ menuOpen, setMenuOpen }) => {
   const { data: session } = useSession();
   const [providers, setProviders] = useState(null);
   // set providers
@@ -31,18 +31,6 @@ const Menu = ({ menuOpen }) => {
       hidden: !session,
       dropdown: [
         {
-          name: "Your listings",
-          link: "/profile/listings",
-        },
-        {
-          name: "Enquiries",
-          link: "/profile/enquiries",
-        },
-        {
-          name: "Wishlist",
-          link: "/profile/wishlist",
-        },
-        {
           name: "Add Listing",
           link: "/profile/add-listing",
         },
@@ -55,10 +43,6 @@ const Menu = ({ menuOpen }) => {
     {
       name: "Contact",
       link: "/contact",
-    },
-    {
-      name: "Blog",
-      link: "/blog",
     },
     {
       name: "Logout",
@@ -85,7 +69,10 @@ const Menu = ({ menuOpen }) => {
               {...button}
               key={button.name}
               active={active === index}
-              clickHandler={() => setActive(index)}
+              clickHandler={() => {
+                setActive(index);
+                setMenuOpen(false);
+              }}
             />
           );
         })}

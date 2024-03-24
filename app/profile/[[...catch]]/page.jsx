@@ -6,8 +6,12 @@ import { useCheckLoginAndRedirect } from "@common_functions/check_login_and_redi
 import ProfileCard from "@components/ProfileCard";
 import FetchAndDisplayCards from "@components/FetchAndDisplayCards";
 import PropertyListingsCard from "@components/PropertyLisingsCard";
+import EnquiryPanel from "@components/EnquiryPanel";
+import { usePathname } from "next/navigation";
+
 const page = () => {
   const { data: session, status } = useSession();
+  const pathname = usePathname();
   const [selectedTab, setSelectedTab] = useState(0);
   useCheckLoginAndRedirect(session, status);
   const handleLogOut = async () => {
@@ -24,15 +28,25 @@ const page = () => {
   const tabs = [
     {
       label: "Your Listings",
-      component: <FetchAndDisplayCards apiEndpoint={`api/listing/user/${session?.user.id}`} CardComponet = {PropertyListingsCard}/>,
+      component: (
+        <FetchAndDisplayCards
+          apiEndpoint={`api/listing/user/${session?.user.id}`}
+          CardComponet={PropertyListingsCard}
+        />
+      ),
     },
     {
       label: "Wish list",
-      component: <></>,
+      component: (
+        <FetchAndDisplayCards
+          apiEndpoint={`api/listing/get-wishlist`}
+          CardComponet={PropertyListingsCard}
+        />
+      ),
     },
     {
       label: "Enquiries",
-      component: <></>,
+      component: <EnquiryPanel />,
     },
   ];
   return (
@@ -53,11 +67,13 @@ const page = () => {
                 <button
                   key={tab.label + index}
                   className={
-                    "border border-faded-orange uppercase tracking-wider px-4 py-2 shadow-md rounded-md "+
-                  "hover:bg-smooth-orange hover:text-white hover:font-semibold transition-all " +
-                  ((index === selectedTab) ? " text-white font-semibold bg-active-orange" : '')
-                } 
-                onClick = {()=>setSelectedTab(index)}
+                    "border border-faded-orange uppercase tracking-wider px-4 py-2 shadow-md rounded-md " +
+                    "hover:bg-smooth-orange hover:text-white hover:font-semibold transition-all " +
+                    (index === selectedTab
+                      ? " text-white font-semibold bg-active-orange"
+                      : "")
+                  }
+                  onClick={() => setSelectedTab(index)}
                 >
                   {tab.label}
                 </button>

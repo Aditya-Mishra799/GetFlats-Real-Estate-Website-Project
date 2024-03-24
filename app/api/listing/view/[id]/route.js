@@ -1,6 +1,7 @@
 import { connectToDB } from "@utils/database"
 import PropertyListing from "@models/property_listing";
 import User from "@models/user";
+import Feedbacks from "@models/feedbacks";
 //GET to read request
 // fetch listings
 export const GET = async (req, {params})=>{
@@ -9,10 +10,12 @@ export const GET = async (req, {params})=>{
       let listings = await PropertyListing.findById(params.id);
 
       if(!listings){
-        return new Response("Post not found", {status: 404})
+        return new Response("listing not found", {status: 404})
       }
       const user = await User.findById(listings?.creator);
-      listings = {...listings?._doc, user: user}
+      const feedbacks = await  Feedbacks.find({property_listing: listings._id}).populate('user').exec();
+      listings = {...listings?._doc, user: user, feedbacks}
+      console.log(listings)
       console.log('Fetched listing and sent to user')
 
       return new Response(JSON.stringify(listings), {status : 200})

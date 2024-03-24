@@ -15,7 +15,7 @@ const DynamicMap = dynamic(()=>import("./Map"),{
 });
 const InputForm = ({ inputFeilds }) => {
   return (
-    <div class="flex flex-wrap bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-xl min-w-sm gap-2 w-full">
+    <div className="flex flex-wrap bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-xl min-w-sm gap-2 w-full">
       {inputFeilds.map((inputFeild, index) => {
         switch (inputFeild.elementType) {
           case "input":

@@ -69,7 +69,7 @@ export default function SnackBarProvider({ children }) {
             <div>
               <h3 className="font-bold">{label}</h3>
               <div className="flex gap-1 w-full items-center">
-                <p className="text-sm">{message}</p>
+                <div className="text-sm">{message}</div>
                 {link && link?.href && link?.label && (
                   <Link
                     href={link?.href}

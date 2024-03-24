@@ -18,7 +18,7 @@ const formInputFields = (commonProps) => [
     },
   ];
 const validLink = z.object({
-    panorama : z.string().refine((link)=>/^https:\/\/www.momento360\.com\/e\/u\/.*$/gm.test(
+    panorama : z.string().refine((link)=>/^https:\/\/(www\.)?momento360\.com\/e\/u\/.*$/gm.test(
         link
     ), {message: 'Must be a valid momento 360 link (https://momento360.com/e/u/*)'})
 })
@@ -48,12 +48,12 @@ const Add3DImagePage = ({listing_id}) => {
           Infinity
         );
         try {
-          const result = await fetch("/api/listing/add-3d", {
+          const result = await fetch("/api/listing/add-panorama", {
             method: "POST",
             body: JSON.stringify({
               ...data,
               creator: session?.user?.id,
-              property_listing: listing_id,
+              property_listing_id: listing_id,
             }),
           });
           if (!result.ok) {

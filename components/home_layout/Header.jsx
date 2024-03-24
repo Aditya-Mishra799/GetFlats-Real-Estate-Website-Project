@@ -28,7 +28,7 @@ const Header = () => {
         </button>
 
         {/* Menu */}
-        <Menu menuOpen = {menuOpen}/>
+        <Menu menuOpen = {menuOpen} setMenuOpen = {setMenuOpen}/>
       </div>
     </nav>
   );

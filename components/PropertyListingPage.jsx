@@ -10,6 +10,7 @@ import dynamic from "next/dynamic";
 import Modal from "./Modal";
 import EnquiryForm from "./EnquiryForm";
 import { useSession } from "next-auth/react";
+import FeedBackPanel from "./FeedBackPanel";
 const DynamicDisplayMap = dynamic(() => import("@components/DisplayMap"), {
   ssr: false,
   loading: () => (
@@ -28,6 +29,7 @@ const PropertyListingPage = ({ listingData }) => {
   const [openMapModal, setOpenMapModal] = useState(false);
   const [open3DViewModal, setOpen3DViewModal] = useState(false);
   const [openEnquriyModal, setOpenEnquriyModal] = useState(false);
+  const [feedbacks, setFeedBacks] = useState(listingData?.feedbacks)
   const formatter = new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
@@ -50,15 +52,30 @@ const PropertyListingPage = ({ listingData }) => {
       onClose={() => setOpenEnquriyModal(false)}
     >
       <EnquiryForm listing_id={listingData?._id} session={session} />
-    </Modal>)
+    </Modal>
+  );
   const ThreeDViewModal = (
     <Modal
       isOpen={open3DViewModal}
       title={"3D View of Property"}
       onClose={() => setOpen3DViewModal(false)}
     >
-      <iframe height="100%" width="100%" allowfullscreen="true" src="https://momento360.com/e/u/fd8ef0b432cf426c8900e6a2ce10d804?utm_campaign=embed&utm_source=other&heading=0&pitch=0&field-of-view=75&size=medium&display-plan=true"></iframe>
-    </Modal>)
+      {listingData?.media?.panorama ? (
+        <iframe
+          height="100%"
+          width="100%"
+          allowfullscreen="true"
+          src={listingData?.media?.panorama}
+        ></iframe>
+      ) : (
+        <div className="w-full h-full flex justify-center items-center">
+          <p className="text-xl  text-gray-500 font-semibold">
+            No 3D View Available
+          </p>
+        </div>
+      )}
+    </Modal>
+  );
   return (
     <div className="w-full h-full m-0">
       {/* Image Display */}
@@ -191,7 +208,6 @@ const PropertyListingPage = ({ listingData }) => {
                 <h3 className="font-semibold">Furnishing Status</h3>
                 <span className="">{listingData?.furnished_status.label}</span>
               </div>
-              {/* Description */}
               <div className="flex justify-between  text-dark-orange ">
                 <h3 className="font-semibold">Property Type</h3>
                 <span className="">{listingData?.property_type.label}</span>
@@ -203,17 +219,18 @@ const PropertyListingPage = ({ listingData }) => {
               </div>
             </div>
           </div>
-
+           {/* Description */}
           <div className="border border-active-orange p-3 m-2 rounded-lg text-slate-600 max-h-max transition-all duration-1000">
             <h3 className="font-bold text-xl">Description:</h3>
             <p className=" text-pretty tracking-wide line-clamp-6 hover:line-clamp-none">
-              {listingData?.property_description}
+              <pre className=" text-gray-500 dark:text-gray-400 font-satoshi whitespace-pre-wrap leading-6"> {listingData?.property_description}</pre>
             </p>
           </div>
           <div className="w-full mx-auto px-2 py-1 space-y-3 lg:px-5">
             <h3 className="self-start text-xl font-bold">Added By:</h3>
             <UserDataDisplay user={listingData?.user} />
           </div>
+          <FeedBackPanel feedbacks = {feedbacks} setFeedBacks = {setFeedBacks} property_listing = {listingData._id}/>
         </div>
       </div>
       {/* Diplay the Modal Componet */}
