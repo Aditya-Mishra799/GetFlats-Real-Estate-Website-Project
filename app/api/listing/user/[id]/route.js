@@ -22,7 +22,7 @@ export const GET = async (req, {params})=>{
       //later add functionality to check if listing is liked by user and also append that to data
       let listings = await PropertyListing.find({
         creator: params.id
-      }).populate("creator").lean().exec();
+      }).populate("creator").lean().limit(20).exec();
 
       if(!listings){
          listings = []
