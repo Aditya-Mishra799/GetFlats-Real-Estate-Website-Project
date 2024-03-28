@@ -8,6 +8,9 @@ const propertyOptions = [
     { label: "Penthouse", value: "penthouse" },
     { label: "Studio", value: "studio" },
     { label: "Loft", value: "loft" },
+    {label: "Farm House", value: 'farmhouse'},
+    {label: "Independent", value: 'independent'},
+    {label: "Residential Land", value: 'residential_land'},
   ];
   
   const amenitiesOptions = [
