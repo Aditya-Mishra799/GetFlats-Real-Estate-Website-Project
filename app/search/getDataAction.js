@@ -75,7 +75,7 @@ const buildMongoDBSearchQuery = (filterQuery) => {
         .limit(perPage)
         .lean()
         .exec();
-      if (session?.user?.id) {
+      if (session?.user ) {
         listings = await checkForFavourites(listings, session.user.id);
       }
       const listingCount = await PropertyListing.countDocuments(query);

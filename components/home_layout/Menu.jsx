@@ -52,7 +52,7 @@ const Menu = ({ menuOpen, setMenuOpen }) => {
 
     {
       name: "Search",
-      link: "/search",
+      link: "/search?page=1&query={}",
     },
   ];
   const pathname = usePathname().split("/")[1];
