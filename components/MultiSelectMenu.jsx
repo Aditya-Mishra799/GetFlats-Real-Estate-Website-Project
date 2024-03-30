@@ -14,7 +14,7 @@ const MultiSelectMenu = ({ options, menuLabel , value = [], setValue}) => {
   return (
     <div className="relative inline-block text-left items-center w-full">
       <div className="w-full">
-        <div className="flex  gap-1 rounded-md shadow-sm border border-active-orange items-center px-2 py-1  w-full">
+        <div className="flex  gap-1 rounded-md shadow-sm border border-active-orange items-center px-2 py-1  w-full bg-white">
           <button
             type="button"
             className="inline-flex justify-center w-full rounded-md   bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none grow"

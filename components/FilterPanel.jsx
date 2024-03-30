@@ -54,6 +54,13 @@ const FilterPanel = ({ query }) => {
     };
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // Optional smooth scrolling behavior
+    });
+  };
+
   const handleFilterSubmit = (jsonQueryString) => {
     //if reseset the reset the inputState
     console.log("Input state", inputState);
@@ -64,12 +71,16 @@ const FilterPanel = ({ query }) => {
   };
 
   const FilterLocationInput = (
-    <Modal isOpen={openMapModal} onClose={() => setOpenMapModal(false)} title = {'All the listings with in 10km radius will be shown'}>
+    <Modal
+      isOpen={openMapModal}
+      onClose={() => setOpenMapModal(false)}
+      title={"All the listings with in 10km radius will be shown"}
+    >
       <DynamicFilterMap {...mountInputs("coordinates")} />
     </Modal>
   );
   const filterComp = (
-    <div className={`w-full flex flex-col gap-4 text-center px-8 py-4 h-full`}>
+    <div className={`w-full flex flex-col gap-4 text-center px-8 py-4 h-full `}>
       <h3 className="text-2xl font-semibold ">Filter listings</h3>
       <MultiSelectMenu
         options={listingTypeOptions}
@@ -126,7 +137,7 @@ const FilterPanel = ({ query }) => {
     <div className="w-full">
       {isOpen && (
         <div
-          className={` lg:hidden absolute z-20 w-[70vw] bg-slate-50 min-h-screen top-[50px]`}
+          className={` lg:hidden absolute z-20 w-[98vw] bg-slate-50 min-h-screen top-[50px] `}
         >
           <div className="w-full  relative h-full">
             <span
@@ -144,7 +155,10 @@ const FilterPanel = ({ query }) => {
         className={`fixed bottom-5 left-5 text-white p-5 rounded-full bg-active-orange ${
           isOpen && "hidden"
         } lg:hidden cursor-pointer z-50 shadow-lg `}
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setIsOpen(true);
+          scrollToTop();
+        }}
       >
         <FaFilter size={20} />
       </div>

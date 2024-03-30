@@ -121,10 +121,10 @@ const page = async ({ searchParams }) => {
           <FilterPanel query={query} />
         </div>
         <div className="grow w-full">
-          <h3 className="text-xl font-semibold mx-8 lg:mx-14 mb-4">
+          <h3 className="text-2xl font-semibold mx-8 lg:mx-14 mb-4 text-slate-800">
             Showing {data.listingCount === 0 ? 0 : (page - 1) * perPage + 1} -{" "}
             {page === totalPages || data.listingCount === 0 ? data.listingCount : page * perPage} listings
-            out of {data.listingCount} ...
+            out of {data.listingCount} 
           </h3>
           <div className="flex  gap-4  flex-wrap  mx-8 lg:mx-14 ">
 
