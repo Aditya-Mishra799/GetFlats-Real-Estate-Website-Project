@@ -17,6 +17,10 @@ export async function GET(req) {
     const response = await fetch(
       recommendationAPIUrl + `/similar-listings?id=${property_listing_id}`
     );
+    //return empty list if recommendation end point is not working
+    if (!response.ok) {
+        return Response.json([], { status: 200 });
+      }
     const result = await response.json();
 
     let listings = await PropertyListing.find({
