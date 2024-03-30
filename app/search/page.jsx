@@ -7,7 +7,7 @@ import PropertyListingsCard from "@components/PropertyLisingsCard";
 import Link from "next/link";
 import FilterPanel from "@components/FilterPanel";
 import { redirect } from "next/navigation";
-
+import User from "@models/user";
 const buildMongoDBSearchQuery = (filterQuery) => {
   const queryArrayAndPart = [];
   const labelFilter = new Set([
