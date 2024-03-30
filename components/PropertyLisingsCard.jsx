@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import React, { useState } from "react";
 import { FaBath, FaBed, FaHeart } from "react-icons/fa6";
@@ -105,7 +106,7 @@ const PropertyListingsCard = ({ data, setCards, index }) => {
             <FaHeart />
           </button>
         )}
-        {data?.creator?._id == session?.user?.id && menuDropDownButton}
+        {data?.creator?._id === session?.user?.id && menuDropDownButton}
       </div>
       <div className="p-2 space-y-1.5">
         <div className="flex gap-1">

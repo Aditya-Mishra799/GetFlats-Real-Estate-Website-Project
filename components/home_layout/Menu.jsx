@@ -49,6 +49,11 @@ const Menu = ({ menuOpen, setMenuOpen }) => {
       link: "/logout",
       hidden: !session,
     },
+
+    {
+      name: "Search",
+      link: "/search",
+    },
   ];
   const pathname = usePathname().split("/")[1];
   const index = menuButtons.findIndex(
@@ -71,7 +76,6 @@ const Menu = ({ menuOpen, setMenuOpen }) => {
               active={active === index}
               clickHandler={() => {
                 setActive(index);
-                setMenuOpen(false);
               }}
             />
           );

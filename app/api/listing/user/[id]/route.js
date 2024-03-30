@@ -23,7 +23,6 @@ export const GET = async (req, {params})=>{
       let listings = await PropertyListing.find({
         creator: params.id
       }).populate("creator").lean().limit(20).exec();
-
       if(!listings){
          listings = []
       } 

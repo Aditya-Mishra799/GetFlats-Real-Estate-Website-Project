@@ -64,17 +64,12 @@ const Map = ({ label, onChange, name, errors, getValues, ...rest }) => {
         }
       );
     }
-    else{
-      //show error
-    }
+    
   }
   useEffect(() => {
     updateAndGetLocation();
   }, []);
-  // useEffect( async () => {
-  //   await fetchAddress(userLocation, saveAddress);
-  // }, [userLocation]);
-  //upadte address in react hook form
+ 
   return (
     <div className="w-full h-full  px-1 py-1 space-y-2" key={name}>
       <div className=" space-y-3">

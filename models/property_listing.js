@@ -61,6 +61,7 @@ const PropertyListingSchema = new Schema({
   location: {
     coordinates: {
       type: [Number],
+      index: '2dsphere', 
       validate: {
         validator: function (coords) {
           return coords.length === 2;
