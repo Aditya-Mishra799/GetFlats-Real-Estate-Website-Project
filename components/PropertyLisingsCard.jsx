@@ -1,6 +1,6 @@
-'use client'
+"use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaBath, FaBed, FaHeart } from "react-icons/fa6";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { TbRulerMeasure } from "react-icons/tb";
@@ -18,38 +18,44 @@ const PropertyListingsCard = ({ data, setCards, index }) => {
     currency: "INR",
   });
   const { data: session } = useSession();
-  const snackBar = useSnackBar()
+  const snackBar = useSnackBar();
   const diplayAddress = `${data?.location?.address?.suburb ?? ""}
     ${data?.location?.address?.city ?? ""} 
     ${data?.location?.address?.state ?? ""}`;
+
   const router = useRouter();
   const [openMenu, setOpenMenu] = useState(false);
   const [openAdd3DImageModel, setOpenAdd3DImageModel] = useState(false);
   const handleClick = () => {
     router.push(`/listing?id=${data?._id}`);
   };
-  const toggleListingFavourites = async ()=>{
+  const toggleListingFavourites = async () => {
     try {
-      const result = await fetch(`api/listing/favourite?id=${data._id}`)
-      if(result.ok){
+      const result = await fetch(`api/listing/favourite?id=${data._id}`);
+      if (result.ok) {
         snackBar.open(
           "success",
           {
             label: "Success!",
-            message:  data.isFavourite ? 'Removed from wish list' : 'Added to wish list',
+            message: data.isFavourite
+              ? "Removed from wish list"
+              : "Added to wish list",
           },
           7000
         );
       }
-      setCards(prevState => {
+      setCards((prevState) => {
         const updatedCards = [...prevState]; // Create a copy of the previous state array
-        updatedCards[index] = {...updatedCards[index], isFavourite: !updatedCards[index].isFavourite};
+        updatedCards[index] = {
+          ...updatedCards[index],
+          isFavourite: !updatedCards[index].isFavourite,
+        };
         return updatedCards;
-    })
+      });
     } catch (error) {
-      console.log(error) 
+      console.log(error);
     }
-  }
+  };
   const menuDropDownButton = (
     <div
       className="absolute text-md tracking-wider font-semibold top-1 right-1 hover:bg-white p-1  rounded-full  hover:text-active-orange  cursor-pointer "
@@ -98,7 +104,10 @@ const PropertyListingsCard = ({ data, setCards, index }) => {
         </div>
         {session?.user && (
           <button
-            className={"absolute text-md tracking-wider font-semibold top-1 left-1 bg-white p-1  rounded-full  hover:text-red-600 hover:opacity-100 " + (data?.isFavourite ? "text-red-600 opacity-100" : "opacity-50")}
+            className={
+              "absolute text-md tracking-wider font-semibold top-1 left-1 bg-white p-1  rounded-full  hover:text-red-600 hover:opacity-100 " +
+              (data?.isFavourite ? "text-red-600 opacity-100" : "opacity-50")
+            }
             title={"Add to Favorite"}
             onClick={toggleListingFavourites}
             aria-label="Add to Favorite"

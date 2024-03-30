@@ -172,7 +172,6 @@ const page = () => {
   return (
     <>
     {session?.user && <div>
-      Add Listing
       <MultiStepForm
         formPages={formPages}
         handleSubmit={handleSubmit}

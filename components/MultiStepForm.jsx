@@ -112,7 +112,7 @@ const MultiStepForm = ({
 }
   return (
     <form
-      className="flex flex-col space-y-3 py-3 gap-2 px-5 border"
+      className="flex flex-col space-y-3 py-3 gap-2 px-5"
     >
       {/* Progress Bar */}
       <div className="flex flex-col items-center space-y-2 my-3 ">

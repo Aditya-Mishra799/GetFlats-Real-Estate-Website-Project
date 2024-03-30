@@ -31,7 +31,7 @@ export async  function GET(req){
           );
     }else{
        const newEntry =  await Favourites.create({user : user_id, property_listing: property_listing_id})
-       console.log(newEntry, 'Added to favourites')
+       console.log('Added to favourites')
        return Response.json(
             { message: "Added to favourites." },
             { status: 200 }

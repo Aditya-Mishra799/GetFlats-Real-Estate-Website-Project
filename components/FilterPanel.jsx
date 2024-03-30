@@ -33,7 +33,7 @@ const initialFilterState = {
   bathrooms: [1, 5],
   coordinates: [],
 };
-const FilterPanel = ({ query }) => {
+const FilterPanel = ({ query, revalidateAndGetdata }) => {
   const [isOpen, setIsOpen] = useState(false);
   const queryObject = JSON.parse(query);
   const router = useRouter();
@@ -63,11 +63,10 @@ const FilterPanel = ({ query }) => {
 
   const handleFilterSubmit = (jsonQueryString) => {
     //if reseset the reset the inputState
-    console.log("Input state", inputState);
     if (jsonQueryString === "{}") {
       setInputState(initialFilterState);
     }
-    router.push(`?page=1&query=${jsonQueryString}`);
+    revalidateAndGetdata(jsonQueryString)
   };
 
   const FilterLocationInput = (

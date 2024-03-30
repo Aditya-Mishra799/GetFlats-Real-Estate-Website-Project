@@ -11,6 +11,7 @@ import Modal from "./Modal";
 import EnquiryForm from "./EnquiryForm";
 import { useSession } from "next-auth/react";
 import FeedBackPanel from "./FeedBackPanel";
+import FetchAndDisplayRecommendation from "./FetchAndDisplayRecommendation";
 const DynamicDisplayMap = dynamic(() => import("@components/DisplayMap"), {
   ssr: false,
   loading: () => (
@@ -25,6 +26,15 @@ const IconButton = ({ Icon }) => (
 );
 const PropertyListingPage = ({ listingData }) => {
   const { data: session, status } = useSession();
+  const constructionDate = new Date(listingData?.construction_date);
+  // Extracting day, month, and year components
+  const day = String(constructionDate.getDate()).padStart(2, '0');
+  const month = String(constructionDate.getMonth() + 1).padStart(2, '0');
+  const year = constructionDate.getFullYear();
+  
+  // Constructing formatted date string in "DD/MM/YYYY" format
+  const formattedDate = `${day}/${month}/${year}`;
+  
   const images = [listingData?.media.thumbnail, ...listingData?.media.images];
   const [openMapModal, setOpenMapModal] = useState(false);
   const [open3DViewModal, setOpen3DViewModal] = useState(false);
@@ -187,11 +197,7 @@ const PropertyListingPage = ({ listingData }) => {
                 </span>
               ))}
             </div>
-          </div>
-        </div>
-        {/* Col 2 */}
-        <div className="px-2 w-full lg:w-1/2">
-          {/* Other Details */}
+             {/* Other Details */}
           <div className="px-4 py-4 border border-active-orange rounded-xl mx-2 my-2 ">
             <h3 className="font-bold text-xl tracking-wider text-slate-800">
               Other Details
@@ -200,7 +206,7 @@ const PropertyListingPage = ({ listingData }) => {
               <div className="flex justify-between  text-dark-orange ">
                 <h3 className="font-semibold">Contruction Date</h3>
                 <span className="">
-                  {Date(listingData?.construction_date).substring(0, 15)}
+                {formattedDate}
                 </span>
               </div>
 
@@ -226,9 +232,19 @@ const PropertyListingPage = ({ listingData }) => {
               <pre className=" text-gray-500 dark:text-gray-400 font-satoshi whitespace-pre-wrap leading-6"> {listingData?.property_description}</pre>
             </p>
           </div>
+       
+          </div>
+        </div>
+        {/* Col 2 */}
+        <div className="px-2 w-full lg:w-1/2">
+         
           <div className="w-full mx-auto px-2 py-1 space-y-3 lg:px-5">
             <h3 className="self-start text-xl font-bold">Added By:</h3>
             <UserDataDisplay user={listingData?.user} />
+          </div>
+             {/* Recommendations */}
+             <div className="px-2 py-1 ">
+            <FetchAndDisplayRecommendation id = {listingData._id}/>
           </div>
           <FeedBackPanel feedbacks = {feedbacks} setFeedBacks = {setFeedBacks} property_listing = {listingData._id}/>
         </div>

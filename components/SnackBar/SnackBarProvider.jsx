@@ -107,7 +107,7 @@ export default function SnackBarProvider({ children }) {
   return (
     <SnackBarContext.Provider value={{ open, close }}>
       {children}
-      <div className="space-y-2 absolute bottom-4 right-4 z-50  w-xs md:w-96">
+      <div className="space-y-2 fixed bottom-4 right-4 z-50  w-xs md:w-96">
         {snackBars.map(({ id, component }) => (
           <div key={id} className="relative flex gap-1 w-full">
             <button
