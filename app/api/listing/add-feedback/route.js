@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import Feedbacks from "@models/feedbacks";
 import { nextAuthOptions } from "@app/api/auth/[...nextauth]/route";
+import { connectToDB } from "@utils/database";
 
 //Get API endpoint to fetch all favourite lsiting i.e wishlist of an user
 export async function POST(req) {
@@ -16,6 +17,7 @@ export async function POST(req) {
     const user_id = session?.user?.id;
     const data = await req.json()
     const { feedback, property_listing } =  data;
+    const db = await connectToDB()
     const createdfeedback = await Feedbacks.create({
       user: user_id,
       feedback : feedback,

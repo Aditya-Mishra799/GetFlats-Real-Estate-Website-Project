@@ -2,6 +2,7 @@ import PropertyListing from "@models/property_listing";
 import Favourites from "@models/favourites";
 import { getServerSession } from "next-auth/next";
 import { nextAuthOptions } from "@app/api/auth/[...nextauth]/route";
+import { connectToDB } from "@utils/database";
 
 //POST API end point to change the status of enquiry to accepted or rejected
 export async  function GET(req){
@@ -18,7 +19,7 @@ export async  function GET(req){
     const searchParams = new URLSearchParams(url.searchParams);
     //get the listing id from search params
     const property_listing_id = searchParams.get("id");
-
+    const db = await connectToDB()
     //checking if already an entry of current property listing with user exists in favourites collection
 
     const favourite_entry = await Favourites.findOne({user : user_id, property_listing: property_listing_id}).exec()

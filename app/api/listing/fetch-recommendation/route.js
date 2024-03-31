@@ -2,6 +2,7 @@ import PropertyListing from "@models/property_listing";
 import { getServerSession } from "next-auth/next";
 import { nextAuthOptions } from "@app/api/auth/[...nextauth]/route";
 import { checkForFavourites } from "../user/[id]/route";
+import { connectToDB } from "@utils/database";
 
 //route to fetch the recommendations for  a property listing
 export async function GET(req) {
@@ -22,7 +23,7 @@ export async function GET(req) {
         return Response.json([], { status: 200 });
       }
     const result = await response.json();
-
+    const db = await connectToDB()
     let listings = await PropertyListing.find({
       _id: { $in: result.similar_listings },
     })

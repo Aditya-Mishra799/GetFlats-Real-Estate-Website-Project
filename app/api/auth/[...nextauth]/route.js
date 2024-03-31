@@ -17,6 +17,7 @@ export const nextAuthOptions = {
             return token
         },
         async session({session}){
+            const db = await connectToDB()
             const sessionUser = await User.findOne({email: session.user.email })
             session.user.id = sessionUser._id.toString();
             return session;

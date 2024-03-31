@@ -2,6 +2,7 @@
 import { getServerSession } from "next-auth/next";
 import { nextAuthOptions } from "@app/api/auth/[...nextauth]/route";
 import Enquiry from "@models/enquiry";
+import { connectToDB } from "@utils/database";
 export async function GET(req) {
   //check if user is looged in oor not
   const session = await getServerSession(nextAuthOptions);
@@ -15,6 +16,7 @@ export async function GET(req) {
   const searchParams = new URLSearchParams(url.searchParams);
   //get the type of enquiry to be fetched
   const type = searchParams.get("type");
+  const db = await connectToDB()
   if(type === 'received'){
     //get all the enquiries received by the user
     const enquiries =  await Enquiry.find({owner: session.user.id}).populate('creator').exec()

@@ -1,6 +1,7 @@
 import Favourites from "@models/favourites";
 import { getServerSession } from "next-auth/next";
 import { nextAuthOptions } from "@app/api/auth/[...nextauth]/route";
+import { connectToDB } from "@utils/database";
 
 //Get API endpoint to fetch all favourite lsiting i.e wishlist of an user
 export async function GET(req) {
@@ -13,6 +14,7 @@ export async function GET(req) {
     );
   }
   try {
+    const db = await connectToDB()
     const user_id = session?.user?.id;
     const wishlist = await Favourites.find({ user: user_id })
       .populate("property_listing")

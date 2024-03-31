@@ -2,6 +2,7 @@ import Enquiry from "@models/enquiry";
 import PropertyListing from "@models/property_listing";
 import { getServerSession } from "next-auth/next";
 import { nextAuthOptions } from "@app/api/auth/[...nextauth]/route";
+import { connectToDB } from "@utils/database";
 
 //POST API end point to change the status of enquiry to accepted or rejected
 export async  function POST(req){
@@ -15,6 +16,7 @@ export async  function POST(req){
     const data = await req.json();
     const  {enquiry_id, status} = data;
     const user_id = session?.user.id;
+    const db = await connectToDB()
     const enquiry = await Enquiry.findById(enquiry_id).exec()
     if(enquiry.status !== 'pending'){
         return Response.json({message: `Enquiry is already ${enquiry.status}`}, {status: 400})
