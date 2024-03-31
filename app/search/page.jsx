@@ -115,6 +115,7 @@ const page = async ({ searchParams }) => {
     if (i >= 1 && i <= totalPages) {
       pageNumbers.push(i);
     }
+    
   }
   return (
     <div className="container  mt-8 w-full">
