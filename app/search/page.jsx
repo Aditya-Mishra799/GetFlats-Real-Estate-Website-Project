@@ -71,7 +71,6 @@ export async function getData(perPage, page, filterQuery) {
   const session = await getServerSession(nextAuthOptions);
   const query = buildMongoDBSearchQuery(JSON.parse(filterQuery));
   try {
-    const client = await connectToDB();
     let listings = await PropertyListing.find(query)
       .populate("creator")
       .skip(perPage * (page - 1))
@@ -90,9 +89,13 @@ export async function getData(perPage, page, filterQuery) {
   }
 }
 const page = async ({ searchParams }) => {
-  let page = parseInt(searchParams.page, 10);
-  const query = searchParams.query;
 
+  if(!searchParams.page || !searchParams.query){
+    redirect("?page=1&query={}");
+  }
+  let page = parseInt(searchParams.page, 10);
+  
+  const query = searchParams.query;
   //set url if loaded incorrectly
   if (page < 1 || !page || !query) {
     redirect("?page=1&query={}");
@@ -115,7 +118,7 @@ const page = async ({ searchParams }) => {
     if (i >= 1 && i <= totalPages) {
       pageNumbers.push(i);
     }
-    
+
   }
   return (
     <div className="container  mt-8 w-full">
