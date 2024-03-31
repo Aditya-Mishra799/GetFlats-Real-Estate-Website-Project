@@ -57,7 +57,7 @@ const FilterPanel = ({ query, revalidateAndGetdata }) => {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth", // Optional smooth scrolling behavior
+      behavior: "smooth",
     });
   };
 
@@ -66,7 +66,7 @@ const FilterPanel = ({ query, revalidateAndGetdata }) => {
     if (jsonQueryString === "{}") {
       setInputState(initialFilterState);
     }
-    revalidateAndGetdata(jsonQueryString)
+    router.push(`/search?page=1&query=${jsonQueryString}`)
   };
 
   const FilterLocationInput = (

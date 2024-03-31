@@ -2,22 +2,17 @@ import "../styles/globals.css";
 import Header from "@/components/home_layout/Header";
 import Provider from "@/components/Provider";
 import SnackBarProvider from "@components/SnackBar/SnackBarProvider";
+import Head from 'next/head'
 export const metadata = {
   title: "Get Flats",
   description: "This website helps you to find your dream with 0 brokerage.",
 };
 
 export default function Layout({ children }) {
+  'use client'
+   
   return (
     <html lang="en">
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-          integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-          crossorigin=""
-        />
-      </head>
       <body className="flex flex-col p-0 m-0 ">
         <Provider>
           <SnackBarProvider>

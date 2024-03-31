@@ -1,14 +1,52 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-const MenuButton = ({ name, link, dropdown, hidden, icon, active, clickHandler }) => {
+const MenuButton = ({
+  name,
+  link,
+  dropdown,
+  hidden,
+  icon,
+  active,
+  clickHandler,
+}) => {
+  if (hidden) return null;
   const pathname = usePathname();
   const index = dropdown?.findIndex(
     (menuButton) => menuButton.link === pathname
   );
-  const [isHovering, setIsHovering] = useState(false)
-  if (hidden) return null;
+  const [isHovering, setIsHovering] = useState(false);
+  const router = useRouter();
+  const dropDownComp = (
+    dropdown && <div
+      className={
+        "lg:absolute w-full lg:w-48 bg-white rounded-md shadow-md mt-2 p-2 right-0  border border-orange-300  flex-col " +
+        (isHovering ? "flex" : "hidden")
+      }
+    >
+      <ul className="space-y-2">
+        {dropdown.map((dropdownOption, i) => (
+          <li
+            key={dropdownOption.name}
+            className={
+              `flex p-1 font-medium  rounded-md ${
+                index !== i && "hover:bg-orange-100 hover:text-active-orange"
+              } transition-all ` +
+              (index === i
+                ? "bg-active-orange text-white"
+                : "text-active-orange")
+            }
+          >
+            <Link href={dropdownOption.link} className="w-full">
+              {dropdownOption.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
   return (
     <li
       className={`flex ${
@@ -20,33 +58,19 @@ const MenuButton = ({ name, link, dropdown, hidden, icon, active, clickHandler }
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
-      <Link href={link} className="w-full">
-       <pre className="inline-flex items-center font-sans">{name }{(dropdown ?<pre> &#x2193;</pre>: '')}</pre> 
-        {dropdown && (
-          <div className={"lg:absolute w-full lg:w-48 bg-white rounded-md shadow-md mt-2 p-2 right-0  border border-orange-300  flex-col " + (isHovering ? "flex" : "hidden")}>
-            <ul className="space-y-2">
-              {dropdown.map((dropdownOption, i) => (
-                <li
-                  key={dropdownOption.name}
-                  className={
-                    `flex p-1 font-medium  rounded-md ${
-                      index !== i &&
-                      "hover:bg-orange-100 hover:text-active-orange"
-                    } transition-all ` +
-                    (index === i
-                      ? "bg-active-orange text-white"
-                      : "text-active-orange")
-                  }
-                >
-                  <Link href={dropdownOption.link} className="w-full">
-                    {dropdownOption.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </Link>
+      {dropdown ? (
+        <div className="w-full" onClick={() => router.push(link)}>
+          <pre className="inline-flex items-center font-sans">
+            {name}
+            {dropdown ? <pre> &#x2193;</pre> : ""}
+          </pre>
+          {dropDownComp}
+        </div>
+      ) : (
+        <Link href={link} className="w-full">
+          <pre className="inline-flex items-center font-sans">{name}</pre>
+        </Link>
+      )}
     </li>
   );
 };
