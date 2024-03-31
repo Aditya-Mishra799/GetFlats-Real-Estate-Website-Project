@@ -7,6 +7,10 @@ import Link from "next/link";
 import FilterPanel from "@components/FilterPanel";
 import { redirect } from "next/navigation";
 import User from "@models/user";
+import { getServerSession } from "next-auth/next";
+import { nextAuthOptions } from "@app/api/auth/[...nextauth]/route";
+import { checkForFavourites } from "@app/api/listing/user/[id]/route";
+
 const buildMongoDBSearchQuery = (filterQuery) => {
   const queryArrayAndPart = [];
   const labelFilter = new Set([
@@ -23,7 +27,7 @@ const buildMongoDBSearchQuery = (filterQuery) => {
   ]);
   Object.entries(filterQuery).forEach(([key, value]) => {
     if (value) {
-      if (key === "keywords") {
+      if (key === "keywords" && value !== '' && value) {
         const keywordRegex = filterQuery.keywords
           .split(" ")
           .map((keyword) => new RegExp(keyword, "i"));
@@ -66,16 +70,19 @@ const buildMongoDBSearchQuery = (filterQuery) => {
 };
 export async function getData(perPage, page, filterQuery) {
   console.log('Execution started')
+  const session = await getServerSession(nextAuthOptions);
   const query = buildMongoDBSearchQuery(JSON.parse(filterQuery));
   try {
     const db = await connectToDB()
-    const listings = await PropertyListing.find(query)
+    let listings = await PropertyListing.find(query)
       .populate("creator")
       .skip(perPage * (page - 1))
       .limit(perPage)
       .lean()
       .exec();
-   
+      if (session?.user?.id) {
+        listings = await checkForFavourites(listings, session.user.id);
+      }
     const listingCount = await PropertyListing.countDocuments(query);
     const response = { listings: JSON.stringify(listings), listingCount };
     console.log('execution-ended')

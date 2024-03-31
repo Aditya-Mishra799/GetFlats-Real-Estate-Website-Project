@@ -12,6 +12,7 @@ import EnquiryForm from "./EnquiryForm";
 import { useSession } from "next-auth/react";
 import FeedBackPanel from "./FeedBackPanel";
 import FetchAndDisplayRecommendation from "./FetchAndDisplayRecommendation";
+import Link from "next/link";
 const DynamicDisplayMap = dynamic(() => import("@components/DisplayMap"), {
   ssr: false,
   loading: () => (
@@ -28,18 +29,18 @@ const PropertyListingPage = ({ listingData }) => {
   const { data: session, status } = useSession();
   const constructionDate = new Date(listingData?.construction_date);
   // Extracting day, month, and year components
-  const day = String(constructionDate.getDate()).padStart(2, '0');
-  const month = String(constructionDate.getMonth() + 1).padStart(2, '0');
+  const day = String(constructionDate.getDate()).padStart(2, "0");
+  const month = String(constructionDate.getMonth() + 1).padStart(2, "0");
   const year = constructionDate.getFullYear();
-  
+
   // Constructing formatted date string in "DD/MM/YYYY" format
   const formattedDate = `${day}/${month}/${year}`;
-  
+
   const images = [listingData?.media.thumbnail, ...listingData?.media.images];
   const [openMapModal, setOpenMapModal] = useState(false);
   const [open3DViewModal, setOpen3DViewModal] = useState(false);
   const [openEnquriyModal, setOpenEnquriyModal] = useState(false);
-  const [feedbacks, setFeedBacks] = useState(listingData?.feedbacks)
+  const [feedbacks, setFeedBacks] = useState(listingData?.feedbacks);
   const formatter = new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
@@ -182,7 +183,13 @@ const PropertyListingPage = ({ listingData }) => {
               Make an Enquiry
             </Button>
             <Button className="uppercase w-full p-2 text-lg tracking-wider rounded-lg">
-              Talk on whatsapp
+              <Link
+                href={`https://wa.me/+91${listingData?.phone}`}
+                target={"_blank"}
+                className="w-full h-full"
+              >
+                Talk on whatsapp
+              </Link>
             </Button>
           </div>
           {/* Amenities */}
@@ -197,56 +204,61 @@ const PropertyListingPage = ({ listingData }) => {
                 </span>
               ))}
             </div>
-             {/* Other Details */}
-          <div className="px-4 py-4 border border-active-orange rounded-xl mx-2 my-2 ">
-            <h3 className="font-bold text-xl tracking-wider text-slate-800">
-              Other Details
-            </h3>
-            <div className="flex flex-col gap-2 text-lg">
-              <div className="flex justify-between  text-dark-orange ">
-                <h3 className="font-semibold">Contruction Date</h3>
-                <span className="">
-                {formattedDate}
-                </span>
-              </div>
+            {/* Other Details */}
+            <div className="px-4 py-4 border border-active-orange rounded-xl mx-2 my-2 ">
+              <h3 className="font-bold text-xl tracking-wider text-slate-800">
+                Other Details
+              </h3>
+              <div className="flex flex-col gap-2 text-lg">
+                <div className="flex justify-between  text-dark-orange ">
+                  <h3 className="font-semibold">Contruction Date</h3>
+                  <span className="">{formattedDate}</span>
+                </div>
 
-              <div className="flex justify-between  text-dark-orange ">
-                <h3 className="font-semibold">Furnishing Status</h3>
-                <span className="">{listingData?.furnished_status.label}</span>
-              </div>
-              <div className="flex justify-between  text-dark-orange ">
-                <h3 className="font-semibold">Property Type</h3>
-                <span className="">{listingData?.property_type.label}</span>
-              </div>
+                <div className="flex justify-between  text-dark-orange ">
+                  <h3 className="font-semibold">Furnishing Status</h3>
+                  <span className="">
+                    {listingData?.furnished_status.label}
+                  </span>
+                </div>
+                <div className="flex justify-between  text-dark-orange ">
+                  <h3 className="font-semibold">Property Type</h3>
+                  <span className="">{listingData?.property_type.label}</span>
+                </div>
 
-              <div className="flex justify-between  text-dark-orange ">
-                <h3 className="font-semibold">Contact Number</h3>
-                <span className="">{listingData?.phone}</span>
+                <div className="flex justify-between  text-dark-orange ">
+                  <h3 className="font-semibold">Contact Number</h3>
+                  <span className="">{listingData?.phone}</span>
+                </div>
               </div>
             </div>
-          </div>
-           {/* Description */}
-          <div className="border border-active-orange p-3 m-2 rounded-lg text-slate-600 max-h-max transition-all duration-1000">
-            <h3 className="font-bold text-xl">Description:</h3>
-            <p className=" text-pretty tracking-wide line-clamp-6 hover:line-clamp-none">
-              <pre className=" text-gray-500 dark:text-gray-400 font-satoshi whitespace-pre-wrap leading-6"> {listingData?.property_description}</pre>
-            </p>
-          </div>
-       
+            {/* Description */}
+            <div className="border border-active-orange p-3 m-2 rounded-lg text-slate-600 max-h-max transition-all duration-1000">
+              <h3 className="font-bold text-xl">Description:</h3>
+              <p className=" text-pretty tracking-wide line-clamp-6 hover:line-clamp-none">
+                <pre className=" text-gray-500 dark:text-gray-400 font-satoshi whitespace-pre-wrap leading-6">
+                  {" "}
+                  {listingData?.property_description}
+                </pre>
+              </p>
+            </div>
           </div>
         </div>
         {/* Col 2 */}
         <div className="px-2 w-full lg:w-1/2">
-         
           <div className="w-full mx-auto px-2 py-1 space-y-3 lg:px-5">
             <h3 className="self-start text-xl font-bold">Added By:</h3>
             <UserDataDisplay user={listingData?.user} />
           </div>
-             {/* Recommendations */}
-             <div className="px-2 py-1 ">
-            <FetchAndDisplayRecommendation id = {listingData._id}/>
+          {/* Recommendations */}
+          <div className="px-2 py-1 ">
+            <FetchAndDisplayRecommendation id={listingData._id} />
           </div>
-          <FeedBackPanel feedbacks = {feedbacks} setFeedBacks = {setFeedBacks} property_listing = {listingData._id}/>
+          <FeedBackPanel
+            feedbacks={feedbacks}
+            setFeedBacks={setFeedBacks}
+            property_listing={listingData._id}
+          />
         </div>
       </div>
       {/* Diplay the Modal Componet */}

@@ -12,6 +12,7 @@ import RangeInput from "./RangeInput";
 import { useRouter } from "next/navigation";
 import Modal from "./Modal";
 import dynamic from "next/dynamic";
+import CustomInput from "./CustomInput";
 
 const DynamicFilterMap = dynamic(() => import("@components/FilterMap"), {
   ssr: false,
@@ -32,6 +33,7 @@ const initialFilterState = {
   halls: [0, 3],
   bathrooms: [1, 5],
   coordinates: [],
+  keywords: '',
 };
 const FilterPanel = ({ query, revalidateAndGetdata }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -81,6 +83,7 @@ const FilterPanel = ({ query, revalidateAndGetdata }) => {
   const filterComp = (
     <div className={`w-full flex flex-col gap-4 text-center px-8 py-4 h-full `}>
       <h3 className="text-2xl font-semibold ">Filter listings</h3>
+      <CustomInput  {...mountInputs("keywords")}/>
       <MultiSelectMenu
         options={listingTypeOptions}
         menuLabel={"Listing Types"}

@@ -105,7 +105,7 @@ const PropertyListingsCard = ({ data, setCards, index }) => {
         {session?.user && (
           <button
             className={
-              "absolute text-md tracking-wider font-semibold top-1 left-1 bg-white p-1  rounded-full  hover:text-red-600 hover:opacity-100 " +
+              "absolute text-md tracking-wider font-semibold top-1 left-1 bg-white p-1  rounded-full active:text-red-600  active:opacity-100  lg:hover:text-red-600 lg:hover:opacity-100 " +
               (data?.isFavourite ? "text-red-600 opacity-100" : "opacity-50")
             }
             title={"Add to Favorite"}

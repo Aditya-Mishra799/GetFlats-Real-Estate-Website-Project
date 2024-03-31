@@ -4,23 +4,23 @@ const RangeInput = ({ label, min, max , value = [1000, Infinity], setValue}) => 
   
   const handleMinChange = (e) => {
     const updateValue = parseInt(e.target.value);
-    if ( updateValue >= min) {
-      if(setValue) setValue([updateValue, value[1]])
-    }
+    if(setValue) setValue([updateValue, value[1]])
   };
 
   const handleMaxChange = (e) => {
     const updateValue = parseInt(e.target.value);
-    if ( updateValue <= max) {
-        if(setValue) setValue([value[0], updateValue])
-    }
+    if(setValue) setValue([value[0], updateValue])
   };
 
   const handleBlur= (e) => {
-    if(value[0]>value[1]){
-      if(setValue) setValue([value[1], value[1]])
-    }
+   if(value[1] < value[0]){
+    if(setValue) setValue([value[0], value[0]])
+   }
+   if(value[0] < min || !value[0] || value[0] === NaN){
+    if(setValue) setValue(min, value[0])
+   }
   };
+ 
 
   return (
     <div className="flex flex-col sm:flex-row border border-active-orange px-2 py-2 rounded-lg">
