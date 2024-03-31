@@ -5,10 +5,11 @@ import PropertyListingsCard from "./PropertyLisingsCard";
 const FetchAndDisplayRecommendation = ({ id }) => {
   const [listings, setListings] = useState([]);
   useEffect(() => {
+    setListings([])
     fetch("/api/listing/fetch-recommendation?id=" + id)
       .then((response) => response.json())
       .then((data) => setListings(data));
-  }, []);
+  }, [id]);
   return (
     <div className="flex flex-col gap-2 mx-1 my-4 shadow-md p-2 border rounded-sm border-dashed">
       <h3 className="text-md font-bold text-slate-900 md:text-xl">
