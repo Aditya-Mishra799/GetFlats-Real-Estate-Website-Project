@@ -19,8 +19,8 @@ const MenuButton = ({
   );
   const [isHovering, setIsHovering] = useState(false);
   const router = useRouter();
-  const dropDownComp = (
-    dropdown && <div
+  const dropDownComp = dropdown && (
+    <div
       className={
         "lg:absolute w-full lg:w-48 bg-white rounded-md shadow-md mt-2 p-2 right-0  border border-orange-300  flex-col " +
         (isHovering ? "flex" : "hidden")
@@ -59,8 +59,11 @@ const MenuButton = ({
       onMouseLeave={() => setIsHovering(false)}
     >
       {dropdown ? (
-        <div className="w-full" onClick={() => router.push(link)}>
-          <pre className="inline-flex items-center font-sans">
+        <div className="w-full">
+          <pre
+            className="inline-flex items-center font-sans"
+            onClick={() => router.push(link)}
+          >
             {name}
             {dropdown ? <pre> &#x2193;</pre> : ""}
           </pre>

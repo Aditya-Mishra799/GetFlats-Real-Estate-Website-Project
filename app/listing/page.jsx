@@ -19,6 +19,7 @@ const page = () => {
     }
   }
   useEffect(()=>{
+    setListingData(null)
     const setData = async ()=>{
         if(listing_id){
             await fetchListingData()
