@@ -89,7 +89,7 @@ const PropertyListingsCard = ({ data, setCards, index }) => {
     </Modal>
   );
   return (
-    <div className="flex flex-col max-w-60 min-w-60 rounded-lg shadow-lg  hover:shadow-2xl">
+    <div className="flex flex-col max-w-60 min-w-60 rounded-lg shadow-lg  hover:shadow-2xl bg-white">
       {/* Hero Iamge */}
       <div className="w-full relative mb-2">
         <Image

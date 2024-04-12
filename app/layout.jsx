@@ -2,7 +2,6 @@ import "../styles/globals.css";
 import Header from "@/components/home_layout/Header";
 import Provider from "@/components/Provider";
 import SnackBarProvider from "@components/SnackBar/SnackBarProvider";
-import Head from 'next/head'
 export const metadata = {
   title: "Get Flats",
   description: "This website helps you to find your dream with 0 brokerage.",
