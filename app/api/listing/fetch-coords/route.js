@@ -23,7 +23,7 @@ export async function GET(req) {
           },
     };
 
-    let listings = await PropertyListing.find(query).lean();
+    let listings = await PropertyListing.find(query).limit(10).lean();
     if (session?.user?.id) {
         listings = await checkForFavourites(listings, session.user.id);
       }

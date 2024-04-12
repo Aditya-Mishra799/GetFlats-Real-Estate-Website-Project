@@ -54,6 +54,10 @@ const Menu = ({ menuOpen, setMenuOpen }) => {
       name: "Search",
       link: "/search?page=1&query={}",
     },
+    {
+      name: "Map Search",
+      link: "/map-search",
+    },
   ];
   const pathname = usePathname().split("/")[1];
   const index = menuButtons.findIndex(

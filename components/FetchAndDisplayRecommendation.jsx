@@ -8,7 +8,7 @@ const FetchAndDisplayRecommendation = ({ id }) => {
     const fetchRecommendations = async ()=>{
       setListings([])
       try {
-        const response =  fetch("/api/listing/fetch-recommendation?id=" + id)
+        const response =  await fetch("/api/listing/fetch-recommendation?id=" + id)
         if(response.ok){
           const data = await response.json()
           setListings(data)

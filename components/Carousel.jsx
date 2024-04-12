@@ -25,9 +25,9 @@ export default function Carousel({ slides, autoSlide = false, interval = 3000 })
        return ()=> clearInterval(slideInterval)
     }, [current])
     return (
-        <div className="overflow-hidden w-full h-full relative ">
+        <div className="overflow-hidden relative w-full h-full">
             <div
-                className="flex transition-transform ease-out duration-500 gap-2 "
+                className="flex transition-transform ease-out duration-500  items-stretch justify-stretch w-full h-full"
                 style={{
                     transform: `translateX(-${current * 100}%)`
                 }}
@@ -35,11 +35,9 @@ export default function Carousel({ slides, autoSlide = false, interval = 3000 })
                 {slides.map((slide, index) => (
                     <img
                         src={slide.src}
-                        width={100}
-                        height={100}
                         alt={slide?.alt}
                         key={slide?.alt + index}
-                        className="w-full h-full"
+                        className="w-full h-full flex-none object-cover"
                     />
                 ))}
             </div>

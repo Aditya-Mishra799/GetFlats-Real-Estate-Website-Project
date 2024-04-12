@@ -317,13 +317,10 @@ i {
 .input-sec {
   margin: auto;
   text-align: center;
-  border: 0.3px red solid;
   display: flex;
   justify-content: center;
-  border-radius: 1em;
   align-items: center;
   width: max-content;
-  box-shadow: 5px 8px 8px #888888;
   margin-bottom: 0.9em;
 }
 
@@ -372,8 +369,6 @@ i {
 }
 
 .high-card {
-  border-radius: 20px 20px 0px 0px;
-  border: 1px #fa7e7e solid;
   overflow: hidden;
   max-width: 20vw;
 
