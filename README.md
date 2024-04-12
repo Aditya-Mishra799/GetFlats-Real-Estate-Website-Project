@@ -11,7 +11,6 @@ Certainly! Here are some additional sections and information commonly found in R
 - License
 - Contact
 - Acknowledgements
-- 
 
 # GetFlats
 
@@ -22,7 +21,7 @@ Welcome to GetFlats – your premier destination for hassle-free property search
 ## Language and tools used
 <p align="center">
   <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=git,js,py,next.js,tailwind,vscode,css,html,node.js,flask" />
+    <img src="https://skillicons.dev/icons?i=git,js,py,next.js,tailwind,vscode,css,html,node.js,flask,vercel,npm,gcp" />
   </a>
 </p>
 
