@@ -1,11 +1,11 @@
 'use client'
 import ChatBot from 'react-simple-chatbot'
 import { LuBot } from "react-icons/lu";
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
+import { ThemeProvider } from 'styled-components';
 
 const Chatbot = () => {
-    const [amenities,setAmenities]=useState(["1"])
-
+    const [amenities,setAmenities]=useState([])
     const step=[
         {
             id:'Greet',
@@ -15,7 +15,7 @@ const Chatbot = () => {
         {
             id:'Ask name',
             message:'Tell me your name',
-            trigger:'room'
+            trigger:'waiting1'
         },
         
         {
@@ -74,28 +74,40 @@ const Chatbot = () => {
         {
             id:'amenities',
             user:true,
-            validator: (value)=>{
-                if (isNaN(value)){
-                    const splittedValues=value.split(" ")
-                    setAmenities(splittedValues)
-                    console.log(amenities)
-                    return true
+            validator: (value, steps) => {
+                if (isNaN(value)) {
+                    const splittedValues = value.split(" ");
+                    setAmenities(splittedValues);
+                    return true;
                 }
             },
+        
             trigger:'confirm amenities',
            
         },
         {
             id:'confirm amenities',
-            message:`So you are looking for ${amenities.join(",")}. Is there any mistake or everything is alright`,
-            trigger:'verify',
+            message:'Lets confirm your choices  Do you want to Confirm?',
+            trigger:'confirm',
+        },
+        {
+            id:'confirm',
+            options:[
+                {value:'yes',label:'Yes',trigger:'verify'},
+                {value:'no',label:'No',trigger:'next2'},
+            ],
         },
         {
             id:'verify',
+            message:`${amenities.join(', ')}. Is everything correct?`,
+            trigger:'check',
+        },
+        {
+            id:'check',
             options:[
                 {value:'yes',label:'Yes',trigger:'next2'},
                 {value:'no',label:'No',trigger:'room'},
-            ]
+            ],
         },
         {
             id:'next2',
@@ -169,13 +181,24 @@ const Chatbot = () => {
     ]
     const handleClick=()=>{
         setOpen(!open)
-        console.log(open)
     }
     const [open,setOpen]=useState(false)
+    const theme={
+         background:'white',
+         headerBgColor:'#FF6F61',
+         headerFontSize:'1.5rem',
+         botBubbleColor:'#FF6F61',
+         headerFontColor:'white',
+         botFontColor:'white',
+         userBubbleColor:'#f72916',
+         userFontColor:'white',
+    }
     return (
     <>   
-       <button className='rounded-full bg-violet-600 fixed bottom-[2em] right-[2em] p-[1em] shadow-xl' onClick={handleClick}><LuBot className='text-4xl text-white'/></button>
-       <ChatBot steps={step} className={`${open?'block':'hidden'} `}/>
+       <button className='rounded-full bg-[#FF6F61] fixed bottom-[2em] right-[2em] p-[1em] shadow-2xl shadow-[#FF6F61]' onClick={handleClick}><LuBot className='text-4xl text-white'/></button>
+       <ThemeProvider theme={theme}>
+       <ChatBot steps={step} className={`${open?'block':'hidden'}`}/>
+       </ThemeProvider>
     </>
   )
 }
