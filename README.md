@@ -65,7 +65,7 @@ This website is deployed on Vercel. Link : [Get Flats](https://get-flats-website
 To run this project locally, follow these steps:
 1. Clone the repository.
 2. Install dependencies using `npm install` / `npm i`.
-3. Add and configure `.env.local` filein root folder according to you requirements or contact the contributor given below for details about enviroment variables. 
+3. Add and configure `.env.local` file in root folder according to your requirements or contact the contributor given below, for details about enviroment variables. 
 4. Run the development server using `npm run dev`.
 
 ## Usage
