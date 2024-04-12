@@ -148,7 +148,7 @@ const MapSearchPage = () => {
           )}
           <Button
           onClick={updateAndGetLocation}
-          className="absolute flex justify-center gap-2 bottom-8 right-8 p-4 rounded-lg shadow-lg"
+          className="fixed flex justify-center gap-2 bottom-8 right-8 p-4 rounded-lg shadow-lg"
         >
           <FaLocationCrosshairs  className="lg:w-[35px] lg:h-[35px] h-[30px] w-[30px]"/>
         </Button>

@@ -7,7 +7,7 @@ const ChatBotFAB = () => {
   const pathname = usePathname()
   if(pathname === '/map-search') return <></>
   return (
-    <div className=" fixed top-16 left-5">
+    <div className=" fixed top-16 left-0 z-50">
     <Chatbot />
     </div>
   );

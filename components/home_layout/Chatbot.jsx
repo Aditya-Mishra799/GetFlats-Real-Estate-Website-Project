@@ -175,7 +175,7 @@ const Chatbot = () => {
     return (
     <>   
        <button className='rounded-full bg-violet-600 fixed bottom-[2em] right-[2em] p-[1em] shadow-xl' onClick={handleClick}><LuBot className='text-4xl text-white'/></button>
-       <ChatBot steps={step} className={`${open?'block':'hidden'}`}/>
+       <ChatBot steps={step} className={`${open?'block':'hidden'} `}/>
     </>
   )
 }

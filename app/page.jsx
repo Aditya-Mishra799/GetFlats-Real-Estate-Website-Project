@@ -146,7 +146,7 @@ const Page = () => {
       </div>
       <div className="home">
         <div className="text">
-          <div className="bg-opacity-50 bg-black px-4 py-4 mt-4 rounded-md font-inter">
+          <div className="bg-opacity-50 bg-black px-4 py-4 mt-4 rounded-md font-inter z-0">
             <h1>
               Buying <span className="head-and">&</span> Selling
             </h1>
