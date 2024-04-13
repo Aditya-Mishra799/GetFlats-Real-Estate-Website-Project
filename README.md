@@ -14,7 +14,7 @@ Certainly! Here are some additional sections and information commonly found in R
 
 # GetFlats
 
-![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
+[![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 Welcome to GetFlats – your premier destination for hassle-free property search and investment opportunities. Built with Next.js, Next Auth, Tailwind CSS, and React Icons, GetFlats offers a seamless experience for finding your next home or investment property. Deployed on Vercel, our platform combines innovative technology with personalized service to meet your unique needs.
 
@@ -78,8 +78,7 @@ We welcome contributions from the community. If you'd like to contribute, please
 
 ## License
 
-NA
-----
+BSD 3-Clause License
 
 ## Contact
 
