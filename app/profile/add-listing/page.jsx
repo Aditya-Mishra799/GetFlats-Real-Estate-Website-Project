@@ -167,8 +167,8 @@ const page = () => {
       ],
     },
   ];
-  const { data: session } = useSession();
-  useCheckLoginAndRedirect(session);
+  const { data: session, status } = useSession();
+  useCheckLoginAndRedirect(session, status);
   return (
     <>
     {session?.user && <div>

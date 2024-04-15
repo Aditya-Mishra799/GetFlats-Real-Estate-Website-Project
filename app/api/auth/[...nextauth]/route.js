@@ -4,6 +4,7 @@ import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import {connectToDB} from '@utils/database';
 import User from '@models/user';
+import { cookies } from 'next/headers'
 
 export const nextAuthOptions = {
     providers:[
@@ -37,6 +38,7 @@ export const nextAuthOptions = {
                         image: profile.picture,
                     })
                 }
+                cookies().set('logged_in', 'true', { secure: true })
                 return true
             } catch (error) {
                 console.log(error)
