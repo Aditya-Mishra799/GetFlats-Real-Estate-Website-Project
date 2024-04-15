@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { FaAngleDown, FaChevronDown } from "react-icons/fa";
 
 const MenuButton = ({
   name,
@@ -17,13 +18,13 @@ const MenuButton = ({
   const index = dropdown?.findIndex(
     (menuButton) => menuButton.link === pathname
   );
-  const [isHovering, setIsHovering] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
   const router = useRouter();
   const dropDownComp = dropdown && (
     <div
       className={
         "lg:absolute w-full lg:w-48 bg-white rounded-md shadow-md mt-2 p-2 right-0  border border-orange-300  flex-col " +
-        (isHovering ? "flex" : "hidden")
+        ((isClicked) ? "flex" : "hidden")
       }
     >
       <ul className="space-y-2">
@@ -39,7 +40,7 @@ const MenuButton = ({
                 : "text-active-orange")
             }
           >
-            <Link href={dropdownOption.link} className="w-full">
+            <Link href={dropdownOption.link} className="w-full"   onClick={clickHandler}>
               {dropdownOption.name}
             </Link>
           </li>
@@ -53,24 +54,24 @@ const MenuButton = ({
         active && "bg-active-orange"
       } px-4 py-2 font-medium rounded-md text-orange-50 hover:${
         active ? "bg-active-orange" : "bg-dark-orange"
-      } hover:text-white cursor-pointer relative w-full transition-all`}
-      onClick={clickHandler}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
+      } hover:text-white  relative w-full transition-all`}
     >
       {dropdown ? (
         <div className="w-full">
-          <pre
-            className="inline-flex items-center font-sans"
-            onClick={() => router.push(link)}
+          <div
+            className="flex items-center font-sans gap-4"
           >
-            {name}
-            {dropdown ? <pre> &#x2193;</pre> : ""}
-          </pre>
+            <Link href={link}  onClick={clickHandler}>{name}</Link>
+            {dropdown ?  <FaChevronDown 
+            size= {20} 
+            className = {`cursor-pointer ${isClicked && "rotate-180"} transition-transform duration-300`}
+            onClick={()=>setIsClicked(!isClicked)}
+            /> : <></>}
+          </div>
           {dropDownComp}
         </div>
       ) : (
-        <Link href={link} className="w-full">
+        <Link href={link} className="w-full" onClick={clickHandler} >
           <pre className="inline-flex items-center font-sans">{name}</pre>
         </Link>
       )}

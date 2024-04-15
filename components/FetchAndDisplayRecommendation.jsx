@@ -20,7 +20,6 @@ const FetchAndDisplayRecommendation = ({ id }) => {
     fetchRecommendations()
   
   }, [id]);
-  console.log(listings)
   return (
     <div className="flex flex-col gap-2 mx-1 my-4 shadow-md p-2 border rounded-sm border-dashed">
       <h3 className="text-md font-bold text-slate-900 md:text-xl">

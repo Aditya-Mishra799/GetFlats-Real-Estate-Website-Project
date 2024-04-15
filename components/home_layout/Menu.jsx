@@ -67,7 +67,7 @@ const Menu = ({ menuOpen, setMenuOpen }) => {
   return (
     <div
       className={
-        " lg:w-auto w-full mt-2 lg:mt-0 " +
+        " lg:w-auto w-full mt-2 lg:mt-0  h-full transition-all duration-500 " +
         (!menuOpen ? "hidden lg:inline-flex" : "inline-flex")
       }
     >
@@ -80,6 +80,7 @@ const Menu = ({ menuOpen, setMenuOpen }) => {
               active={active === index}
               clickHandler={() => {
                 setActive(index);
+                setMenuOpen(false)
               }}
             />
           );

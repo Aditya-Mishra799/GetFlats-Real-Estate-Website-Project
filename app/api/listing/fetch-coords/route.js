@@ -11,7 +11,6 @@ export async function GET(req) {
   try {
     const db = await connectToDB();
     const session = await getServerSession(nextAuthOptions);
-    console.log(lat, lng, radius)
     const query = {
         "location.coordinates": {
             $geoWithin: {

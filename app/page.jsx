@@ -103,7 +103,7 @@ const Page = () => {
       <div >
         <ul className="flex gap-4 overflow-scroll hidden-scrollbar my-4 px-2">
           <li
-            className="flex gap-1 items-center bg-active-orange px-2 py-1 w-max text-nowrap text-white uppercase tracking-wider rounded-md cursor-pointer flex-nowrap "
+            className="flex gap-1 items-center bg-active-orange px-2 py-1 flex-none justify-stretch w-max text-nowrap text-white uppercase tracking-wider rounded-md cursor-pointer flex-nowrap "
             onClick={() =>
               router.push(
                 '/search?page=1&query={"listing_type":["For%20Sale"]}'
@@ -113,7 +113,7 @@ const Page = () => {
             <i class="fa-solid fa-house-circle-check text-white"></i>Buy
           </li>
           <li
-            className="flex gap-1 items-center bg-active-orange px-2 py-1 w-max text-nowrap text-white uppercase tracking-wider rounded-md cursor-pointer flex-nowrap "
+            className="flex gap-1 items-center bg-active-orange px-2 py-1 flex-none justify-stretch w-max text-nowrap text-white uppercase tracking-wider rounded-md cursor-pointer flex-nowrap "
             onClick={() =>
               router.push(
                 '/search?page=1&query={"listing_type":["For%20Rent"]}'
@@ -123,7 +123,7 @@ const Page = () => {
             <i class="fa-solid fa-truck-moving text-white"></i>Rent
           </li>
           <li
-            className="flex gap-1 items-center bg-active-orange px-2 py-1 w-max text-nowrap text-white uppercase tracking-wider rounded-md cursor-pointer flex-nowrap "
+            className="flex gap-1 items-center bg-active-orange px-2 py-1 flex-none justify-stretch w-max text-nowrap text-white uppercase tracking-wider rounded-md cursor-pointer flex-nowrap "
             onClick={() =>
               router.push(
                 '/search?page=1&query={"property_type":["Independent","Residential%20Land"]}'
@@ -133,7 +133,7 @@ const Page = () => {
             <i class="fa-solid fa-table-cells text-white"></i>Plot/Land
           </li>
           <li
-            className="flex gap-1 items-center bg-active-orange px-2 py-1 w-max text-nowrap text-white uppercase tracking-wider rounded-md cursor-pointer flex-nowrap "
+            className="flex gap-1 items-center bg-active-orange px-2 py-1 flex-none justify-stretch w-max text-nowrap text-white uppercase tracking-wider rounded-md cursor-pointer flex-nowrap "
             onClick={() => router.push("/profile/add-listing")}
           >
             <i class="fa-solid fa-house-user text-white"></i>

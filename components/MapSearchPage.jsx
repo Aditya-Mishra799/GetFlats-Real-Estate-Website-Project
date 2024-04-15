@@ -11,17 +11,12 @@ import { FaLocationCrosshairs } from "react-icons/fa6";
 
 const MapInteractionHandler = ({ handleMapMove, loadMarkers }) => {
   const map = useMapEvents({
-    click: (e) => {
-      console.log(map);
-    },
     moveend: (e) => {
-      console.log("Moved map...");
       handleMapMove(map);
     },
   });
   useEffect(() => {
     if (window) {
-      console.log("Loaded initial markers....");
       loadMarkers(map.getBounds());
     }
   }, [window]);
@@ -43,7 +38,6 @@ const MapSearchPage = () => {
     const stringValues = values.map((value) => value.toString());
     const updatedMarkers = new Set([...markers, ...stringValues]);
     setMarkes(updatedMarkers);
-    console.log(updatedMarkers);
   };
 
   const getCoordsFromString = (coordsString) => {
@@ -62,7 +56,6 @@ const MapSearchPage = () => {
       );
       if (!response.ok) throw new Error(response.statusText);
       const data = await response.json();
-      console.log(data, "Data loaded successfully");
       extendMArkers(data);
     } catch (error) {
       console.log(error);
