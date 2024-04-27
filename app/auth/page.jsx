@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { signIn, signOut, useSession, getProviders } from "next-auth/react";
+import { signIn, getProviders } from "next-auth/react";
 import { useSnackBar } from "@components/SnackBar/SnackBarService";
 
 const page = () => {

@@ -153,7 +153,9 @@ const Page = () => {
             <p className="text-para">
               Unlock Your Dream Home: Where Flats Find Their Perfect Match!
             </p>
-            <button className="bg-white px-4 py-4 rounded-md text-active-orange uppercase text-xl mt-2  shadow-md">
+            <button className="bg-white px-4 py-4 rounded-md text-active-orange uppercase text-xl mt-2  shadow-md"
+            onClick={()=> router.push('/about')}
+            >
               {" "}
               More About
             </button>
