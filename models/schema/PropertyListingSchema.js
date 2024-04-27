@@ -93,7 +93,7 @@ const PropertyListingSchema = z.object({
   ),
   area: validNumberSchema(50,Infinity,'Area must be greater than 50 sqft.'),
   phone: phoneNumberSchema,
-  price : validNumberSchema(5000, Infinity,'Price must be greater than 5000.'),
+  price : validNumberSchema(100, Infinity,'Price must be greater than 100 Rs.'),
 
 });
 

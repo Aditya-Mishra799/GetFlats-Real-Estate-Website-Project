@@ -107,7 +107,7 @@ const PropertyListingSchema = new Schema({
   },
   price: {
     type: Number,
-    min: 5000,
+    min: 100,
     required: true
   }
 });
