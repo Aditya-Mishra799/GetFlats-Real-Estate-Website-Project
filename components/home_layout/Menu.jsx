@@ -34,6 +34,11 @@ const Menu = ({ menuOpen, setMenuOpen }) => {
           name: "Add Listing",
           link: "/profile/add-listing",
         },
+        {
+          name: "Logout",
+          link: "/logout",
+          hidden: !session,
+        },
       ],
     },
     {
@@ -44,11 +49,7 @@ const Menu = ({ menuOpen, setMenuOpen }) => {
       name: "Contact",
       link: "/contact",
     },
-    {
-      name: "Logout",
-      link: "/logout",
-      hidden: !session,
-    },
+   
 
     {
       name: "Search",

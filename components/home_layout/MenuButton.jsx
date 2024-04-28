@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { FaAngleDown, FaChevronDown } from "react-icons/fa";
+import { FaAngleDown, FaChevronDown, FaChevronRight } from "react-icons/fa";
 
 const MenuButton = ({
   name,
@@ -54,19 +54,19 @@ const MenuButton = ({
         active && "bg-active-orange"
       } px-4 py-2 font-medium rounded-md text-orange-50 hover:${
         active ? "bg-active-orange" : "bg-dark-orange"
-      } hover:text-white  relative w-full transition-all`}
+      } hover:text-white  relative w-full transition-all hover:bg-dark-orange`}
     >
       {dropdown ? (
         <div className="w-full">
           <div
-            className="flex items-center font-sans gap-4"
+            className="flex items-center font-sans gap-3"
           >
-            <Link href={link}  onClick={clickHandler}>{name}</Link>
-            {dropdown ?  <FaChevronDown 
+            {dropdown ?  <FaChevronRight
             size= {20} 
-            className = {`cursor-pointer ${isClicked && "rotate-180"} transition-transform duration-300`}
+            className = {`cursor-pointer ${isClicked && "rotate-90"} transition-transform duration-300`}
             onClick={()=>setIsClicked(!isClicked)}
             /> : <></>}
+            <Link href={link}  onClick={clickHandler}>{name}</Link>
           </div>
           {dropDownComp}
         </div>
