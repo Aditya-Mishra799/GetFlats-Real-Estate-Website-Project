@@ -18,6 +18,8 @@ const PropertyListingsCard = ({ data, setCards, index }) => {
     currency: "INR",
   });
   const { data: session } = useSession();
+  // state to store the favorite (like) by a user for a listing
+  const [isFavourite, setIsFavourite] = useState(data?.isFavourite)
   const snackBar = useSnackBar();
   const diplayAddress = `${data?.location?.address?.suburb ?? ""}
     ${data?.location?.address?.city ?? ""} 
@@ -37,14 +39,14 @@ const PropertyListingsCard = ({ data, setCards, index }) => {
           "success",
           {
             label: "Success!",
-            message: data.isFavourite
+            message: isFavourite
               ? "Removed from wish list"
               : "Added to wish list",
           },
           7000
         );
       }
-      setCards((prevState) => {
+      setCards && setCards((prevState) => {
         const updatedCards = [...prevState]; // Create a copy of the previous state array
         updatedCards[index] = {
           ...updatedCards[index],
@@ -52,13 +54,15 @@ const PropertyListingsCard = ({ data, setCards, index }) => {
         };
         return updatedCards;
       });
+      setIsFavourite(previous => !previous);
     } catch (error) {
       console.log(error);
     }
   };
+
   const menuDropDownButton = (
     <div
-      className="absolute text-md tracking-wider font-semibold top-1 right-1 hover:bg-white p-1  rounded-full  hover:text-active-orange  cursor-pointer "
+      className="absolute text-md tracking-wider font-semibold top-1 right-1 hover:bg-white hover:text-black p-1  rounded-full  hover:text-active-orange  cursor-pointer bg-opacity-20 bg-black text-white"
       title={"Menu"}
       onClick={() => setOpenMenu((prevstate) => !prevstate)}
       aria-label="Menu"
@@ -106,7 +110,7 @@ const PropertyListingsCard = ({ data, setCards, index }) => {
           <button
             className={
               "absolute text-md tracking-wider font-semibold top-1 left-1 bg-white p-1  rounded-full active:text-red-600  active:opacity-100  lg:hover:text-red-600 lg:hover:opacity-100 " +
-              (data?.isFavourite ? "text-red-600 opacity-100" : "opacity-50")
+              (isFavourite ? "text-red-600 opacity-100" : "opacity-50")
             }
             title={"Add to Favorite"}
             onClick={toggleListingFavourites}
