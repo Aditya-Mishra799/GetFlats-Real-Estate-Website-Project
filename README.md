@@ -1,4 +1,3 @@
-Certainly! Here are some additional sections and information commonly found in README files:
 
 ## Table of Contents
 - Description
