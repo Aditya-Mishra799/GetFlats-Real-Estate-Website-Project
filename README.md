@@ -9,7 +9,6 @@
 - Contributing
 - License
 - Contact
-- Acknowledgements
 
 # GetFlats
 
@@ -81,22 +80,9 @@ BSD 3-Clause License
 
 ## Contact
 
-For any inquiries or feedback, feel free to reach out to us:
-- **Leader:**
-  - Aditya Mishra
-    - Email: adityamishra@eng.rizvi.edu.in
+For any inquiries or feedback, feel free to contact me:
+  - Aditya Shyamanand Mishra
+    -  Email: adityamishra@eng.rizvi.edu.in
     -  GitHub: [Aditya-Mishra799](https://github.com/Aditya-Mishra799)
-- **Group Members:**
-  - Rohitkumar Pandey
-    - Email: rohitpandey10503@eng.rizvi.edu.in
-    - GitHub: [rohit10503](https://github.com/rohit10503)
-  - Didar Abbas Shaikh
-    - Email: didarabbas@eng.rizvi.edu.in
-    - GitHub: [Didar9595](https://github.com/Didar9595)
-  - Ahsan Ansari
-    - Email: ahsanansari2026@eng.rizvi.edu.in
-    - GitHub: [Mohammed-Ahsan786](https://github.com/Mohammed-Ahsan786)
+    -  LinkedIn: [Aditya Mishra](https://linkedin.com/in/aditya-mishra-b4050a291)
 
-## Acknowledgements
-
-We would like to thank all contributors and supporters of GetFlats for their valuable contributions and feedback. Your support is greatly appreciated!
