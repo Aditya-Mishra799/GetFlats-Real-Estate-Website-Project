@@ -126,7 +126,7 @@ const Page = () => {
       description: "AI-powered suggestions based on your preferences"
     },
     {
-      icon: "fa-solid fa-shield-check",
+      icon: "fa-solid fa-check",
       title: "Verified Listings",
       description: "All properties are verified for authenticity"
     },
