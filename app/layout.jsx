@@ -6,6 +6,7 @@ import ChatBotFAB from "@components/home_layout/ChatBotFAB";
 export const metadata = {
   title: "Get Flats",
   description: "This website helps you to find your dream with 0 brokerage.",
+  icons : "/favicon.png"
 };
 
 export default function Layout({ children }) {
