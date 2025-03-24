@@ -78,7 +78,7 @@ const Menu = ({ menuOpen, setMenuOpen }) => {
 
   return (
     <AnimatePresence>
-      {(menuOpen || window.innerWidth >= 1024) && (
+      {(
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
