@@ -1,38 +1,59 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import PropertyListingsCard from "./PropertyLisingsCard";
-//this is a component to fetch and display the the similar property listings
+import { motion } from "framer-motion";
+
 const FetchAndDisplayRecommendation = ({ id }) => {
   const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const fetchRecommendations = async ()=>{
-      setListings([])
+    const fetchRecommendations = async () => {
+      setLoading(true);
       try {
-        const response =  await fetch("/api/listing/fetch-recommendation?id=" + id)
-        if(response.ok){
-          const data = await response.json()
-          setListings(data)
+        const response = await fetch("/api/listing/fetch-recommendation?id=" + id);
+        if (response.ok) {
+          const data = await response.json();
+          setListings(data);
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
+      } finally {
+        setLoading(false);
       }
-    }
-    fetchRecommendations()
-  
+    };
+    fetchRecommendations();
   }, [id]);
+
+  if (loading) {
+    return (
+      <div className="w-full py-8 text-center">
+        <div className="loading-circle mx-auto"></div>
+        <p className="text-gray-600 mt-4">Finding similar properties...</p>
+      </div>
+    );
+  }
+
+  if (!listings.length) {
+    return (
+      <div className="w-full py-8 text-center bg-gray-50 rounded-xl">
+        <i className="fa-solid fa-house-circle-xmark text-4xl text-gray-400 mb-4"></i>
+        <p className="text-gray-600">No similar properties found</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex  flex-col gap-2 mx-1 my-4 shadow-md p-2 border rounded-sm border-dashed">
-      <h3 className="text-md font-bold text-slate-900 md:text-xl">
-        Rcommended Similar Property Listings{" "}
-      </h3>
-      {/* Diplay the fetched listings */}
-      <div className="flex flex-wrap gap-x-4 gap-y-6 overflow-scroll hidden-scrollbar  mx-2 my-4 ">
-        {listings.length === 0 && (
-          <div className="text-center text-xl font-bold text-slate-700">
-            Loading ...
-          </div>
-        )}
-        {listings && listings.map((listing, index) => (
-          <PropertyListingsCard key={listing._id} data={listing} />
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {listings.map((listing, index) => (
+          <motion.div
+            key={listing._id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
+          >
+            <PropertyListingsCard data={listing} />
+          </motion.div>
         ))}
       </div>
     </div>

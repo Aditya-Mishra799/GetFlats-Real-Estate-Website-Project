@@ -1,50 +1,49 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const RangeInput = ({ label, min, max , value = [1000, Infinity], setValue}) => {
-  
+const RangeInput = ({ label, min, max, value = [1000, Infinity], setValue }) => {
   const handleMinChange = (e) => {
     const updateValue = parseInt(e.target.value);
-    if(setValue) setValue([updateValue, value[1]])
+    if (setValue) setValue([updateValue, value[1]]);
   };
 
   const handleMaxChange = (e) => {
     const updateValue = parseInt(e.target.value);
-    if(setValue) setValue([value[0], updateValue])
+    if (setValue) setValue([value[0], updateValue]);
   };
 
-  const handleBlur= (e) => {
-   if(value[1] < value[0]){
-    if(setValue) setValue([value[0], value[0]])
-   }
-   if(value[0] < min || !value[0] || value[0] === NaN){
-    if(setValue) setValue(min, value[0])
-   }
+  const handleBlur = () => {
+    if (value[1] < value[0]) {
+      if (setValue) setValue([value[0], value[0]]);
+    }
+    if (value[0] < min || !value[0] || isNaN(value[0])) {
+      if (setValue) setValue([min, value[1]]);
+    }
   };
- 
 
   return (
-    <div className="flex flex-col sm:flex-row border border-active-orange px-2 py-2 rounded-lg">
-      <div className="flex flex-col items-center">
-        <label htmlFor={`${label}-min`} className="font-semibold text-md text-slate-600 mb-1">{label}</label>
-        <div className='flex gap-2 w-full'>
-        <input
-          type="number"
-          id={`${label}-min`}
-          name={`${label}-min`}
-          value={value[0]}
-          onChange={handleMinChange}
-          onBlur = {handleBlur}
-          className="text-center border-2 rounded-md w-1/2 px-2 py-1  focus:outline-faded-orange focus:ouline-2 grow"
-        />
-        <input
-          type="number"
-          id={`${label}-max`}
-          name={`${label}-max`}
-          value={value[1]}
-          onChange={handleMaxChange}
-          onBlur = {handleBlur}
-          className="text-center border-2 rounded-md w-1/2 px-2 py-1  focus:outline-faded-orange focus:ouline-2 grow"
-        />
+    <div className="space-y-2">
+      <label className="block text-sm font-medium text-gray-700">{label}</label>
+      <div className="flex gap-2">
+        <div className="flex-1">
+          <input
+            type="number"
+            value={value[0]}
+            onChange={handleMinChange}
+            onBlur={handleBlur}
+            placeholder="Min"
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-active-orange/20 focus:border-active-orange transition-all duration-200"
+          />
+        </div>
+        <div className="flex items-center text-gray-400">to</div>
+        <div className="flex-1">
+          <input
+            type="number"
+            value={value[1]}
+            onChange={handleMaxChange}
+            onBlur={handleBlur}
+            placeholder="Max"
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-active-orange/20 focus:border-active-orange transition-all duration-200"
+          />
         </div>
       </div>
     </div>

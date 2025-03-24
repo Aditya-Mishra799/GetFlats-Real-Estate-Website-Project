@@ -20,12 +20,19 @@ export async function GET(req) {
           autocomplete: {
             query: query,
             path: "property_title",
-            fuzzy: { maxEdits: 2 },
+            fuzzy: { maxEdits: 1 },
           },
         },
       },
+      {
+        $project: {
+          property_title: 1,
+          _id: 0,
+          score: { $meta: "searchScore" }, // Get similarity score
+        },
+      },
+      { $sort: { score: -1 } }, // Sort by highest similarity
       { $limit: 10 }, 
-      { $project: { property_title: 1, _id: 0 } },
     ]);
 
     return Response.json(results.map((item) => item.property_title), { status: 200 });

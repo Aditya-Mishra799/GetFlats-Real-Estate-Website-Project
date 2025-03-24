@@ -27,17 +27,7 @@ const buildMongoDBSearchQuery = (filterQuery) => {
   ]);
   Object.entries(filterQuery).forEach(([key, value]) => {
     if (value) {
-      if (key === "keywords" && value !== '' && value) {
-        const keywordRegex = filterQuery.keywords
-          .split(" ")
-          .map((keyword) => new RegExp(keyword, "i"));
-        queryArrayAndPart.push({
-          $or: [
-            { property_title: { $in: keywordRegex } },
-            { property_description: { $in: keywordRegex } },
-          ],
-        });
-      } else if (labelFilter.has(key) && value.length >= 1) {
+      if (labelFilter.has(key) && value.length >= 1) {
         queryArrayAndPart.push({ [`${key}.label`]: { $in: value } });
       } else if (numericFilter.has(key) && value.length === 2) {
         queryArrayAndPart.push({ [key]: { $gte: value[0], $lte: value[1] } });
@@ -70,18 +60,46 @@ const buildMongoDBSearchQuery = (filterQuery) => {
 };
 export async function getData(perPage, page, filterQuery) {
   const session = await getServerSession(nextAuthOptions);
-  const query = buildMongoDBSearchQuery(JSON.parse(filterQuery));
+  const filterObj = JSON.parse(filterQuery);
+  const query = buildMongoDBSearchQuery(filterObj);
+  const keywords = filterObj["keywords"] || "";
   try {
-    const db = await connectToDB()
-    let listings = await PropertyListing.find(query)
-      .populate("creator")
-      .skip(perPage * (page - 1))
-      .limit(perPage)
-      .lean()
-      .exec();
-      if (session?.user?.id) {
-        listings = await checkForFavourites(listings, session.user.id);
-      }
+    const db = await connectToDB();
+    const pipeline = [
+      keywords && {
+        $search: {
+          index: "property_text_index",
+          text: {
+            query: keywords,
+            path: ["property_title", "property_description"],
+            fuzzy: { maxEdits: 1 }, // Handles typos & paraphrasing
+          },
+        },
+      },
+      { $match: query },
+      { $skip: perPage * (page - 1) },
+      { $limit: perPage },
+      {
+        $lookup: {
+          from: "users",
+          localField: "creator",
+          foreignField: "_id",
+          as: "creator",
+        },
+      },
+      {
+        $unwind: {
+          path: "$creator",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+    ].filter(Boolean); // Removes `false`, `null`, or `undefined` values
+
+    let listings = await PropertyListing.aggregate(pipeline);
+    
+    if (session?.user?.id) {
+      listings = await checkForFavourites(listings, session.user.id);
+    }
     const listingCount = await PropertyListing.countDocuments(query);
     const response = { listings: JSON.stringify(listings), listingCount };
     return response;
@@ -91,8 +109,7 @@ export async function getData(perPage, page, filterQuery) {
   }
 }
 const page = async ({ searchParams }) => {
-
-  if(!searchParams.page || !searchParams.query){
+  if (!searchParams.page || !searchParams.query) {
     redirect("?page=1&query={}");
   }
   let page = parseInt(searchParams.page, 10);
@@ -120,12 +137,11 @@ const page = async ({ searchParams }) => {
     if (i >= 1 && i <= totalPages) {
       pageNumbers.push(i);
     }
-
   }
   return (
     <div className="container  mt-8 w-full">
       <div className="flex  gap-1">
-        <div className="lg:w-80 lg:min-w-80 lg:max-w-80">
+        <div className="lg:max-w-96">
           <FilterPanel query={query} />
         </div>
         <div className="grow w-full">
