@@ -69,7 +69,6 @@ const buildMongoDBSearchQuery = (filterQuery) => {
   return { $and: queryArrayAndPart };
 };
 export async function getData(perPage, page, filterQuery) {
-  console.log('Execution started')
   const session = await getServerSession(nextAuthOptions);
   const query = buildMongoDBSearchQuery(JSON.parse(filterQuery));
   try {
@@ -85,7 +84,6 @@ export async function getData(perPage, page, filterQuery) {
       }
     const listingCount = await PropertyListing.countDocuments(query);
     const response = { listings: JSON.stringify(listings), listingCount };
-    console.log('execution-ended')
     return response;
   } catch (error) {
     console.error(error);

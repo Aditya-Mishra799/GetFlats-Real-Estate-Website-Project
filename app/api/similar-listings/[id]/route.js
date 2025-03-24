@@ -1,35 +1,20 @@
 import PropertyListing from "@models/property_listing";
-import { getServerSession } from "next-auth/next";
-import { nextAuthOptions } from "@app/api/auth/[...nextauth]/route";
-import { checkForFavourites } from "../user/[id]/route";
-import { connectToDB } from "@utils/database";
 
-//route to fetch the recommendations for  a property listing
-export async function GET(req) {
-  try {
-    const url = new URL(req.url)
-    const searchParams = new URLSearchParams(url.searchParams);
-    //get the listing id from search params
-    const property_listing_id = searchParams.get("id");
-    await connectToDB();
-    const similarListings = await findSimilarProperties(property_listing_id)
-    return Response.json(similarListings, { status: 200 });
-  } catch (error) {
-    console.error(error);
-    return Response.json(
-      {
-        error:
-          error.message ||
-          "Some error occurred while finding similar lsitings.",
-      },
-      { status: 500 }
-    );
-  }
+export const GET = async (req, {params})=>{
+    try {
+      await connectToDB();
+      const similarListings = await findSimilarProperties(params?.id)
+      return new Response(JSON.stringify(similarListings), {status : 200})
+    } catch (error) {
+        console.error(error)
+        return new Response("Failed to find similar listings data", {status: 500} )
+    }
 }
 
-async function findSimilarProperties(propertyId,  maxPriceDifference = 20) {
+async function findSimilarProperties(propertyId, maxDistanceKm = 5, maxPriceDifference = 20) {
   const property = await PropertyListing.findById(propertyId);
   if (!property) throw new Error("Property not found");
+
   return await PropertyListing.aggregate([
     {
       // Step 1: Text Search on Title & Description
@@ -38,19 +23,27 @@ async function findSimilarProperties(propertyId,  maxPriceDifference = 20) {
         text: {
           query: property.property_title + " " + property.property_description,
           path: ["property_title", "property_description"],
-          fuzzy: { maxEdits: 1 }, // Handles typos & paraphrasing
+          fuzzy: { maxEdits: 2 }, // Handles typos & paraphrasing
         },
       },
     },
     {
-      // Step 2: Filter by price range
+      // Step 2: Geo-Spatial Filtering
+      $geoNear: {
+        near: { type: "Point", coordinates: property.location.coordinates },
+        distanceField: "distance",
+        maxDistance: maxDistanceKm * 1000, // Convert km to meters
+        spherical: true,
+      },
+    },
+    {
+      // Step 3: Filter by price range
       $match: {
-        _id : {$ne : property._id},
         price: { $gte: property.price * (1 - maxPriceDifference / 100), $lte: property.price * (1 + maxPriceDifference / 100) },
       },
     },
     {
-      // Step 3: Compute Jaccard Similarity for Amenities
+      // Step 4: Compute Jaccard Similarity for Amenities
       $addFields: {
         commonAmenities: {
           $size: {
@@ -72,7 +65,7 @@ async function findSimilarProperties(propertyId,  maxPriceDifference = 20) {
       },
     },
     {
-      // Step 4: Compute Weighted Similarity Score
+      // Step 5: Compute Weighted Similarity Score
       $addFields: {
         similarityScore: {
           $add: [
@@ -85,28 +78,12 @@ async function findSimilarProperties(propertyId,  maxPriceDifference = 20) {
       },
     },
     {
-      // Step 5: Sort by Most Similar
+      // Step 6: Sort by Most Similar
       $sort: { similarityScore: -1 },
     },
     {
-      // Step 6: Limit Results
+      // Step 7: Limit Results
       $limit: 10,
-    },
-    {
-      // Step 7: Lookup to populate the creator (User)
-      $lookup: {
-        from: "users", // MongoDB collection name for User
-        localField: "creator",
-        foreignField: "_id",
-        as: "creator",
-      },
-    },
-    {
-      // Step 8: Unwind creator array (convert to object)
-      $unwind: {
-        path: "$creator",
-        preserveNullAndEmptyArrays: true, // Keep property even if no user found
-      },
     },
   ]);
 }

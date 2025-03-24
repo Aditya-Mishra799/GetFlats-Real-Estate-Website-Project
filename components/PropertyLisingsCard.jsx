@@ -11,6 +11,7 @@ import DropDownMenu from "./DropDownMenu";
 import Modal from "./Modal";
 import Add3DImagePage from "./Add3DImagePage";
 import { useSnackBar } from "./SnackBar/SnackBarService";
+import Link from "next/link";
 
 const PropertyListingsCard = ({ data, setCards, index }) => {
   const formatter = new Intl.NumberFormat("en-IN", {
@@ -168,12 +169,12 @@ const PropertyListingsCard = ({ data, setCards, index }) => {
         </div>
 
         {/* View Button */}
-        <button
-          onClick={handleClick}
-          className="w-full bg-active-orange text-white py-2 rounded-lg hover:bg-dark-orange transition-all duration-300 font-medium"
+        <Link
+          href = {`/listing?id=${data?._id}`}
+          className="w-full bg-active-orange text-white py-2 rounded-lg hover:bg-dark-orange transition-all duration-300 font-medium block text-center"
         >
           View Details
-        </button>
+        </Link>
       </div>
 
       {Add3DImageModal}
