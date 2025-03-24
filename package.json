@@ -12,6 +12,7 @@
     "@hookform/resolvers": "^3.3.4",
     "@vercel/blob": "^0.22.1",
     "bcrypt": "^5.1.1",
+    "framer-motion": "^12.5.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.483.0",
     "mongodb": "^6.3.0",

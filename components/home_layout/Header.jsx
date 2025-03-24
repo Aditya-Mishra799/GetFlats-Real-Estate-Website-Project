@@ -12,7 +12,7 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
     <nav className="bg-smooth-orange  text-white fixed top-0 left-0 right-0 z-50 ">
-      <div className={"container flex mx-auto py-2 flex-wrap px-1  transition-all ease-in-out duration-300 " }>
+      <div className={"container flex mx-auto py-2 flex-wrap px-1  transition-all ease-in-out duration-300 lg:justify-between" }>
         <Link
           href="#"
           className="inline-flex p-2 text-xl font-bold uppercase tracking-wider"
