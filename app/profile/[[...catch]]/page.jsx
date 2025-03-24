@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useCheckLoginAndRedirect } from "@common_functions/check_login_and_redirect";
 import ProfileCard from "@components/ProfileCard";
 import FetchAndDisplayCards from "@components/FetchAndDisplayCards";
