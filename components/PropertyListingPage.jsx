@@ -13,7 +13,6 @@ import { useSession } from "next-auth/react";
 import FeedBackPanel from "./FeedBackPanel";
 import FetchAndDisplayRecommendation from "./FetchAndDisplayRecommendation";
 import Link from "next/link";
-import { motion } from "framer-motion";
 
 const DynamicDisplayMap = dynamic(() => import("@components/DisplayMap"), {
   ssr: false,
@@ -48,9 +47,7 @@ const PropertyListingPage = ({ listingData }) => {
         title="Property Location"
         onClose={() => setOpenMapModal(false)}
       >
-        <DynamicDisplayMap
-          mainMarkerCoords={listingData?.location?.coordinates}
-        />
+        <DynamicDisplayMap mainMarkerCoords={listingData?.location?.coordinates} />
       </Modal>
     ),
     enquiry: (
@@ -69,17 +66,10 @@ const PropertyListingPage = ({ listingData }) => {
         onClose={() => setOpen3DViewModal(false)}
       >
         {listingData?.media?.panorama ? (
-          <iframe
-            height="100%"
-            width="100%"
-            allowFullScreen
-            src={listingData?.media?.panorama}
-          />
+          <iframe height="100%" width="100%" allowFullScreen src={listingData?.media?.panorama} />
         ) : (
           <div className="flex h-full items-center justify-center">
-            <p className="text-xl text-gray-500 font-semibold">
-              3D View Not Available
-            </p>
+            <p className="text-xl text-gray-500 font-semibold">3D View Not Available</p>
           </div>
         )}
       </Modal>
@@ -88,52 +78,56 @@ const PropertyListingPage = ({ listingData }) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section with Image Gallery */}
-      <div className="relative h-[40vh] md:h-[60vh] bg-gray-900">
-        {/* Main Image */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="absolute inset-0"
-        >
-          <Image
-            src={images[selectedImage]}
-            layout="fill"
-            objectFit="cover"
-            alt="Property"
-            className="opacity-90"
-            priority
-          />
-        </motion.div>
+      {/* Title and Address Section */}
+      <div className="bg-white shadow-md py-6 px-4 md:px-8 mb-6">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-2xl md:text-4xl font-bold text-gray-800 mb-3">
+            {listingData?.property_title}
+          </h1>
+          <div className="flex items-center gap-2 text-gray-600">
+            <CiLocationOn className="text-active-orange text-xl" />
+            <p className="text-sm md:text-base">
+              {formatAddress(listingData?.location?.address)}
+            </p>
+          </div>
+        </div>
+      </div>
 
-        {/* Property Info Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/50">
-          <div className="container mx-auto px-4 h-full flex flex-col justify-between py-6 relative">
-            {/* Image Gallery */}
-            <div className="w-full overflow-x-auto pb-2 hidden-scrollbar bottom-0 absolute">
-              <div className="flex gap-2 px-4 min-w-min">
-                {images.map((image, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ scale: 1.05 }}
-                    className={`flex-none w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden cursor-pointer border-2 ${
-                      selectedImage === index
-                        ? "border-active-orange"
-                        : "border-white"
-                    }`}
-                    onClick={() => setSelectedImage(index)}
-                  >
-                    <Image
-                      src={image}
-                      width={80}
-                      height={80}
-                      alt={`Property ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </motion.div>
-                ))}
+      {/* Image Gallery Section */}
+      <div className="max-w-7xl mx-auto px-4 mb-8">
+        <div className="grid grid-cols-1  gap-4">
+          {/* Main Image */}
+          <div className="lg:col-span-2 aspect-[4/3] lg:aspect-[5/2] relative rounded-lg overflow-hidden">
+            <Image
+              src={images[selectedImage]}
+              layout="fill"
+              objectFit="cover"
+              alt="Property"
+              className="hover:scale-105 transition-transform duration-300"
+              priority
+            />
+          </div>
+
+
+
+          {/*Thumbnails */}
+          <div className="flex gap-2 overflow-x-auto  pb-2  w-full justify-center">
+            {images.map((image, index) => (
+              <div
+                key={index}
+                className={`flex-none w-20 h-20 relative rounded-lg overflow-hidden ${
+                  selectedImage === index ? "ring-2 ring-active-orange" : ""
+                }`}
+                onClick={() => setSelectedImage(index)}
+              >
+                <Image
+                  src={image}
+                  layout="fill"
+                  objectFit="cover"
+                  alt={`Property ${index + 1}`}
+                />
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
@@ -147,9 +141,7 @@ const PropertyListingPage = ({ listingData }) => {
               <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
                 {formatter.format(listingData?.price)}
               </h2>
-              <p className="text-gray-600">
-                {listingData?.listing_type?.label}
-              </p>
+              <p className="text-gray-600">{listingData?.listing_type?.label}</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
               <Button
@@ -218,9 +210,7 @@ const PropertyListingPage = ({ listingData }) => {
 
             {/* Amenities */}
             <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">
-                Amenities
-              </h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">Amenities</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {listingData?.amenities.map((amenity) => (
                   <div
@@ -236,55 +226,32 @@ const PropertyListingPage = ({ listingData }) => {
 
             {/* Description */}
             <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">
-                Description
-              </h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">Description</h2>
               <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
                 {listingData?.property_description}
               </p>
             </div>
-
-            {/* Title and Address */}
-            <motion.div
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              className="bg-white/95 p-4 rounded-lg shadow-lg max-w-2xl"
-            >
-              <h1 className="text-xl md:text-3xl font-bold text-gray-800">
-                {listingData?.property_title}
-              </h1>
-              <p className="text-sm md:text-base text-gray-600 mt-2">
-                {formatAddress(listingData?.location?.address)}
-              </p>
-            </motion.div>
           </div>
+
           {/* Right Column */}
           <div className="space-y-6">
             {/* Owner Info */}
             <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">
-                Listed By
-              </h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">Listed By</h2>
               <UserDataDisplay user={listingData?.user} />
             </div>
 
             {/* Property Details */}
             <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">
-                Property Details
-              </h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">Property Details</h2>
               <div className="space-y-3">
                 <div className="flex justify-between text-gray-700">
                   <span>Listed For</span>
-                  <span className="font-medium">
-                    {listingData?.listing_type?.label}
-                  </span>
+                  <span className="font-medium">{listingData?.listing_type?.label}</span>
                 </div>
                 <div className="flex justify-between text-gray-700">
                   <span>Furnishing</span>
-                  <span className="font-medium">
-                    {listingData?.furnished_status?.label}
-                  </span>
+                  <span className="font-medium">{listingData?.furnished_status?.label}</span>
                 </div>
                 <div className="flex justify-between text-gray-700">
                   <span>Built Date</span>
@@ -310,9 +277,7 @@ const PropertyListingPage = ({ listingData }) => {
 
         {/* Similar Properties */}
         <div className="mt-12">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">
-            Similar Properties
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Similar Properties</h2>
           <FetchAndDisplayRecommendation id={listingData._id} />
         </div>
       </div>
