@@ -1,18 +1,14 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { useSnackBar } from "./SnackBar/SnackBarService";
+import { motion } from "framer-motion";
 
 const EnquiryCard = ({ data, type }) => {
-  let profileImage = null;
-  let userData = null;
+  const [isExpanded, setIsExpanded] = useState(false);
+  const profileImage = type === "received" ? data?.creator.image : data?.owner.image;
+  const userData = type === "received" ? data?.creator : data?.owner;
   const snackBar = useSnackBar();
-  if (type === "received") {
-    profileImage = data?.creator.image;
-    userData = data?.creator;
-  } else {
-    profileImage = data?.owner.image;
-    userData = data?.owner;
-  }
+
   const handleStatusChange = async (status) => {
     const snackBarId = snackBar.open(
       "loading",
@@ -49,10 +45,8 @@ const EnquiryCard = ({ data, type }) => {
       snackBar.open(
         "alert",
         {
-          label: "Submission Failed",
-          message: (
-            <div className="max-w-64 truncate ...">{`Error : ${error?.message}`}</div>
-          ),
+          label: "Action Failed",
+          message: `Error: ${error?.message}`,
         },
         7000
       );
@@ -60,53 +54,88 @@ const EnquiryCard = ({ data, type }) => {
       snackBar.close(snackBarId);
     }
   };
+
+  const statusColors = {
+    pending: "bg-yellow-100 text-yellow-800",
+    accepted: "bg-green-100 text-green-800",
+    rejected: "bg-red-100 text-red-800"
+  };
+
   return (
-    <div className="rounded-md shadow-md bg-slate-50 w-80 transition-all">
-      {/* Controls */}
-      {type === "received" && data?.status === "pending" && (
-        <div className="flex justify-between items-center px-2 py-1 border-b-2 rounded-t-md">
-          <button
-            className=" text-red-500 px-2 py-1 "
-            onClick={(e) => handleStatusChange("rejected")}
-          >
-            Reject
-          </button>
-          <button
-            className="text-green-500 px-2 py-1"
-            onClick={(e) => handleStatusChange("accepted")}
-          >
-            Accept
-          </button>
-        </div>
-      )}
-      <div className="px-4 py-2 flex flex-col gap-1">
-        <p>
-          <span className="font-semibold">Phone:</span> {data.phone}
-        </p>
-        <p className="truncate   hover:text-black hover:whitespace-normal">
-          <span className="font-semibold"> Contact Email:</span> {data.email}
-        </p>
-        <p>
-          <span className="font-semibold">Status: </span> {data?.status}
-        </p>
-        <p className="line-clamp-4">{data?.description}</p>
-      </div>
-      <div className="bg-highlight-orange px-2 py-2 rounded-b-md">
-        <div className="flex gap-2">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      whileHover={{ scale: 1.02 }}
+      className="bg-white rounded-xl shadow-md overflow-hidden w-full sm:w-[350px] md:w-[380px]"
+    >
+      {/* Header with Status */}
+      <div className="bg-gradient-to-r from-active-orange to-smooth-orange p-4 flex flex-col sm:flex-row sm:items-center gap-4">
+        <div className="flex items-center gap-3">
           <Image
-            height={60}
-            width={60}
+            height={48}
+            width={48}
             src={profileImage}
-            className="rounded-full border-2 border-dashed border-active-orange border-spacing-2 p-1"
+            className="rounded-full border-2 border-white"
             alt="profile image"
           />
-          <div className="flex flex-col gap-1 truncate ...">
-            <p>{userData?.username}</p>
-            <p>{userData?.email}</p>
+          <div className="text-white">
+            <h3 className="font-semibold truncate max-w-[150px]">{userData?.username}</h3>
+            <p className="text-sm opacity-90 truncate max-w-[150px]">{userData?.email}</p>
           </div>
         </div>
+        <span className={`px-3 py-1 rounded-full text-sm font-medium self-start sm:self-center ${statusColors[data.status]}`}>
+          {data.status}
+        </span>
       </div>
-    </div>
+
+      {/* Enquiry Content */}
+      <div className="p-4 space-y-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div className="flex items-center gap-2 text-gray-600">
+            <i className="fa-solid fa-phone w-5"></i>
+            <span className="truncate">{data.phone}</span>
+          </div>
+          <div className="flex items-center gap-2 text-gray-600">
+            <i className="fa-solid fa-envelope w-5"></i>
+            <span className="truncate">{data.email}</span>
+          </div>
+        </div>
+
+        <div className="relative">
+          <p className={`text-gray-700 bg-gray-50 p-4 rounded-lg ${!isExpanded && 'line-clamp-3'}`}>
+            {data.description}
+          </p>
+          {data.description?.length > 150 && (
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="text-active-orange hover:text-dark-orange text-sm mt-1 font-medium"
+            >
+              {isExpanded ? 'Show less' : 'Read more'}
+            </button>
+          )}
+        </div>
+
+        {/* Action Buttons for Received Enquiries */}
+        {type === "received" && data?.status === "pending" && (
+          <div className="flex gap-3 pt-2">
+            <button
+              onClick={() => handleStatusChange("accepted")}
+              className="flex-1 py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-300 text-sm sm:text-base"
+            >
+              <span className="hidden sm:inline">Accept</span>
+              <i className="fa-solid fa-check sm:hidden"></i>
+            </button>
+            <button
+              onClick={() => handleStatusChange("rejected")}
+              className="flex-1 py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300 text-sm sm:text-base"
+            >
+              <span className="hidden sm:inline">Reject</span>
+              <i className="fa-solid fa-times sm:hidden"></i>
+            </button>
+          </div>
+        )}
+      </div>
+    </motion.div>
   );
 };
 

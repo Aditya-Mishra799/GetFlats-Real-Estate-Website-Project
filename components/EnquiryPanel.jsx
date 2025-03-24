@@ -1,39 +1,61 @@
-import React, { useState } from 'react'
-import EnquiryCard from './EnquiryCard'
-import FetchAndDisplayCards from './FetchAndDisplayCards'
+import React, { useState } from 'react';
+import EnquiryCard from './EnquiryCard';
+import FetchAndDisplayCards from './FetchAndDisplayCards';
+import { motion, AnimatePresence } from "framer-motion";
+
 const EnquiryPanel = () => {
-    //select menu with options for different types of enquiries
-    //two options are enquiries made by the user (i.e. sent by the user) and enquiries received by the user for his listings
-    //on slecting one of the option we load the specific type of enquiries
-    //for this we use FetchAndDisplayCards and pass specific api 
-    const [type, setType] = useState('sent')
-    const hnadleChange = (e)=>{
-      e.preventDefault()
-      const type = e.target.value
-      setType(type)
-    }
-  const DisplayPanel = (
-    <FetchAndDisplayCards type={type} apiEndpoint={`api/enquiry/view?type=${type}`} CardComponet = {EnquiryCard}/>
-  )
+  const [type, setType] = useState('sent');
+
+  const handleChange = (newType) => {
+    setType(newType);
+  };
 
   return (
-    <div className='w-full h-full flex flex-col items-center justify-center'>
-        {/* enquiry loader selction component */}
-        {/* custom select tag code */}
-           <div className='flex flex-col self-start '>
-               <label htmlFor="enquiry-type" className='mb-2 font-bold'>Select Enquiry Type</label>
-               <select 
-               value={type} 
-               onChange={hnadleChange}
-               className=' border  border-active-orange px-2 py-1 text-md font-semibold rounded-md focus:outline-0' >
-                <option value={'sent'}>Sent</option>
-                <option value={'received'}>Received</option>
-               </select>
-           </div>
-           {DisplayPanel}
-      
-    </div>
-  )
-}
+    <div className="space-y-6">
+      {/* Tab Selector */}
+      <div className="flex justify-center gap-4">
+        <button
+          onClick={() => handleChange('sent')}
+          className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-300 ${
+            type === 'sent'
+              ? 'bg-active-orange text-white'
+              : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+          }`}
+        >
+          <i className="fa-solid fa-paper-plane"></i>
+          Sent Enquiries
+        </button>
+        <button
+          onClick={() => handleChange('received')}
+          className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-300 ${
+            type === 'received'
+              ? 'bg-active-orange text-white'
+              : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+          }`}
+        >
+          <i className="fa-solid fa-inbox"></i>
+          Received Enquiries
+        </button>
+      </div>
 
-export default EnquiryPanel
+      {/* Enquiries Display */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={type}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+        >
+          <FetchAndDisplayCards
+            type={type}
+            apiEndpoint={`api/enquiry/view?type=${type}`}
+            CardComponet={EnquiryCard}
+          />
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default EnquiryPanel;

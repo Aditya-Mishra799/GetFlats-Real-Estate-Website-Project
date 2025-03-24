@@ -1,33 +1,36 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { signIn, signOut, useSession, getProviders } from "next-auth/react";
-import Image from "next/image";
+import { useSession } from "next-auth/react";
 import { useCheckLoginAndRedirect } from "@common_functions/check_login_and_redirect";
 import ProfileCard from "@components/ProfileCard";
 import FetchAndDisplayCards from "@components/FetchAndDisplayCards";
 import PropertyListingsCard from "@components/PropertyLisingsCard";
 import EnquiryPanel from "@components/EnquiryPanel";
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 
 const page = () => {
   const { data: session, status } = useSession();
-  const pathname = usePathname();
   const [selectedTab, setSelectedTab] = useState(0);
   useCheckLoginAndRedirect(session, status);
+
   const handleLogOut = async () => {
     await signOut();
     sessionStorage.removeItem("hasRunOnce");
   };
+
   if (status === "loading") {
     return (
-      <div className="w-screen h-screen flex justify-center items-center text-2xl font-bold text-slate-800">
-        Loading...
+      <div className="min-h-screen flex justify-center items-center">
+        <div className="loading-circle"></div>
       </div>
     );
   }
+
   const tabs = [
     {
       label: "Your Listings",
+      icon: "fa-solid fa-list",
       component: (
         <FetchAndDisplayCards
           apiEndpoint={`api/listing/user/${session?.user.id}`}
@@ -36,7 +39,8 @@ const page = () => {
       ),
     },
     {
-      label: "Wish list",
+      label: "Wishlist",
+      icon: "fa-solid fa-heart",
       component: (
         <FetchAndDisplayCards
           apiEndpoint={`api/listing/get-wishlist`}
@@ -46,42 +50,63 @@ const page = () => {
     },
     {
       label: "Enquiries",
+      icon: "fa-solid fa-message",
       component: <EnquiryPanel />,
     },
   ];
+
   return (
     <>
       {session?.user && (
-        <div className="flex flex-col items-start p-3 lg:flex-row w-full gap-4 lg:justify-between lg:m-5 justify-evenly">
-          <div className="lg:w-1/3 flex w-full justify-center max-h-min flex-grow-0 self-auto">
-            <ProfileCard
-              user={session?.user}
-              control={true}
-              handleLogOut={handleLogOut}
-            />
-          </div>
-          <div className="w-full flex-col items-center  gap-4">
-            {/* Tabs */}
-            <div className="flex gap-1 lg:gap-4 w-full justify-center">
-              {tabs.map((tab, index) => (
-                <button
-                  key={tab.label + index}
-                  className={
-                    "border border-faded-orange uppercase tracking-wider px-4 py-2 shadow-md rounded-md " +
-                    "hover:bg-smooth-orange hover:text-white hover:font-semibold transition-all " +
-                    (index === selectedTab
-                      ? " text-white font-semibold bg-active-orange"
-                      : "")
-                  }
-                  onClick={() => setSelectedTab(index)}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-            {/* Display Component */}
-            <div className="w-full p-4 m-y-1">
-              {tabs[selectedTab]?.component}
+        <div className="min-h-screen bg-gray-50 p-4 lg:p-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              {/* Profile Section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="lg:col-span-1"
+              >
+                <div className="sticky top-20">
+                  <ProfileCard
+                    user={session?.user}
+                    control={true}
+                    handleLogOut={handleLogOut}
+                  />
+                </div>
+              </motion.div>
+
+              {/* Main Content Section */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="lg:col-span-3 space-y-6"
+              >
+                {/* Tabs */}
+                <div className="bg-white rounded-xl shadow-md p-4">
+                  <div className="flex flex-wrap gap-4">
+                    {tabs.map((tab, index) => (
+                      <button
+                        key={tab.label}
+                        onClick={() => setSelectedTab(index)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 ${
+                          selectedTab === index
+                            ? "bg-active-orange text-white"
+                            : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                        }`}
+                      >
+                        <i className={tab.icon}></i>
+                        <span className="font-medium">{tab.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="bg-white rounded-xl shadow-md p-6">
+                  {tabs[selectedTab].component}
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>

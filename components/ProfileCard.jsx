@@ -1,41 +1,50 @@
 import Image from "next/image";
 import React from "react";
+import { motion } from "framer-motion";
 
-const ProfileCard = ({ user, handleLogOut,control = false }) => {
+const ProfileCard = ({ user, handleLogOut, control = false }) => {
   return (
-    <div className="border p-4 rounded-md  max-w-max  shadow-md flex flex-col max-h-max">
-      <h1 className="text-2xl font-semibold">Profile</h1>
-      {user && (
-        <div>
+    <motion.div 
+      className="bg-white rounded-xl shadow-md overflow-hidden"
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.2 }}
+    >
+      <div className="relative h-32 bg-gradient-to-r from-active-orange to-smooth-orange">
+        <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
           <Image
-            height={120}
-            width={120}
+            height={96}
+            width={96}
             src={user.image}
             alt="profile"
             title="profile"
-            className="mx-auto my-3 rounded-md shadow-sm"
+            className="rounded-full border-4 border-white shadow-lg"
           />
-          <div className="flex flex-col gap-2 mt-5">
-            <p>
-              <span className="font-medium ">Name: </span>{" "}
-              <span>{user.name}</span>
-            </p>
-            <p>
-              <span className="font-medium ">Email:</span>{" "}
-              <span>{user.email}</span>
-            </p>
+        </div>
+      </div>
+
+      <div className="pt-16 pb-6 px-6">
+        <div className="text-center mb-6">
+          <h2 className="text-xl font-bold text-gray-800">{user.name}</h2>
+          <p className="text-gray-600 text-sm">{user.email}</p>
+        </div>
+
+        {control && (
+          <div className="flex gap-3">
+            <button
+              onClick={handleLogOut}
+              className="w-full py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300"
+            >
+              <i className="fa-solid fa-sign-out-alt mr-2"></i>
+              Log Out
+            </button>
+            <button className="w-full py-2 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-300">
+              <i className="fa-solid fa-edit mr-2"></i>
+              Edit
+            </button>
           </div>
-        </div>
-      )}
-      {control && (
-        <div className="flex justify-between items-center mt-4 gap-3">
-          <button className="primary_btn" onClick={handleLogOut}>
-            Log Out
-          </button>
-          <button className="outline_btn">Edit Profile</button>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </motion.div>
   );
 };
 
