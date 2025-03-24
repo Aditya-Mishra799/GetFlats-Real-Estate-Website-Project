@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 const FetchAndDisplayCards = ({ apiEndpoint, CardComponet, session, type }) => {
   const [cards, setCards] = useState([]);
   const [error, setError] = useState(null);
-  
+
   useEffect(() => {
     setError(null);
     try {
@@ -16,10 +16,17 @@ const FetchAndDisplayCards = ({ apiEndpoint, CardComponet, session, type }) => {
     }
   }, [apiEndpoint]);
 
+  const handleReload = () => {
+    if (window) {
+      window.location.reload();
+    }
+  };
   if (cards.length === 0) {
     return (
       <div className="w-full py-8 text-center">
-        <p className="text-xl text-gray-600 font-semibold">Nothing to show here</p>
+        <p className="text-xl text-gray-600 font-semibold">
+          Nothing to show here
+        </p>
         <p className="text-gray-500">No items found in this section</p>
       </div>
     );
@@ -35,10 +42,12 @@ const FetchAndDisplayCards = ({ apiEndpoint, CardComponet, session, type }) => {
   if (error !== null) {
     return (
       <div className="w-full py-8 text-center">
-        <p className="text-xl text-red-500 font-bold mb-2">Error while loading</p>
+        <p className="text-xl text-red-500 font-bold mb-2">
+          Error while loading
+        </p>
         <p className="text-gray-600 mb-4">{error.message}</p>
         <button
-          onClick={() => window.location.reload()}
+          onClick={handleReload}
           className="px-4 py-2 bg-active-orange text-white rounded-lg hover:bg-dark-orange transition-colors duration-300"
         >
           Reload
