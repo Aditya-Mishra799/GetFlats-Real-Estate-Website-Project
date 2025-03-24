@@ -248,7 +248,7 @@ const PropertyListingPage = ({ listingData }) => {
             <motion.div
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              className="bg-white/95 p-4 rounded-lg shadow-lg max-w-2xl hidden lg:block"
+              className="bg-white/95 p-4 rounded-lg shadow-lg max-w-2xl"
             >
               <h1 className="text-xl md:text-3xl font-bold text-gray-800">
                 {listingData?.property_title}
