@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaBath, FaBed, FaHeart } from "react-icons/fa6";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { TbRulerMeasure } from "react-icons/tb";
@@ -18,19 +18,20 @@ const PropertyListingsCard = ({ data, setCards, index }) => {
     currency: "INR",
   });
   const { data: session } = useSession();
-  // state to store the favorite (like) by a user for a listing
-  const [isFavourite, setIsFavourite] = useState(data?.isFavourite)
+  const [isFavourite, setIsFavourite] = useState(data?.isFavourite);
   const snackBar = useSnackBar();
-  const diplayAddress = `${data?.location?.address?.suburb ?? ""}
+  const displayAddress = `${data?.location?.address?.suburb ?? ""}
     ${data?.location?.address?.city ?? ""} 
     ${data?.location?.address?.state ?? ""}`;
 
   const router = useRouter();
   const [openMenu, setOpenMenu] = useState(false);
   const [openAdd3DImageModel, setOpenAdd3DImageModel] = useState(false);
+
   const handleClick = () => {
     router.push(`/listing?id=${data?._id}`);
   };
+
   const toggleListingFavourites = async () => {
     try {
       const result = await fetch(`api/listing/favourite?id=${data._id}`);
@@ -47,7 +48,7 @@ const PropertyListingsCard = ({ data, setCards, index }) => {
         );
       }
       setCards && setCards((prevState) => {
-        const updatedCards = [...prevState]; // Create a copy of the previous state array
+        const updatedCards = [...prevState];
         updatedCards[index] = {
           ...updatedCards[index],
           isFavourite: !updatedCards[index].isFavourite,
@@ -61,28 +62,28 @@ const PropertyListingsCard = ({ data, setCards, index }) => {
   };
 
   const menuDropDownButton = (
-    <div
-      className="absolute text-md tracking-wider font-semibold top-1 right-1 hover:bg-white hover:text-black p-1  rounded-full  hover:text-active-orange  cursor-pointer bg-opacity-20 bg-black text-white"
-      title={"Menu"}
-      onClick={() => setOpenMenu((prevstate) => !prevstate)}
-      aria-label="Menu"
-    >
-      <div className="w-full h-full relative">
-        <BsThreeDotsVertical />
-        <DropDownMenu
-          menuOptions={[
-            {
-              label: "Add 3D view",
-              onClick: () => setOpenAdd3DImageModel(true),
-            },
-            { label: "Delete" },
-            { label: "Update" },
-          ]}
-          open={openMenu}
-        />
-      </div>
+    <div className="absolute top-3 right-3 z-10">
+      <button
+        className="p-2 bg-white/90 rounded-full shadow-lg hover:bg-white transition-all duration-300"
+        onClick={() => setOpenMenu(!openMenu)}
+        title="Menu"
+      >
+        <BsThreeDotsVertical className="text-gray-700" />
+      </button>
+      <DropDownMenu
+        menuOptions={[
+          {
+            label: "Add 3D view",
+            onClick: () => setOpenAdd3DImageModel(true),
+          },
+          { label: "Delete" },
+          { label: "Update" },
+        ]}
+        open={openMenu}
+      />
     </div>
   );
+
   const Add3DImageModal = (
     <Modal
       title="Add 3D Image"
@@ -92,87 +93,89 @@ const PropertyListingsCard = ({ data, setCards, index }) => {
       <Add3DImagePage listing_id={data._id} />
     </Modal>
   );
+
   return (
-    <div className="flex flex-col max-w-60 min-w-60 rounded-lg shadow-lg  hover:shadow-2xl bg-white">
-      {/* Hero Iamge */}
-      <div className="w-full relative mb-2">
+    <div className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 w-72">
+      {/* Image Section */}
+      <div className="relative h-48">
         <Image
           src={data?.media?.thumbnail}
-          width={100}
-          height={100}
           alt={data?.property_title}
-          className="w-full object-cover h-40 rounded-t-lg"
+          width={300}
+          height={200}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute text-sm tracking-wider font-semibold bottom-1 left-1 bg-white p-1 opacity-50 rounded-sm truncate ...">
-          {diplayAddress}
+        
+        {/* Overlay with listing type and property type */}
+        <div className="absolute top-0 left-0 right-0 p-3 bg-gradient-to-b from-black/50 to-transparent">
+          <div className="flex gap-2">
+            <span className="px-2 py-1 text-xs bg-active-orange text-white rounded-full">
+              {data?.listing_type?.label}
+            </span>
+            <span className="px-2 py-1 text-xs bg-white/90 text-active-orange rounded-full">
+              {data?.property_type?.label}
+            </span>
+          </div>
         </div>
+
+        {/* Favorite Button */}
         {session?.user && (
           <button
-            className={
-              "absolute text-md tracking-wider font-semibold top-1 left-1 bg-white p-1  rounded-full active:text-red-600  active:opacity-100  lg:hover:text-red-600 lg:hover:opacity-100 " +
-              (isFavourite ? "text-red-600 opacity-100" : "opacity-50")
-            }
-            title={"Add to Favorite"}
             onClick={toggleListingFavourites}
-            aria-label="Add to Favorite"
+            className={`absolute top-3 right-14 p-2 rounded-full transition-all duration-300 ${
+              isFavourite 
+                ? "bg-active-orange text-white" 
+                : "bg-white/90 text-gray-600 hover:bg-active-orange hover:text-white"
+            }`}
+            title={isFavourite ? "Remove from Favorites" : "Add to Favorites"}
           >
             <FaHeart />
           </button>
         )}
+
+        {/* Menu Button */}
         {data?.creator?._id === session?.user?.id && menuDropDownButton}
-      </div>
-      <div className="p-2 space-y-1.5">
-        <div className="flex gap-1">
-          <h3 className="px-2 py-1 text-xs uppercase tracking-wider font-semibold border border-active-orange rounded-md text-active-orange">
-            {data?.listing_type?.label}
-          </h3>
-          <h3 className="px-2 py-1 text-xs uppercase tracking-wider font-semibold   rounded-lg text-active-orange">
-            {data?.property_type?.label}
-          </h3>
-          <Button
-            className={"px-1.5 py-1 uppercase text-sm"}
-            onClick={handleClick}
-            title={"View Detail"}
-            aria-label="View Detail"
-          >
-            View
-          </Button>
+
+        {/* Address Badge */}
+        <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/50 to-transparent">
+          <p className="text-white text-sm truncate">{displayAddress}</p>
         </div>
+      </div>
+
+      {/* Content Section */}
+      <div className="p-4 space-y-4">
+        {/* Price */}
         <div className="text-center">
-          <p>
-            <span className="font-bold tracking-wide uppercase">
-              Sale Price:{" "}
-            </span>{" "}
+          <p className="text-2xl font-bold text-gray-800">
             {formatter.format(data?.price)}
           </p>
         </div>
+
+        {/* Property Features */}
+        <div className="flex justify-between items-center px-2">
+          <div className="flex items-center gap-1 text-gray-600">
+            <FaBed className="text-active-orange" />
+            <span>{data?.bedrooms}</span>
+          </div>
+          <div className="flex items-center gap-1 text-gray-600">
+            <FaBath className="text-active-orange" />
+            <span>{data?.bathrooms}</span>
+          </div>
+          <div className="flex items-center gap-1 text-gray-600">
+            <TbRulerMeasure className="text-active-orange" />
+            <span>{data?.area} sqft</span>
+          </div>
+        </div>
+
+        {/* View Button */}
+        <button
+          onClick={handleClick}
+          className="w-full bg-active-orange text-white py-2 rounded-lg hover:bg-dark-orange transition-all duration-300 font-medium"
+        >
+          View Details
+        </button>
       </div>
 
-      {/* Additional details */}
-      <div className="flex gap-1 flex-wrap mb-2 px-2">
-        <Button
-          className={
-            "outline_btn px-2 py-1 font-medium text-sm flex  items-center rounded-lg gap-2"
-          }
-        >
-          <FaBed size={20} /> {data?.bedrooms}
-        </Button>
-
-        <Button
-          className={
-            "outline_btn px-2 py-1 font-medium text-sm flex  items-center rounded-lg gap-2"
-          }
-        >
-          <FaBath size={20} /> {data?.bathrooms}
-        </Button>
-        <Button
-          className={
-            "outline_btn px-2 py-1 font-medium text-sm flex  items-center rounded-lg gap-2"
-          }
-        >
-          <TbRulerMeasure size={20} /> {data?.area} sqft
-        </Button>
-      </div>
       {Add3DImageModal}
     </div>
   );

@@ -48,10 +48,8 @@ const Page = () => {
     return url;
   };
 
-  //get user location
   const updateAndGetLocation = async () => {
     if ("geolocation" in navigator) {
-      // Geolocation is supported
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           setUserLocation([
@@ -60,208 +58,197 @@ const Page = () => {
           ]);
         },
         (error) => {
-          console.error("Error white fetching Location", error);
+          console.error("Error while fetching Location", error);
         }
       );
     }
   };
+
   useEffect(() => {
     updateAndGetLocation();
   }, []);
+
   const sliderImages = [
     {
-      src: "https://images.pexels.com/photos/162539/architecture-building-amsterdam-blue-sky-162539.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "display-image",
+      src: "https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      alt: "Modern Apartment",
     },
     {
-      src: "https://images.pexels.com/photos/941195/pexels-photo-941195.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "display-image",
+      src: "https://images.pexels.com/photos/1643389/pexels-photo-1643389.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      alt: "Luxury Villa",
     },
     {
-      src: "https://images.pexels.com/photos/347141/pexels-photo-347141.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "display-image",
+      src: "https://images.pexels.com/photos/1876045/pexels-photo-1876045.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      alt: "Contemporary Home",
     },
     {
-      src: "https://images.pexels.com/photos/273204/pexels-photo-273204.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "display-image",
+      src: "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      alt: "Urban Living",
     },
     {
-      src: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "display-image",
-    },
-    {
-      src: "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "display-image",
-    },
-    {
-      src: "https://images.pexels.com/photos/259580/pexels-photo-259580.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-      alt: "display-image",
-    },
+      src: "https://images.pexels.com/photos/1612351/pexels-photo-1612351.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+      alt: "Dream Home",
+    }
   ];
+
   return (
-    <>
-      <div >
-        <ul className="flex gap-4 overflow-scroll hidden-scrollbar my-4 px-2">
+    <div className="min-h-screen bg-gray-50">
+      {/* Quick Action Buttons */}
+      <div className="px-4 py-6">
+        <ul className="flex gap-4 overflow-x-auto hidden-scrollbar">
           <li
-            className="flex gap-1 items-center bg-active-orange px-2 py-1 flex-none justify-stretch w-max text-nowrap text-white uppercase tracking-wider rounded-md cursor-pointer flex-nowrap "
-            onClick={() =>
-              router.push(
-                '/search?page=1&query={"listing_type":["For%20Sale"]}'
-              )
-            }
+            className="flex gap-2 items-center bg-active-orange px-4 py-2 rounded-lg cursor-pointer text-white shadow-md hover:bg-dark-orange transition-all duration-300 flex-none"
+            onClick={() => router.push('/search?page=1&query={"listing_type":["For%20Sale"]}')}
           >
-            <i class="fa-solid fa-house-circle-check text-white"></i>Buy
+            <i className="fa-solid fa-house-circle-check text-white"></i>
+            <span className="whitespace-nowrap">Buy Property</span>
           </li>
           <li
-            className="flex gap-1 items-center bg-active-orange px-2 py-1 flex-none justify-stretch w-max text-nowrap text-white uppercase tracking-wider rounded-md cursor-pointer flex-nowrap "
-            onClick={() =>
-              router.push(
-                '/search?page=1&query={"listing_type":["For%20Rent"]}'
-              )
-            }
+            className="flex gap-2 items-center bg-active-orange px-4 py-2 rounded-lg cursor-pointer text-white shadow-md hover:bg-dark-orange transition-all duration-300 flex-none"
+            onClick={() => router.push('/search?page=1&query={"listing_type":["For%20Rent"]}')}
           >
-            <i class="fa-solid fa-truck-moving text-white"></i>Rent
+            <i className="fa-solid fa-truck-moving text-white"></i>
+            <span className="whitespace-nowrap">Rent Property</span>
           </li>
           <li
-            className="flex gap-1 items-center bg-active-orange px-2 py-1 flex-none justify-stretch w-max text-nowrap text-white uppercase tracking-wider rounded-md cursor-pointer flex-nowrap "
-            onClick={() =>
-              router.push(
-                '/search?page=1&query={"property_type":["Independent","Residential%20Land"]}'
-              )
-            }
+            className="flex gap-2 items-center bg-active-orange px-4 py-2 rounded-lg cursor-pointer text-white shadow-md hover:bg-dark-orange transition-all duration-300 flex-none"
+            onClick={() => router.push('/search?page=1&query={"property_type":["Independent","Residential%20Land"]}')}
           >
-            <i class="fa-solid fa-table-cells text-white"></i>Plot/Land
+            <i className="fa-solid fa-table-cells text-white"></i>
+            <span className="whitespace-nowrap">Plot/Land</span>
           </li>
           <li
-            className="flex gap-1 items-center bg-active-orange px-2 py-1 flex-none justify-stretch w-max text-nowrap text-white uppercase tracking-wider rounded-md cursor-pointer flex-nowrap "
+            className="flex gap-2 items-center bg-active-orange px-4 py-2 rounded-lg cursor-pointer text-white shadow-md hover:bg-dark-orange transition-all duration-300 flex-none"
             onClick={() => router.push("/profile/add-listing")}
           >
-            <i class="fa-solid fa-house-user text-white"></i>
-            <span>Add a listing</span>
+            <i className="fa-solid fa-house-user text-white"></i>
+            <span className="whitespace-nowrap">List Property</span>
           </li>
         </ul>
       </div>
-      <div className="w-full h-80 m-2 rounded-md lg:h-[400px]">
+
+      {/* Hero Section with Carousel */}
+      <div className="w-full h-[500px] px-4 rounded-xl overflow-hidden shadow-lg">
         <Carousel slides={sliderImages} autoSlide={true} />
       </div>
-      <div className="home">
-        <div className="text">
-          <div className="bg-opacity-50 bg-black px-4 py-4 mt-4 rounded-md font-inter z-0">
-            <h1>
-              Buying <span className="head-and">&</span> Selling
-            </h1>
-            <p className="text-para">
-              Unlock Your Dream Home: Where Flats Find Their Perfect Match!
-            </p>
-            <button className="bg-white px-4 py-4 rounded-md text-active-orange uppercase text-xl mt-2  shadow-md"
-            onClick={()=> router.push('/about')}
+
+      {/* Search Section */}
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="bg-white p-6 rounded-xl shadow-lg">
+          <h1 className="text-4xl font-bold text-gray-800 mb-4 text-center">
+            Find Your Dream Home
+          </h1>
+          <div className="flex gap-2">
+            <input
+              className="w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-active-orange"
+              type="text"
+              placeholder="Search by locality, landmark, or project"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+            />
+            <button
+              className="bg-active-orange text-white px-6 py-3 rounded-lg hover:bg-dark-orange transition-all duration-300"
+              onClick={() => router.push(`/search?page=1&query={"keywords":"${searchInput}"}`)}
             >
-              {" "}
-              More About
+              Search
             </button>
           </div>
-          <ul>
-            <li>
-              <i className="fa-brands fa-facebook-f"></i>
-            </li>
-            <li>
-              <i className="fa-brands fa-linkedin-in"></i>
-            </li>
-            <li>
-              <i className="fa-brands fa-whatsapp"></i>
-            </li>
-            <li>
-              <i className="fa-brands fa-instagram"></i>
-            </li>
-          </ul>
         </div>
       </div>
-      <div className="home-middle">
-        <div>
-          <span className="input-sec px-1.5 py-2 rounded-lg shadow-lg border">
-            <input
-              className="local-input"
-              type="text"
-              placeholder="Search by locality or landmark"
-              value = {searchInput}
-              onChange = {(e)=>setSearchInput(e.target.value)}
-              onSubmit = {()=>router.push('/search')}
-            />
-            <i class="fa-solid fa-location-crosshairs"></i>
-            <i class="fa-solid fa-magnifying-glass cursor-pointer"  onClick = {()=>router.push(`/search?page=1&query={"keywords":"${searchInput}"}`)}></i>
-          </span>
-        </div>
-        <div className="highlights">
-          <h2>Apartments, Villas and more</h2>
-          <div className="flex gap-6 overflow-scroll hidden-scrollbar">
-            <div className="flex flex-col w-64  border rounded-lg shadow-lg overflow-hidden flex-none">
-              <div className="high-image">
-                <img
-                  src="https://res.cloudinary.com/sentral/image/upload/w_1000,h_1000,q_auto:eco,c_fill/f_auto/v1684782440/miro_hero_building_exterior_2000x1125.jpg"
-                  alt=""
-                  className="w-full h-64 object-cover transition-transform rounded-t-lg hover:scale-x-110"
-                />
-              </div>
-              <div className="high-card-desp mt-2.5">
-                <h3>Residential Apartments</h3>
-                <p>10,000+ Properties</p>
-              </div>
+
+      {/* Property Categories */}
+      <div className="px-4 py-12 bg-white">
+        <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+          Explore Properties by Category
+        </h2>
+        <div className="flex gap-6 overflow-x-auto hidden-scrollbar pb-4">
+          <div className="flex-none w-72 bg-white rounded-xl shadow-lg overflow-hidden group">
+            <div className="h-48 overflow-hidden">
+              <img
+                src="https://images.pexels.com/photos/1643384/pexels-photo-1643384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                alt="Apartments"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
             </div>
-            <div className="flex flex-col w-64  border rounded-lg shadow-lg overflow-hidden flex-none ">
-              <div className="high-image">
-                <img
-                  src="https://tjh.com/wp-content/uploads/2023/04/denver-new-home-Meade2.webp"
-                  alt=""
-                  className="w-full h-64 object-cover transition-transform rounded-t-lg hover:scale-x-110"
-                />
-              </div>
-              <div className="high-card-desp mt-2.5">
-                <h3>Independent House/ Villa</h3>
-                <p>900+ Properties</p>
-              </div>
+            <div className="p-4">
+              <h3 className="text-xl font-semibold text-gray-800">Residential Apartments</h3>
+              <p className="text-gray-600">10,000+ Properties</p>
             </div>
-            <div className="flex flex-col w-64  border rounded-lg shadow-lg overflow-hidden flex-none ">
-              <div className="high-image">
-                <img
-                  src="https://5.imimg.com/data5/FD/BL/MY-11964470/residential-plots-500x500.jpg"
-                  alt=""
-                  className="w-full h-64 object-cover transition-transform rounded-t-lg hover:scale-x-110"
-                />
-              </div>
-              <div className="high-card-desp mt-2.5">
-                <h3>Residential Land</h3>
-                <p>60+ Properties</p>
-              </div>
+          </div>
+
+          <div className="flex-none w-72 bg-white rounded-xl shadow-lg overflow-hidden group">
+            <div className="h-48 overflow-hidden">
+              <img
+                src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                alt="Villas"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
             </div>
-            <div className="flex flex-col w-64  border rounded-lg shadow-lg overflow-hidden flex-none ">
-              <div className="high-image">
-                <img
-                  src="https://www.redfin.com/blog/wp-content/uploads/2022/11/farmhouse-1.jpg"
-                  alt=""
-                  className="w-full h-64 object-cover transition-transform rounded-t-lg hover:scale-x-110"
-                />
-              </div>
-              <div className="high-card-desp mt-2.5">
-                <h3>Farm House</h3>
-                <p>12+ Properties</p>
-              </div>
+            <div className="p-4">
+              <h3 className="text-xl font-semibold text-gray-800">Independent Villas</h3>
+              <p className="text-gray-600">900+ Properties</p>
+            </div>
+          </div>
+
+          <div className="flex-none w-72 bg-white rounded-xl shadow-lg overflow-hidden group">
+            <div className="h-48 overflow-hidden">
+              <img
+                src="https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                alt="Plots"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+            </div>
+            <div className="p-4">
+              <h3 className="text-xl font-semibold text-gray-800">Residential Plots</h3>
+              <p className="text-gray-600">60+ Properties</p>
             </div>
           </div>
         </div>
       </div>
-      <div className="home-lower-middle">
-        <h2>
-          <i class="fa-solid fa-map-location"></i> New Launch Property in Your
-          area for Sale/Rent
-        </h2>
-        <div className="w-full h-full px-12 py-6">
+
+      {/* Featured Properties */}
+      <div className="px-4 py-12">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+            <i className="fa-solid fa-map-location text-active-orange"></i>
+            Featured Properties Near You
+          </h2>
           <FetchAndDisplayCards
             apiEndpoint={getApiEndPoint()}
             CardComponet={PropertyListingsCard}
           />
         </div>
       </div>
-    </>
+
+      {/* Social Links */}
+      <div className="bg-gray-800 text-white py-8">
+        <div className="max-w-4xl mx-auto px-4">
+          <h3 className="text-2xl font-semibold mb-6 text-center">Connect With Us</h3>
+          <ul className="flex justify-center gap-6">
+            <li className="hover:text-active-orange transition-colors duration-300">
+              <a href="#" className="text-2xl">
+                <i className="fa-brands fa-facebook-f"></i>
+              </a>
+            </li>
+            <li className="hover:text-active-orange transition-colors duration-300">
+              <a href="#" className="text-2xl">
+                <i className="fa-brands fa-linkedin-in"></i>
+              </a>
+            </li>
+            <li className="hover:text-active-orange transition-colors duration-300">
+              <a href="#" className="text-2xl">
+                <i className="fa-brands fa-whatsapp"></i>
+              </a>
+            </li>
+            <li className="hover:text-active-orange transition-colors duration-300">
+              <a href="#" className="text-2xl">
+                <i className="fa-brands fa-instagram"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   );
 };
 
