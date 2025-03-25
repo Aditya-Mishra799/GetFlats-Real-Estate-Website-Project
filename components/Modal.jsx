@@ -1,40 +1,45 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { IoClose } from 'react-icons/io5';
 
-const Modal = ({ title ='Modal', isOpen, onClose, children }) => {
-  const handleClose = () => {
-    onClose && onClose();
-  };
-
+const Modal = ({ title = 'Modal', isOpen, onClose, children }) => {
   return (
-    <>
+    <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-30">
-          <div className="fixed inset-0 bg-gray-900 opacity-50" onClick={handleClose}></div>
-          <div className="bg-slate-50 p-4 rounded shadow-lg w-full flex-grow max-w-lg z-50 m-4 h-3/4">
-            <div className="flex justify-between items-center ">
-              <h2 className="text-lg font-semibold">{title}</h2>
-              <button className="text-gray-500 hover:text-gray-700" onClick={handleClose}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={onClose}
+          />
+          
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }}
+            className="bg-white rounded-xl shadow-xl w-full max-w-lg m-4 z-50 overflow-hidden"
+          >
+            {/* Header */}
+            <div className="flex justify-between items-center px-6 py-4 border-b">
+              <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <IoClose size={24} className="text-gray-500" />
               </button>
             </div>
-            <div className="w-full h-[90%]  overflow-scroll m-2 px-2 py-7 hidden-scrollbar">{children}</div>
-          </div>
+
+            {/* Content */}
+            <div className="p-6 max-h-[calc(100vh-200px)] overflow-y-auto">
+              {children}
+            </div>
+          </motion.div>
         </div>
       )}
-    </>
+    </AnimatePresence>
   );
 };
 

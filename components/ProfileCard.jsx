@@ -1,6 +1,8 @@
 import Image from "next/image";
 import React from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { FaPlus } from "react-icons/fa";
 
 const ProfileCard = ({ user, handleLogOut, control = false }) => {
   return (
@@ -29,18 +31,28 @@ const ProfileCard = ({ user, handleLogOut, control = false }) => {
         </div>
 
         {control && (
-          <div className="flex gap-3">
-            <button
-              onClick={handleLogOut}
-              className="w-full py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300"
+          <div className="space-y-3">
+            <div className="flex gap-3">
+              <button
+                onClick={handleLogOut}
+                className="w-full py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300 flex items-center justify-center gap-2"
+              >
+                <i className="fa-solid fa-sign-out-alt"></i>
+                Log Out
+              </button>
+              <button className="w-full py-2 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center gap-2">
+                <i className="fa-solid fa-edit"></i>
+                Edit
+              </button>
+            </div>
+            
+            <Link
+              href="/profile/add-listing"
+              className="w-full py-3 px-4 bg-active-orange text-white rounded-lg hover:bg-dark-orange transition-colors duration-300 flex items-center justify-center gap-2"
             >
-              <i className="fa-solid fa-sign-out-alt mr-2"></i>
-              Log Out
-            </button>
-            <button className="w-full py-2 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-300">
-              <i className="fa-solid fa-edit mr-2"></i>
-              Edit
-            </button>
+              <FaPlus />
+              Add New Property
+            </Link>
           </div>
         )}
       </div>

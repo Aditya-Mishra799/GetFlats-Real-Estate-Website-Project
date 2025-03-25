@@ -1,23 +1,30 @@
 import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const DropDownMenu = ({ open, menuOptions, onClose }) => {
+  if (!open) return null;
+
   return (
-    <div
-      className={
-        "w-max bg-white shadow-md border border-highlight-orange flex flex-col p-1 rounded-sm  gap-1 absolute right-0 text-right " +
-        (!open ? "hidden" : "")
-      }
-    >
-      {menuOptions.map((option, index) => (
-        <button
-          key={option?.label + index}
-          onClick={option?.onClick}
-          className="text-xs w-full text-left tracking-wide font-medium text-slate-700 max-w-32 truncate ... border-b px-1 py-0.5 rounded-sm hover:bg-slate-100"
-        >
-          {option?.label}
-        </button>
-      ))}
-    </div>
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg overflow-hidden z-50"
+      >
+        {menuOptions.map((option, index) => (
+          <motion.button
+            key={option?.label + index}
+            whileHover={{ backgroundColor: "#f3f4f6" }}
+            onClick={option?.onClick}
+            className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center gap-2"
+          >
+            <i className={option.icon}></i>
+            {option?.label}
+          </motion.button>
+        ))}
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
