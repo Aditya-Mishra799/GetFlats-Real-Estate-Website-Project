@@ -34,7 +34,7 @@ const initialFilterState = {
   halls: [0, 3],
   bathrooms: [1, 5],
   coordinates: [],
-  keywords: '',
+  keywords: "",
 };
 
 const FilterPanel = ({ query, revalidateAndGetdata }) => {
@@ -87,7 +87,9 @@ const FilterPanel = ({ query, revalidateAndGetdata }) => {
     <div className="w-full space-y-6 px-6 py-8">
       <div className="space-y-2">
         <h3 className="text-2xl font-bold text-gray-800">Filter Properties</h3>
-        <p className="text-gray-600">Refine your search to find the perfect property</p>
+        <p className="text-gray-600">
+          Refine your search to find the perfect property
+        </p>
       </div>
 
       <div className="space-y-6">
@@ -117,8 +119,14 @@ const FilterPanel = ({ query, revalidateAndGetdata }) => {
 
         <div className="space-y-4">
           <h4 className="text-lg font-semibold text-gray-700">Price & Area</h4>
-          <RangeInput label="Price Range (₹)" {...mountInputs("price", 1000, Infinity)} />
-          <RangeInput label="Area (sq.ft)" {...mountInputs("area", 50, Infinity)} />
+          <RangeInput
+            label="Price Range (₹)"
+            {...mountInputs("price", 1000, Infinity)}
+          />
+          <RangeInput
+            label="Area (sq.ft)"
+            {...mountInputs("area", 50, Infinity)}
+          />
         </div>
 
         <div className="space-y-4">
@@ -193,7 +201,9 @@ const FilterPanel = ({ query, revalidateAndGetdata }) => {
       </div>
 
       <button
-        className="fixed bottom-5 left-5 z-50 lg:hidden bg-active-orange text-white p-4 rounded-full shadow-lg hover:bg-dark-orange transition-all duration-200"
+        className={`fixed bottom-5 left-5 z-50 lg:hidden bg-active-orange text-white p-4 rounded-full shadow-lg hover:bg-dark-orange transition-all duration-200 ${
+          isOpen ? "hidden" : ""
+        }`}
         onClick={() => {
           setIsOpen(true);
           scrollToTop();
