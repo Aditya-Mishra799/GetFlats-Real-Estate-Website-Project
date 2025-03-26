@@ -6,6 +6,15 @@ import { Marker, Popup } from "react-leaflet";
 import Button from "./Button";
 import formatAddress from "@common_functions/formatAddress";
 import { FaLocationCrosshairs } from "react-icons/fa6";
+import { Icon } from "leaflet";
+
+const defaultIcon = new Icon({
+  iconUrl: "/loaction-marker.png", 
+  iconSize: [28, 41], // Default size
+  iconAnchor: [12, 41], // Point to place marker on map
+  popupAnchor: [1, -34], // Where popup opens
+  shadowSize: [41, 41], // Shadow size
+});
 
 //function to fetch Adrdress based on  coords
 const reverseGeoCodeURL = "https://nominatim.openstreetmap.org/reverse";
@@ -87,6 +96,7 @@ const Map = ({ label, onChange, name, errors, getValues, ...rest }) => {
                 draggable={true}
                 eventHandlers={eventHandlers}
                 ref={markerRef}
+                icon = {defaultIcon}
               >
                 <Popup>Your Location</Popup>
               </Marker>
