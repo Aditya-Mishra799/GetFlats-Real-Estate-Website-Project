@@ -8,30 +8,31 @@ const CustomInput = ({ value, setValue }) => {
   const suggestionsRef = useRef(null);
   const selectedSuggestionRef = useRef(null);
 
-
   useEffect(() => {
-    let timer = null 
+    let timer = null;
     if (value.length > 2) {
-      timer = setTimeout(()=> fetchSuggestions(value), 300)
-      setShowSuggestions(true)
+      timer = setTimeout(() => fetchSuggestions(value), 300);
     } else {
       setSuggestions([]);
       setSelectedIndex(-1);
     }
-    return () => clearTimeout(timer)
+    return () => clearTimeout(timer);
   }, [value]);
 
-  useEffect(()=>{
-    if(selectedSuggestionRef.current){
+  useEffect(() => {
+    if (selectedSuggestionRef.current) {
       selectedSuggestionRef.current.scrollIntoView({
-        behaviour : "smooth",
-        block : "nearest",
-      })
+        behaviour: "smooth",
+        block: "nearest",
+      });
     }
-  }, [selectedSuggestionRef.current])
+  }, [selectedSuggestionRef.current]);
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
+      if (
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target)
+      ) {
         setShowSuggestions(false);
       }
     };
@@ -56,14 +57,14 @@ const CustomInput = ({ value, setValue }) => {
     // Arrow Down
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setSelectedIndex(prev => 
+      setSelectedIndex((prev) =>
         prev < suggestions.length - 1 ? prev + 1 : 0
       );
     }
     // Arrow Up
     else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setSelectedIndex(prev => 
+      setSelectedIndex((prev) =>
         prev > 0 ? prev - 1 : suggestions.length - 1
       );
     }
@@ -71,6 +72,9 @@ const CustomInput = ({ value, setValue }) => {
     else if (e.key === "Enter" && selectedIndex >= 0) {
       e.preventDefault();
       handleSelectSuggestion(suggestions[selectedIndex]);
+    } // other
+    else if (e.key.length === 1 && !showSuggestions) {
+      setShowSuggestions(true);
     }
   };
 
@@ -78,7 +82,7 @@ const CustomInput = ({ value, setValue }) => {
     setValue(suggestion);
     setShowSuggestions(false);
     setSelectedIndex(-1);
-    inputRef.current?.focus();
+    // inputRef.current?.focus();
   };
 
   return (
@@ -91,7 +95,9 @@ const CustomInput = ({ value, setValue }) => {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          onFocus={() => setShowSuggestions(true)}
+          onFocus={() => {
+            setShowSuggestions(true);
+          }}
         />
         <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
           <i className="fa-solid fa-magnifying-glass"></i>
@@ -99,18 +105,20 @@ const CustomInput = ({ value, setValue }) => {
       </div>
 
       {showSuggestions && suggestions.length > 0 && (
-        <div 
+        <div
           ref={suggestionsRef}
           className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
         >
           {suggestions.map((suggestion, index) => (
             <div
               key={index}
-              ref = {index === selectedIndex ? selectedSuggestionRef : null}
+              ref={index === selectedIndex ? selectedSuggestionRef : null}
               className={`px-4 py-3 cursor-pointer transition-colors duration-150
-                ${index === selectedIndex 
-                  ? 'bg-active-orange text-white' 
-                  : 'hover:bg-smooth-orange text-white'} group`}
+                ${
+                  index === selectedIndex
+                    ? "bg-active-orange text-white"
+                    : "hover:bg-smooth-orange text-white"
+                } group`}
               onClick={() => handleSelectSuggestion(suggestion)}
             >
               <div className="flex items-center gap-2 group-hover:text-white text-gray-700">

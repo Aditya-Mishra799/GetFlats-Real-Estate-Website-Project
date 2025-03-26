@@ -69,14 +69,34 @@ export async function getData(perPage, page, filterQuery) {
       keywords && {
         $search: {
           index: "property_text_index",
-          text: {
-            query: keywords,
-            path: ["property_title", "property_description"],
-            fuzzy: { maxEdits: 1 }, // Handles typos & paraphrasing
+          compound: {
+            should: [
+              {
+                text: {
+                  query: keywords,
+                  path: ["property_title", "property_description"],
+                  fuzzy: { maxEdits: 1 }, // Handles small typos & misspellings
+                  score: { boost: { value: 2 } }, // Boost direct keyword matches
+                },
+              },
+              {
+                text: {
+                  query: keywords,
+                  path: ["location.city", "location.state"],
+                  fuzzy: { maxEdits: 1 }, // Allow small variations in city/state names
+                },
+              },
+            ],
           },
         },
       },
+      keywords && {
+        $set: { score: { $meta: "searchScore" } },
+      },
       { $match: query },
+      keywords && {
+        $sort: { score: -1 },
+      },
       { $skip: perPage * (page - 1) },
       { $limit: perPage },
       {
@@ -96,7 +116,7 @@ export async function getData(perPage, page, filterQuery) {
     ].filter(Boolean); // Removes `false`, `null`, or `undefined` values
 
     let listings = await PropertyListing.aggregate(pipeline);
-    
+
     if (session?.user?.id) {
       listings = await checkForFavourites(listings, session.user.id);
     }
