@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-
+// used by filter panel only, for filtering based on input keywords
 const CustomInput = ({ value, setValue }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -13,6 +13,7 @@ const CustomInput = ({ value, setValue }) => {
     let timer = null 
     if (value.length > 2) {
       timer = setTimeout(()=> fetchSuggestions(value), 300)
+      setShowSuggestions(true)
     } else {
       setSuggestions([]);
       setSelectedIndex(-1);
@@ -44,7 +45,6 @@ const CustomInput = ({ value, setValue }) => {
       const response = await fetch(`/api/auto-complete?query=${query}`);
       const data = await response.json();
       setSuggestions(data);
-      setShowSuggestions(true);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
     }
@@ -91,7 +91,7 @@ const CustomInput = ({ value, setValue }) => {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          onFocus={() => value.length > 2 && setShowSuggestions(true)}
+          onFocus={() => setShowSuggestions(true)}
         />
         <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
           <i className="fa-solid fa-magnifying-glass"></i>
@@ -110,12 +110,12 @@ const CustomInput = ({ value, setValue }) => {
               className={`px-4 py-3 cursor-pointer transition-colors duration-150
                 ${index === selectedIndex 
                   ? 'bg-active-orange text-white' 
-                  : 'hover:bg-gray-50 text-gray-700'}`}
+                  : 'hover:bg-smooth-orange text-white'} group`}
               onClick={() => handleSelectSuggestion(suggestion)}
             >
-              <div className="flex items-center gap-2">
-                <i className="fa-solid fa-search text-sm opacity-70"></i>
-                <span className={`${index === selectedIndex ? 'text-white' : 'text-gray-700'}`}>
+              <div className="flex items-center gap-2 group-hover:text-white text-gray-700">
+                <i className="fa-solid fa-search text-sm opacity-70 group-hover:text-white "></i>
+                <span className={index === selectedIndex ? "text-white" : null}>
                   {suggestion}
                 </span>
               </div>

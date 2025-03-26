@@ -27,7 +27,7 @@ const MapInteractionHandler = ({ handleMapMove, loadMarkers }) => {
 const MapSearchPage = () => {
   const mapRef = useRef();
   const initalMarkersSet = new Set();
-  const [markers, setMarkes] = useState(initalMarkersSet);
+  const [markers, setMarkers] = useState(initalMarkersSet);
   const [current, setCurrent] = useState(null);
   const [userLocation, setUserLocation] = useState([19.4714447, 72.8868084]);
   const handleMapMove = (map) => {
@@ -38,7 +38,7 @@ const MapSearchPage = () => {
   const extendMArkers = (values) => {
     const stringValues = values.map((value) => value.toString());
     const updatedMarkers = new Set([...markers, ...stringValues]);
-    setMarkes(updatedMarkers);
+    setMarkers(updatedMarkers);
   };
 
   const getCoordsFromString = (coordsString) => {
@@ -118,8 +118,8 @@ const MapSearchPage = () => {
         setCurrent(null);
       }
     };
-    window.addEventListener("click", clickHandler);
-    return () => window.removeEventListener("click", clickHandler);
+    document.addEventListener("click", clickHandler);
+    return () => document.removeEventListener("click", clickHandler);
   });
   return (
     <div className="w-[95vw]   h-[85vh] ">
