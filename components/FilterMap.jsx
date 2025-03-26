@@ -1,6 +1,6 @@
 "use-client";
 import React, { useState, useRef, useMemo, useEffect } from "react";
-import { MapContainer } from "react-leaflet";
+import { Circle, MapContainer } from "react-leaflet";
 import { TileLayer } from "react-leaflet/TileLayer";
 import { Marker, Popup } from "react-leaflet";
 
@@ -12,10 +12,10 @@ const FilterMap = ({ value, setValue }) => {
   const [coordinates, setCoordinates] = useState(initialValue);
   const eventHandlers = useMemo(
     () => ({
-      async dragend() {
+      async drag(e) {
         const marker = markerRef.current;
         if (marker != null) {
-          const coords = Object.values(marker._latlng);
+          const coords = Object.values(marker.getLatLng());
           setCoordinates(coords);
         }
       },
@@ -50,7 +50,7 @@ const FilterMap = ({ value, setValue }) => {
     setValue(coordinates);
   }, [coordinates]);
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-[62vh]">
       <MapContainer
         center={coordinates}
         zoom={15}
@@ -58,13 +58,22 @@ const FilterMap = ({ value, setValue }) => {
         ref={mapRef}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        <Circle center={coordinates} radius={10000} color="blue" fillOpacity={0.1} weight={1}>
+        <Popup>
+            <strong>Search Radius</strong> <br />
+            Listings will be shown within the highlighted area.
+          </Popup>
+        </Circle>
         <Marker
           position={coordinates}
           draggable={true}
           eventHandlers={eventHandlers}
           ref={markerRef}
         >
-          <Popup>Listing Location</Popup>
+         <Popup>
+            <strong>Move Me!</strong> <br />
+            Drag this marker to change your search location.
+          </Popup>
         </Marker>
       </MapContainer>
     </div>

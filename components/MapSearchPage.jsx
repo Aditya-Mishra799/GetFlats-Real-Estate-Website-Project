@@ -8,6 +8,7 @@ import PropertyListingsCard from "@components/PropertyLisingsCard";
 import { IoCloseSharp } from "react-icons/io5";
 import Button from "@components/Button";
 import { FaLocationCrosshairs } from "react-icons/fa6";
+import MarkerClusterGroup from "react-leaflet-cluster";
 
 const MapInteractionHandler = ({ handleMapMove, loadMarkers }) => {
   const map = useMapEvents({
@@ -62,8 +63,15 @@ const MapSearchPage = () => {
     }
   };
   const housingIcon = new Icon({
-    iconUrl: "https://img.icons8.com/plasticine/100/exterior.png",
-    iconSize: [38, 45], // size of the icon
+    iconUrl: "/house-marker.png",
+    iconSize: [24, 28], // size of the icon
+    iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+    popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
+  });
+
+  const userLocationMarker = new Icon({
+    iconUrl: "/loaction-marker.png",
+    iconSize: [26, 30], // size of the icon
     iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
     popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
   });
@@ -74,26 +82,45 @@ const MapSearchPage = () => {
     return url;
   };
 
-  //get user location 
-  const updateAndGetLocation = async () =>{
+  //get user location
+  const updateAndGetLocation = async () => {
     if ("geolocation" in navigator) {
       // Geolocation is supported
       navigator.geolocation.getCurrentPosition(
         async (position) => {
-          setUserLocation([position.coords.latitude, position.coords.longitude]);
-          mapRef.current.flyTo([position.coords.latitude, position.coords.longitude], 15, {animate: true})
+          setUserLocation([
+            position.coords.latitude,
+            position.coords.longitude,
+          ]);
+          mapRef.current.flyTo(
+            [position.coords.latitude, position.coords.longitude],
+            15,
+            { animate: true }
+          );
         },
         (error) => {
-          console.error("Error white fetching Location", error)
+          console.error("Error white fetching Location", error);
         }
       );
     }
-    
-  }
+  };
   useEffect(() => {
     updateAndGetLocation();
   }, []);
-
+  const listingsContainerRef = useRef(null);
+  useEffect(() => {
+    const clickHandler = (e) => {
+      if (
+        listingsContainerRef.current &&
+        current !== null &&
+        !listingsContainerRef.current.contains(e.target)
+      ) {
+        setCurrent(null);
+      }
+    };
+    window.addEventListener("click", clickHandler);
+    return () => window.removeEventListener("click", clickHandler);
+  });
   return (
     <div className="w-[95vw]   h-[85vh] ">
       <h3 className="text-2xl mx-3 my-2">Search listings via map</h3>
@@ -110,27 +137,37 @@ const MapSearchPage = () => {
               loadMarkers={loadMarkers}
             />
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <MarkerClusterGroup>
             {Array.from(markers).map((coords, index) => (
               <Marker
                 key={index}
                 position={getCoordsFromString(coords)}
                 icon={housingIcon} // Use the selected icon
-                eventHandlers={{ click: () => setCurrent(coords) }}
+                eventHandlers={{
+                  click: (e) => {
+                    e.originalEvent.stopPropagation();
+                    setCurrent(coords);
+                  },
+                }}
               ></Marker>
             ))}
-            <Marker position={userLocation}>
+            </MarkerClusterGroup>
+            <Marker position={userLocation} icon = {userLocationMarker}>
               <Popup>Your location</Popup>
             </Marker>
           </MapContainer>
 
           {current && (
-            <div className="w-full  absolute bottom-2 z-10">
-              <div className="w-[90vw] min-h-80 max-h-96 bg-black   bg-opacity-50 rounded-md  mx-auto px-4 py-2  overflow-x-scroll hidden-scrollbar relative">
+            <div className="w-full absolute bottom-2 z-10">
+              <div
+                ref={listingsContainerRef}
+                className="w-[90vw] min-h-80 max-h-96 bg-black   bg-opacity-50 rounded-md  mx-auto px-4 py-2  overflow-x-scroll hidden-scrollbar relative"
+              >
                 <button
-                  className="absolute top-3 right-3 text-white "
+                  className="sticky top-1 right-1 text-black z-[100] text-sm font-thin bg-white rounded-full p-1 shadow-md"
                   onClick={() => setCurrent(null)}
                 >
-                  <IoCloseSharp size={40} /> 
+                  <IoCloseSharp size={16} />
                 </button>
                 <FetchAndDisplayCards
                   apiEndpoint={getApiEndPoint()}
@@ -140,11 +177,11 @@ const MapSearchPage = () => {
             </div>
           )}
           <Button
-          onClick={updateAndGetLocation}
-          className="fixed flex justify-center gap-2 bottom-8 right-8 p-4 rounded-lg shadow-lg"
-        >
-          <FaLocationCrosshairs  className="lg:w-[35px] lg:h-[35px] h-[30px] w-[30px]"/>
-        </Button>
+            onClick={updateAndGetLocation}
+            className="fixed flex justify-center gap-2 bottom-8 right-8 p-4 rounded-lg shadow-lg"
+          >
+            <FaLocationCrosshairs className="lg:w-[35px] lg:h-[35px] h-[30px] w-[30px]" />
+          </Button>
         </div>
       </div>
     </div>

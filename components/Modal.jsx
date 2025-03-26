@@ -1,8 +1,14 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { IoClose } from 'react-icons/io5';
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { IoClose } from "react-icons/io5";
 
-const Modal = ({ title = 'Modal', isOpen, onClose, children }) => {
+const Modal = ({
+  title = "Modal",
+  isOpen,
+  onClose,
+  subTitle = "",
+  children,
+}) => {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -14,7 +20,7 @@ const Modal = ({ title = 'Modal', isOpen, onClose, children }) => {
             className="fixed inset-0 bg-black/50 backdrop-blur-sm"
             onClick={onClose}
           />
-          
+
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -23,7 +29,14 @@ const Modal = ({ title = 'Modal', isOpen, onClose, children }) => {
           >
             {/* Header */}
             <div className="flex justify-between items-center px-6 py-4 border-b">
-              <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
+              <div>
+                <h2 className="text-lg font-bold text-gray-900">{title}</h2>
+                {subTitle && (
+                  <h3 className="mt-1 text-sm text-slate-600 font-medium tracking-wide">
+                    {subTitle}
+                  </h3>
+                )}
+              </div>
               <button
                 onClick={onClose}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"

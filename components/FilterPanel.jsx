@@ -78,6 +78,7 @@ const FilterPanel = ({ query, revalidateAndGetdata }) => {
       isOpen={openMapModal}
       onClose={() => setOpenMapModal(false)}
       title={"All listings within 10km radius will be shown"}
+      subTitle = {"Move the marker to your location, then close this window to apply the search filter."}
     >
       <DynamicFilterMap {...mountInputs("coordinates")} />
     </Modal>

@@ -8,7 +8,7 @@ const DisplayMap = ({mainMarkerCoords, locationMarkerCoords , markers = []}) => 
     const markerRef = useRef(null);
     const mapRef = useRef(null);
   return (
-    <div className="w-full h-full">
+    <div className="w-full  h-[62vh]">
       <MapContainer
         center={mainMarkerCoords}
         zoom={15}

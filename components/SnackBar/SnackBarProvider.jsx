@@ -21,7 +21,7 @@ export default function SnackBarProvider({ children }) {
         type,
         component?.message,
         component?.link,
-        component?.label,
+        component?.label
       );
       setSnackBars((snackBars) => [
         ...snackBars,
@@ -34,11 +34,16 @@ export default function SnackBarProvider({ children }) {
     return id;
   };
   const defaultLabels = {
-    success: 'Success',
-    loading: 'Loading...',
-    alert: 'Action Failed',
-  }
-  const defaultSnackBarComponents = (type, message, link, label = defaultLabels[type]) => {
+    success: "Success",
+    loading: "Loading...",
+    alert: "Action Failed",
+  };
+  const defaultSnackBarComponents = (
+    type,
+    message,
+    link,
+    label = defaultLabels[type]
+  ) => {
     switch (type) {
       case "success":
         return (
@@ -111,7 +116,10 @@ export default function SnackBarProvider({ children }) {
         {snackBars.map(({ id, component }) => (
           <div key={id} className="relative flex gap-1 w-full">
             <button
-              onClick={() => close(id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                close(id);
+              }}
               className="cursor-pointer absolute top-2 right-2 p-1 rounded-lg bg-gray-200/20 text-gray-800/60 "
             >
               <RxCross1 size={16} />
