@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropertyListingsCard from "./PropertyLisingsCard";
 import { motion } from "framer-motion";
+import PropertyCardLoadingSkeleton from "./PropertyCardLoadingSkeleton";
 
 const FetchAndDisplayRecommendation = ({ id }) => {
   const [listings, setListings] = useState([]);
@@ -10,7 +11,9 @@ const FetchAndDisplayRecommendation = ({ id }) => {
     const fetchRecommendations = async () => {
       setLoading(true);
       try {
-        const response = await fetch("/api/listing/fetch-recommendation?id=" + id);
+        const response = await fetch(
+          "/api/listing/fetch-recommendation?id=" + id
+        );
         if (response.ok) {
           const data = await response.json();
           setListings(data);
@@ -26,9 +29,12 @@ const FetchAndDisplayRecommendation = ({ id }) => {
 
   if (loading) {
     return (
-      <div className="w-full py-8 text-center">
-        <div className="loading-circle mx-auto"></div>
-        <p className="text-gray-600 mt-4">Finding similar properties...</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {Array(8)
+          .fill(null)
+          .map((_, index) => (
+            <PropertyCardLoadingSkeleton key={index} />
+          ))}
       </div>
     );
   }

@@ -26,9 +26,9 @@ export async function GET(req) {
     if (session?.user?.id) {
         listings = await checkForFavourites(listings, session.user.id);
       }
-    return Response.json(listings, { status: 200 });
+    return Response.json({items: listings}, { status: 200 });
   } catch (error) {
-    console.error("Error", error);
+    console.error("Error in fetch coords", error);
     return Response.json([], { status: 200 });
   }
 }

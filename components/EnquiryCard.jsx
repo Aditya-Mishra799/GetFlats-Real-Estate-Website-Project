@@ -2,10 +2,13 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { useSnackBar } from "./SnackBar/SnackBarService";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 
 const EnquiryCard = ({ data, type }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const profileImage = type === "received" ? data?.creator.image : data?.owner.image;
+  const profileImage =
+    type === "received" ? data?.creator.image : data?.owner.image;
   const userData = type === "received" ? data?.creator : data?.owner;
   const snackBar = useSnackBar();
 
@@ -58,7 +61,7 @@ const EnquiryCard = ({ data, type }) => {
   const statusColors = {
     pending: "bg-yellow-100 text-yellow-800",
     accepted: "bg-green-100 text-green-800",
-    rejected: "bg-red-100 text-red-800"
+    rejected: "bg-red-100 text-red-800",
   };
 
   return (
@@ -79,11 +82,19 @@ const EnquiryCard = ({ data, type }) => {
             alt="profile image"
           />
           <div className="text-white">
-            <h3 className="font-semibold truncate max-w-[150px]">{userData?.username}</h3>
-            <p className="text-sm opacity-90 truncate max-w-[150px]">{userData?.email}</p>
+            <h3 className="font-semibold truncate max-w-[150px]">
+              {userData?.username}
+            </h3>
+            <p className="text-sm opacity-90 truncate max-w-[150px]">
+              {userData?.email}
+            </p>
           </div>
         </div>
-        <span className={`px-3 py-1 rounded-full text-sm font-medium self-start sm:self-center ${statusColors[data.status]}`}>
+        <span
+          className={`px-3 py-1 rounded-full text-sm font-medium self-start sm:self-center ${
+            statusColors[data.status]
+          }`}
+        >
           {data.status}
         </span>
       </div>
@@ -100,9 +111,24 @@ const EnquiryCard = ({ data, type }) => {
             <span className="truncate">{data.email}</span>
           </div>
         </div>
-
+        {data.property_listing && (
+          <div className="border-t border-gray-200 pt-3 flex items-center gap-2">
+            <ExternalLink className="w-5 h-5 text-active-orange" />
+            <Link
+              className="text-active-orange hover:text-dark-orange text-base tracking-wide font-medium transition-colors duration-200"
+              href={`/listing?id=${data.property_listing}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View Listing
+            </Link>
+          </div>
+        )}
         <div className="relative">
-          <p className={`text-gray-700 bg-gray-50 p-4 rounded-lg ${!isExpanded && 'line-clamp-3'}`}>
+          <p
+            className={`text-gray-700 bg-gray-50 p-4 rounded-lg ${!isExpanded &&
+              "line-clamp-3"}`}
+          >
             {data.description}
           </p>
           {data.description?.length > 150 && (
@@ -110,7 +136,7 @@ const EnquiryCard = ({ data, type }) => {
               onClick={() => setIsExpanded(!isExpanded)}
               className="text-active-orange hover:text-dark-orange text-sm mt-1 font-medium"
             >
-              {isExpanded ? 'Show less' : 'Read more'}
+              {isExpanded ? "Show less" : "Read more"}
             </button>
           )}
         </div>

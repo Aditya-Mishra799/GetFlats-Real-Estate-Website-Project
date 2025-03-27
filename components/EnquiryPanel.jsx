@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import EnquiryCard from './EnquiryCard';
-import FetchAndDisplayCards from './FetchAndDisplayCards';
+import React, { useState } from "react";
+import EnquiryCard from "./EnquiryCard";
+import FetchAndDisplayCards from "./FetchAndDisplayCards";
 import { motion, AnimatePresence } from "framer-motion";
-import EnquiresCardSkeleton from './EnquiresCardSkeleton';
+import EnquiresCardSkeleton from "./EnquiresCardSkeleton";
 
 const EnquiryPanel = () => {
-  const [type, setType] = useState('sent');
+  const [type, setType] = useState("sent");
 
   const handleChange = (newType) => {
     setType(newType);
@@ -16,22 +16,22 @@ const EnquiryPanel = () => {
       {/* Tab Selector */}
       <div className="flex justify-center gap-4">
         <button
-          onClick={() => handleChange('sent')}
+          onClick={() => handleChange("sent")}
           className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-300 ${
-            type === 'sent'
-              ? 'bg-active-orange text-white'
-              : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+            type === "sent"
+              ? "bg-active-orange text-white"
+              : "bg-gray-100 hover:bg-gray-200 text-gray-700"
           }`}
         >
           <i className="fa-solid fa-paper-plane"></i>
           Sent Enquiries
         </button>
         <button
-          onClick={() => handleChange('received')}
+          onClick={() => handleChange("received")}
           className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-300 ${
-            type === 'received'
-              ? 'bg-active-orange text-white'
-              : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+            type === "received"
+              ? "bg-active-orange text-white"
+              : "bg-gray-100 hover:bg-gray-200 text-gray-700"
           }`}
         >
           <i className="fa-solid fa-inbox"></i>
@@ -50,9 +50,11 @@ const EnquiryPanel = () => {
         >
           <FetchAndDisplayCards
             type={type}
-            apiEndpoint={`api/enquiry/view?type=${type}`}
+            apiEndpoint={`api/enquiry/view/${type}`}
             CardComponet={EnquiryCard}
-            CardSkeleton = {EnquiresCardSkeleton}
+            CardSkeleton={EnquiresCardSkeleton}
+            currentPage={1}
+            paginate
           />
         </motion.div>
       </AnimatePresence>

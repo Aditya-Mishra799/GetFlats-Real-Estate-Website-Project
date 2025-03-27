@@ -37,8 +37,11 @@ const page = () => {
       component: (
         <FetchAndDisplayCards
           apiEndpoint={`api/listing/user/${session?.user.id}`}
+          key = {`api/listing/user/${session?.user.id}`}
           CardComponet={PropertyListingsCard}
           CardSkeleton = {PropertyCardLoadingSkeleton}
+          currentPage = {1}
+          paginate
         />
       ),
     },
@@ -48,8 +51,11 @@ const page = () => {
       component: (
         <FetchAndDisplayCards
           apiEndpoint={`api/listing/get-wishlist`}
+          key = {`api/listing/get-wishlist`}
           CardComponet={PropertyListingsCard}
           CardSkeleton = {PropertyCardLoadingSkeleton}
+          currentPage = {1}
+          paginate
         />
       ),
     },
