@@ -8,6 +8,7 @@ import Carousel from "@components/Carousel";
 import FetchAndDisplayCards from "@components/FetchAndDisplayCards";
 import PropertyListingsCard from "@components/PropertyLisingsCard";
 import PropertyCardLoadingSkeleton from "@components/PropertyCardLoadingSkeleton";
+import Link from "next/link";
 
 const Page = () => {
   const router = useRouter();
@@ -177,16 +178,16 @@ const Page = () => {
         <div className="bg-white rounded-xl shadow-lg p-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {quickActions.map((action, index) => (
-              <button
+              <Link
                 key={index}
-                onClick={() => router.push(action.path || `/search?page=1&query=${action.query}`)}
+                href = {action.path || `/search?page=1&query=${action.query}`}
                 className="flex flex-col items-center gap-3 p-4 rounded-lg hover:bg-gray-50 transition-all duration-300"
               >
                 <div className="w-12 h-12 bg-active-orange/10 rounded-full flex items-center justify-center">
                   <i className={`fa-solid ${action.icon} text-active-orange text-xl`}></i>
                 </div>
                 <span className="text-gray-700 font-medium">{action.label}</span>
-              </button>
+              </Link>
             ))}
           </div>
         </div>

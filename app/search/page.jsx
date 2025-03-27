@@ -95,33 +95,39 @@ export async function getData(perPage, page, filterQuery) {
         $set: { score: { $meta: "searchScore" } },
       },
       { $match: query },
-      keywords && {
-        $sort: { score: -1 },
-      },
-      { $skip: perPage * (page - 1) },
-      { $limit: perPage },
       {
-        $lookup: {
-          from: "users",
-          localField: "creator",
-          foreignField: "_id",
-          as: "creator",
-        },
-      },
-      {
-        $unwind: {
-          path: "$creator",
-          preserveNullAndEmptyArrays: true,
+        $facet: {
+          listings: [
+            keywords && { $sort: { score: -1 } },
+            { $skip: perPage * (page - 1) },
+            { $limit: perPage },
+            {
+              $lookup: {
+                from: "users",
+                localField: "creator",
+                foreignField: "_id",
+                as: "creator",
+              },
+            },
+            {
+              $unwind: {
+                path: "$creator",
+                preserveNullAndEmptyArrays: true,
+              },
+            },
+          ].filter(Boolean),
+          totalCount: [{ $count: "count" }],
         },
       },
     ].filter(Boolean); // Removes `false`, `null`, or `undefined` values
 
-    let listings = await PropertyListing.aggregate(pipeline);
+    let result = await PropertyListing.aggregate(pipeline);
 
+    let listings = result[0]?.listings || [];
+    const listingCount = result[0]?.totalCount?.[0]?.count || 0;
     if (session?.user?.id) {
       listings = await checkForFavourites(listings, session.user.id);
     }
-    const listingCount = await PropertyListing.countDocuments(query);
     const response = { listings: JSON.stringify(listings), listingCount };
     return response;
   } catch (error) {
@@ -158,10 +164,15 @@ const page = async ({ searchParams }) => {
         <div className="lg:max-w-96">
           <FilterPanel query={query} />
         </div>
-        <div className="grow w-full" key = {query} >
+        <div className="grow w-full" key={query}>
           {/* Render fallback until the query data fetch request is completed */}
-          <Suspense fallback={fallbackComp} key = {query}>
-            <RenderListingsData key = {query} page={page} perPage={perPage} query={query} />
+          <Suspense fallback={fallbackComp} key={query}>
+            <RenderListingsData
+              key={query}
+              page={page}
+              perPage={perPage}
+              query={query}
+            />
           </Suspense>
         </div>
       </div>

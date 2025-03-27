@@ -1,13 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 // used by filter panel only, for filtering based on input keywords
-const CustomInput = ({ value, setValue }) => {
+const CustomInput = ({ value = "", setValue }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef(null);
   const suggestionsRef = useRef(null);
   const selectedSuggestionRef = useRef(null);
-
+  useEffect(()=>{
+    if(!value){
+      setValue("")
+    }
+  }, [])
   useEffect(() => {
     let timer = null;
     if (value.length > 2) {
