@@ -1,19 +1,42 @@
 "use client";
+import { Loader2 } from "lucide-react";
 import React, { useState, useEffect } from "react";
 
-const FetchAndDisplayCards = ({ apiEndpoint, CardComponet, session, type }) => {
+const FetchAndDisplayCards = ({
+  apiEndpoint,
+  CardComponet,
+  session,
+  type,
+  CardSkeleton,
+  placeholderCount = 8,
+  currentPage = 1,
+  limit = 20,
+}) => {
   const [cards, setCards] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [paginationData, setPaginationData] = useState({
+    currentPage: currentPage,
+    limit: limit,
+    totalDocuments: 0,
+    totalPages: 0,
+  });
 
   useEffect(() => {
-    setError(null);
-    try {
-      fetch(apiEndpoint)
-        .then((response) => response.json())
-        .then((data) => setCards(data));
-    } catch (err) {
-      setError(err);
-    }
+    const fetchData = async () => {
+      setError(null);
+      try {
+        setLoading(true);
+        const response = await fetch(apiEndpoint);
+        const data = await response.json();
+        setCards(data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, [apiEndpoint]);
 
   const handleReload = () => {
@@ -21,20 +44,32 @@ const FetchAndDisplayCards = ({ apiEndpoint, CardComponet, session, type }) => {
       window.location.reload();
     }
   };
-  if (cards.length === 0) {
+
+  if (loading) {
+    return (
+      <>
+        {CardSkeleton ? (
+          <div className="flex flex-wrap justify-center gap-6">
+            {Array(placeholderCount)
+              .fill(null)
+              .map((_, index) => (
+                <CardSkeleton key={index} />
+              ))}
+          </div>
+        ) : (
+          <div className="w-full py-8 text-center flex justify-center items-center flex-col">
+            <Loader2 className="animate-spin text-smooth-orange" size={56} />
+          </div>
+        )}
+      </>
+    );
+  } else if (cards.length === 0) {
     return (
       <div className="w-full py-8 text-center">
         <p className="text-xl text-gray-600 font-semibold">
           Nothing to show here
         </p>
         <p className="text-gray-500">No items found in this section</p>
-      </div>
-    );
-  } else if (error === null && cards.length === 0) {
-    return (
-      <div className="w-full py-8 text-center">
-        <div className="loading-circle mx-auto"></div>
-        <p className="text-gray-600 mt-4">Loading...</p>
       </div>
     );
   }

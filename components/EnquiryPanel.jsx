@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import EnquiryCard from './EnquiryCard';
 import FetchAndDisplayCards from './FetchAndDisplayCards';
 import { motion, AnimatePresence } from "framer-motion";
+import EnquiresCardSkeleton from './EnquiresCardSkeleton';
 
 const EnquiryPanel = () => {
   const [type, setType] = useState('sent');
@@ -51,6 +52,7 @@ const EnquiryPanel = () => {
             type={type}
             apiEndpoint={`api/enquiry/view?type=${type}`}
             CardComponet={EnquiryCard}
+            CardSkeleton = {EnquiresCardSkeleton}
           />
         </motion.div>
       </AnimatePresence>

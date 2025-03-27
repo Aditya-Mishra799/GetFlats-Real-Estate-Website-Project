@@ -8,12 +8,11 @@ import formatAddress from "@common_functions/formatAddress";
 import { FaLocationCrosshairs } from "react-icons/fa6";
 import { Icon } from "leaflet";
 
-const defaultIcon = new Icon({
-  iconUrl: "/loaction-marker.png", 
-  iconSize: [28, 41], // Default size
-  iconAnchor: [12, 41], // Point to place marker on map
-  popupAnchor: [1, -34], // Where popup opens
-  shadowSize: [41, 41], // Shadow size
+const defaultIcon =  new Icon({
+  iconUrl: "/loaction-marker.png",
+  iconSize: [28, 28], // size of the icon
+  iconAnchor: [14, 28], // point of the icon which will correspond to marker's location
+  popupAnchor: [0, -28], // point from which the popup should open relative to the iconAnchor
 });
 
 //function to fetch Adrdress based on  coords

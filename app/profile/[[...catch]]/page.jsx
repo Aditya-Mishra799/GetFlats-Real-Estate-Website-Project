@@ -8,6 +8,8 @@ import PropertyListingsCard from "@components/PropertyLisingsCard";
 import EnquiryPanel from "@components/EnquiryPanel";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
+import PropertyCardLoadingSkeleton from "@components/PropertyCardLoadingSkeleton";
+import { Loader2 } from "lucide-react";
 
 const page = () => {
   const { data: session, status } = useSession();
@@ -21,8 +23,9 @@ const page = () => {
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen flex justify-center items-center">
-        <div className="loading-circle"></div>
+      <div className="min-h-screen flex flex-col gap-2 justify-center items-center">
+        <Loader2 className="animate-spin text-smooth-orange" size={56} />
+        <p className="text-sm tracking-wider font-semibold  text-slate-500">Loading Profile details</p>
       </div>
     );
   }
@@ -35,6 +38,7 @@ const page = () => {
         <FetchAndDisplayCards
           apiEndpoint={`api/listing/user/${session?.user.id}`}
           CardComponet={PropertyListingsCard}
+          CardSkeleton = {PropertyCardLoadingSkeleton}
         />
       ),
     },
@@ -45,6 +49,7 @@ const page = () => {
         <FetchAndDisplayCards
           apiEndpoint={`api/listing/get-wishlist`}
           CardComponet={PropertyListingsCard}
+          CardSkeleton = {PropertyCardLoadingSkeleton}
         />
       ),
     },

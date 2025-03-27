@@ -9,6 +9,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import Button from "@components/Button";
 import { FaLocationCrosshairs } from "react-icons/fa6";
 import MarkerClusterGroup from "react-leaflet-cluster";
+import PropertyCardLoadingSkeleton from "./PropertyCardLoadingSkeleton";
 
 const MapInteractionHandler = ({ handleMapMove, loadMarkers }) => {
   const map = useMapEvents({
@@ -44,6 +45,7 @@ const MapSearchPage = () => {
   const getCoordsFromString = (coordsString) => {
     return coordsString.split(",").map(Number);
   };
+
   const loadMarkers = async (bounds) => {
     const ne = bounds.getNorthEast();
     const sw = bounds.getSouthWest();
@@ -64,16 +66,16 @@ const MapSearchPage = () => {
   };
   const housingIcon = new Icon({
     iconUrl: "/house-marker.png",
-    iconSize: [24, 28], // size of the icon
-    iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-    popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
+    iconSize: [32, 32], // Width, Height
+    // iconAnchor: [16, 32], // Center-bottom anchor for correct placement
+    popupAnchor: [0, -32], // Ensures popups appear correctly
   });
 
   const userLocationMarker = new Icon({
     iconUrl: "/loaction-marker.png",
-    iconSize: [26, 30], // size of the icon
-    iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-    popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
+    iconSize: [28, 28], // size of the icon
+    iconAnchor: [14, 28], // point of the icon which will correspond to marker's location
+    popupAnchor: [0, -28], // point from which the popup should open relative to the iconAnchor
   });
 
   const getApiEndPoint = () => {
@@ -108,6 +110,7 @@ const MapSearchPage = () => {
     updateAndGetLocation();
   }, []);
   const listingsContainerRef = useRef(null);
+
   useEffect(() => {
     const clickHandler = (e) => {
       if (
@@ -121,6 +124,7 @@ const MapSearchPage = () => {
     document.addEventListener("click", clickHandler);
     return () => document.removeEventListener("click", clickHandler);
   });
+  
   return (
     <div className="w-[95vw]   h-[85vh] ">
       <h3 className="text-2xl mx-3 my-2">Search listings via map</h3>
@@ -152,7 +156,7 @@ const MapSearchPage = () => {
               ></Marker>
             ))}
             </MarkerClusterGroup>
-            <Marker position={userLocation} icon = {userLocationMarker}>
+            <Marker position={userLocation}  icon = {userLocationMarker}>
               <Popup>Your location</Popup>
             </Marker>
           </MapContainer>
@@ -172,6 +176,8 @@ const MapSearchPage = () => {
                 <FetchAndDisplayCards
                   apiEndpoint={getApiEndPoint()}
                   CardComponet={PropertyListingsCard}
+                  CardSkeleton = {PropertyCardLoadingSkeleton}
+                  placeholderCount = {4}
                 />
               </div>
             </div>

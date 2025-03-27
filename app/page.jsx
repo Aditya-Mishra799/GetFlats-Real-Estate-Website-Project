@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Carousel from "@components/Carousel";
 import FetchAndDisplayCards from "@components/FetchAndDisplayCards";
 import PropertyListingsCard from "@components/PropertyLisingsCard";
+import PropertyCardLoadingSkeleton from "@components/PropertyCardLoadingSkeleton";
 
 const Page = () => {
   const router = useRouter();
@@ -218,6 +219,7 @@ const Page = () => {
           <FetchAndDisplayCards
             apiEndpoint={getApiEndPoint()}
             CardComponet={PropertyListingsCard}
+            CardSkeleton = {PropertyCardLoadingSkeleton}
           />
         </div>
       </div>
